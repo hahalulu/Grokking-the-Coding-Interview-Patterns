@@ -93,3 +93,42 @@ max_sub_array_of_size_k(3, [2, 1, 5, 1, 3, 2])//9
 max_sub_array_of_size_k(2, [2, 3, 4, 1, 5])//7
 ````
 - The time complexity of the above algorithm will be `O(N)`
+
+## Smallest Subarray with a given sum (easy)
+
+````
+function smallest_subarray_with_given_sum(s, arr) {
+  let windowSum = 0, minLength = Infinity, windowStart = 0;
+  
+  for(windowEnd = 0; windowEnd < arr.length; windowEnd++){
+    //add elements from the beggining of the array 
+    //until thier sum becomes >= to s
+    windowSum += arr[windowEnd]
+    //remember the length of this window at the 
+    //smallest window so far
+    //keep adding one element in the sliding window
+    while(windowSum >= s) {
+      //1. check if the current window length is the small so far,
+      //if so remeber it's length
+      minLength = Math.min(minLength, windowEnd-windowStart+1)
+      //while trying to shrink the window from the beggining
+      //shrink the window until the window's sum 
+  //is smaller than s again
+      windowSum -= arr[windowStart]
+      //2. subtract the first element of the window from the running sum to shrink the sliding window
+      windowStart += 1
+    }
+  }
+  if(minLength === Infinity) {
+    return 0
+  }
+  return minLength;
+};
+
+smallest_subarray_with_given_sum(7, [2, 1, 5, 2, 3, 2])//2
+smallest_subarray_with_given_sum(7, [2, 1, 5, 2, 8])//1
+smallest_subarray_with_given_sum(8, [3, 4, 1, 1, 6])//3
+````
+
+- The time complexity of the above algorithm will be `O(N)`. The outer for loop runs for all elements, and the inner while loop processes each element only once; therefore, the time complexity of the algorithm will be `O(N+N)`), which is asymptotically equivalent to `O(N)`.
+- The algorithm runs in constant space O(1)O(1).
