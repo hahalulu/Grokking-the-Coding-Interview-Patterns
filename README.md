@@ -23,7 +23,7 @@ function find_averages_of_subarrays(K, arr) {
 find_averages_of_subarrays(5, [1, 3, 2, 6, -1, 4, 1, 8, 2])
 ````
 
-## Sliding Window Approach
+### Sliding Window Approach
 ````
 function find_averages_of_subarrays(K, arr) {
   //sliding window approach
