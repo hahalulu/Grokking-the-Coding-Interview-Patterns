@@ -44,3 +44,4 @@ return results
 
 find_averages_of_subarrays(5, [1, 3, 2, 6, -1, 4, 1, 8, 2])
 ````
+### Maximum Sum Subarray of Size K (easy)
