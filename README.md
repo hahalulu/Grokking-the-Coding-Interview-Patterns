@@ -2,7 +2,9 @@
 
 ## Pattern 1 : Sliding Window
 
-### Brute Force
+### Find Averages of Sub Arrays
+
+#### Brute Force
 ````
 function find_averages_of_subarrays(K, arr) {
   //brute force
@@ -23,7 +25,7 @@ function find_averages_of_subarrays(K, arr) {
 find_averages_of_subarrays(5, [1, 3, 2, 6, -1, 4, 1, 8, 2])
 ````
 
-### Sliding Window Approach
+#### Sliding Window Approach
 ````
 function find_averages_of_subarrays(K, arr) {
   //sliding window approach
@@ -46,7 +48,7 @@ find_averages_of_subarrays(5, [1, 3, 2, 6, -1, 4, 1, 8, 2])
 ````
 ### Maximum Sum Subarray of Size K (easy)
 
-### Brute Force 
+#### Brute Force 
 ````
 function max_sub_array_of_size_k(k, arr) {
   //brute force
@@ -70,6 +72,7 @@ max_sub_array_of_size_k(3, [2, 1, 5, 1, 3, 2])//9
 max_sub_array_of_size_k(2, [2, 3, 4, 1, 5])//7
 ````
 - time complexity will be `O(N*K)`, where `N` is the total number of elements in the given array
+#### Sliding Window Approach
 ````
 function max_sub_array_of_size_k(k, arr) {
   //sliding window
@@ -94,7 +97,9 @@ max_sub_array_of_size_k(2, [2, 3, 4, 1, 5])//7
 ````
 - The time complexity of the above algorithm will be `O(N)`
 
-## Smallest Subarray with a given sum (easy)
+### Smallest Subarray with a given sum (easy)
+
+#### Sliding Window Approach
 
 ````
 function smallest_subarray_with_given_sum(s, arr) {
@@ -132,3 +137,47 @@ smallest_subarray_with_given_sum(8, [3, 4, 1, 1, 6])//3
 
 - The time complexity of the above algorithm will be `O(N)`. The outer for loop runs for all elements, and the inner while loop processes each element only once; therefore, the time complexity of the algorithm will be `O(N+N)`), which is asymptotically equivalent to `O(N)`.
 - The algorithm runs in constant space O(1)O(1).
+
+### Longest Substring with K Distinct Characters (medium)
+
+#### Sliding Window Approach
+
+````
+function longest_substring_with_k_distinct(str, k) {
+   // Given a string, find the length of the longest substring in it with no more than K distinct characters.
+  let windowStart = 0, maxLength = 0, charFrequency = {}
+
+  //in the following loop we'll try to extend the range [windowStart, windowEnd]
+  for(let windowEnd = 0; windowEnd < str.length; windowEnd++) {
+    const rightChar = str[windowEnd]
+    if(!(rightChar in charFrequency)){
+      charFrequency[rightChar] = 0
+    }
+    charFrequency[rightChar] +=1
+     
+    //insert charactes from the beginning of the string until we have 'K' distinct characters in the hashMap 
+  //these characters will consitutue our sliding window.  We are asked to find the longest such window having no more that K distinct characters.  We will remember the length of the window as the longest window so far
+  //we will keep adding on character in the sliding window in a stepwise fashion
+    while(Object.keys(charFrequency).length > k){
+      //in each step we will try to shrink the window from the beggining if the count of distinct characters in the hashmap is larger than K. We will shrink the window until we have no more that K distinct characters in the HashMap
+  //while shrinking , we will decrement the characters frequency going out of the window and remove it from the HashMap if it's frequency becomes zero
+      const leftChar = str[windowStart]
+      charFrequency[leftChar] -= 1
+      if(charFrequency[leftChar]=== 0){
+        delete charFrequency[leftChar]
+      }
+      windowStart += 1//shrink the window
+    }
+    //after each step we will check if the current window length is the longest so far, and if so, remember it's length
+    maxLength = Math.max(maxLength, windowEnd - windowStart + 1)
+    
+  }
+  return maxLength;
+};
+
+longest_substring_with_k_distinct("araaci", 2)//4, The longest substring with no more than '2' distinct characters is "araa".
+longest_substring_with_k_distinct("araaci", 1)//2, The longest substring with no more than '1' distinct characters is "aa".
+longest_substring_with_k_distinct("cbbebi", 3)//5, The longest substrings with no more than '3' distinct characters are "cbbeb" & "bbebi".
+````
+- The above algorithm’s time complexity will be `O(N)`, where `N` is the number of characters in the input string. The outer for loop runs for all characters, and the inner while loop processes each character only once; therefore, the time complexity of the algorithm will be `O(N+N)`, which is asymptotically equivalent to `O(N)`
+- The algorithm’s space complexity is `O(K)`, as we will be storing a maximum of `K+1` characters in the HashMap.
