@@ -45,3 +45,27 @@ return results
 find_averages_of_subarrays(5, [1, 3, 2, 6, -1, 4, 1, 8, 2])
 ````
 ### Maximum Sum Subarray of Size K (easy)
+
+### Brute Force 
+````
+function max_sub_array_of_size_k(k, arr) {
+  //brute force
+  let maxWindowSum = 0
+  let currentwindowSum = 0
+  //loop through array
+  for(let i = 0; i < arr.length-k+1; i++) {
+    currentwindowSum = 0
+    //keep track of sum in current window
+    for(j = i; j < i + k; j++) {
+      currentwindowSum += arr[j]
+    }
+    //if currentWindowSum is > maxWindowSum
+    //set currentWindwoSum to maxWindowSum
+    maxWindowSum = Math.max(maxWindowSum, currentwindowSum)
+  }
+  return maxWindowSum
+};
+
+max_sub_array_of_size_k(3, [2, 1, 5, 1, 3, 2])//9
+max_sub_array_of_size_k(2, [2, 3, 4, 1, 5])//7
+````
