@@ -69,3 +69,4 @@ function max_sub_array_of_size_k(k, arr) {
 max_sub_array_of_size_k(3, [2, 1, 5, 1, 3, 2])//9
 max_sub_array_of_size_k(2, [2, 3, 4, 1, 5])//7
 ````
+- time complexity will be `O(N*K)`, where `N` is the total number of elements in the given array
