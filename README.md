@@ -70,3 +70,26 @@ max_sub_array_of_size_k(3, [2, 1, 5, 1, 3, 2])//9
 max_sub_array_of_size_k(2, [2, 3, 4, 1, 5])//7
 ````
 - time complexity will be `O(N*K)`, where `N` is the total number of elements in the given array
+````
+function max_sub_array_of_size_k(k, arr) {
+  //sliding window
+  let maxWindowSum = 0, currentwindowSum = 0, windowStart = 0
+  
+  for(windowEnd = 0; windowEnd < arr.length; windowEnd++) {
+    currentwindowSum += arr[windowEnd]//add the next element 
+    //slide the window
+    //we don't need to slide if we have not hit 
+    //the required window size of k
+    if(windowEnd >= k - 1) {
+      maxWindowSum = Math.max(maxWindowSum, currentwindowSum);
+      currentwindowSum -= arr[windowStart]//subtract the element going out
+      windowStart += 1 //slide the window ahead
+    }
+  }
+  return maxWindowSum
+};
+
+max_sub_array_of_size_k(3, [2, 1, 5, 1, 3, 2])//9
+max_sub_array_of_size_k(2, [2, 3, 4, 1, 5])//7
+````
+- The time complexity of the above algorithm will be `O(N)`
