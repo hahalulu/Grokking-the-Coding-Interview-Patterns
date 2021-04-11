@@ -181,3 +181,100 @@ longest_substring_with_k_distinct("cbbebi", 3)//5, The longest substrings with n
 ````
 - The above algorithm’s time complexity will be `O(N)`, where `N` is the number of characters in the input string. The outer for loop runs for all characters, and the inner while loop processes each character only once; therefore, the time complexity of the algorithm will be `O(N+N)`, which is asymptotically equivalent to `O(N)`
 - The algorithm’s space complexity is `O(K)`, as we will be storing a maximum of `K+1` characters in the HashMap.
+
+
+## Pattern: Tree Breadth First Search
+
+### Binary Tree Level Order Traversal (easy) 😕
+````
+class Deque {
+    constructor() {
+        this.front = this.back = undefined;
+    }
+    addFront(value) {
+        if (!this.front) this.front = this.back = { value };
+        else this.front = this.front.next = { value, prev: this.front };
+    }
+    removeFront() {
+        let value = this.peekFront();
+        if (this.front === this.back) this.front = this.back = undefined;
+        else (this.front = this.front.prev).next = undefined;
+        return value;
+    }
+    peekFront() { 
+        return this.front && this.front.value;
+    }
+    addBack(value) {
+        if (!this.front) this.front = this.back = { value };
+        else this.back = this.back.prev = { value, next: this.back };
+    }
+    removeBack() {
+        let value = this.peekBack();
+        if (this.front === this.back) this.front = this.back = undefined;
+        else (this.back = this.back.next).back = undefined;
+        return value;
+    }
+    peekBack() { 
+        return this.back && this.back.value;
+    }
+}
+
+class TreeNode {
+  constructor(value) {
+    this.value = value;
+    this.left = null;
+    this.right = null; 
+  }
+};
+
+
+function traverse (root) {
+  result = [];
+  if(root === null ) {
+    return result
+  }
+  
+  const queue = new Deque()
+  //Start by pushing the root node to the queue.
+  queue.addFront(root)
+  //Keep iterating until the queue is empty.
+  let currentLevel = []
+  while (queue.length > 0) {
+    const levelSize = queue.length
+    //In each iteration, first count the elements in the queue (let’s call it levelSize). We will have these many nodes in the current level.
+     
+    for(i = 0; i < levelSize; i++) {
+      TreeNode = queue.removeFront()
+      //add the node to the current level
+      currentLevel.push(TreeNode.val)
+      //insert the children of current node in the queue
+      if(TreeNode.left !== null) {
+        queue.addBack(TreeNode.left)
+      }
+    }
+    if(TreeNode.right !== null) {
+      queue.addBack(TreeNode.right)
+    }
+  }
+  
+  result.push(currentLevel)
+  
+  //Next, remove levelSize nodes from the queue and push their value in an array to represent the current level.
+  //After removing each node from the queue, insert both of its children into the queue.
+  //If the queue is not empty, repeat from step 3 for the next level.
+  return result;
+};
+
+
+
+var root = new TreeNode(12);
+root.left = new TreeNode(7);
+root.right = new TreeNode(1);
+root.left.left = new TreeNode(9);
+root.right.left = new TreeNode(10);
+root.right.right = new TreeNode(5);
+console.log(`Level order traversal: ${traverse(root)}`);
+
+//The time complexity of the above algorithm is O(N), where ‘N’ is the total number of nodes in the tree. This is due to the fact that we traverse each node once.
+//The space complexity of the above algorithm will be O(N)O(N) as we need to return a list containing the level order traversal. We will also need O(N) space for the queue. Since we can have a maximum of N/2N/2 nodes at any level (this could happen only at the lowest level), therefore we will need O(N) space to store them in the queue.
+````
