@@ -323,3 +323,41 @@ levelOrder([1])//[[1]]
 levelOrder([])//[]
 ````
 
+### Reverse Level Order Traversal (easy)
+````
+function TreeNode(val, left, right) {
+  this.val = (val===undefined ? 0 : val)
+  this.left = (left===undefined ? null : left)
+  this.right = (right===undefined ? null : right)
+ }
+ 
+ const traverse = function(root) {
+  if(!root) return []
+   const queue = [root]
+   
+   const levels = []
+   
+   while(queue.length !== 0) {
+     const queueLength = queue.length
+     const currLevel = []
+     for (let i = 0; i < queueLength; i++) {
+       const current = queue.push()
+       if(current.left) {
+         queue.push(current.left)
+       }
+       if(current.right) {
+         queue.push(current.right)
+       }
+       currLevel.push(current.val)
+     }
+     levels.unshift(currLevel)
+   }
+   
+   return levels
+}
+ 
+ traverse([[12], [7,1], [9, 10, null, 5]])
+````
+
+
+
