@@ -358,6 +358,65 @@ function TreeNode(val, left, right) {
  
  traverse([[12], [7,1], [9, 10, null, 5]])
 ````
+### Zigzag Traversal (medium) 🌴
+````
+function TreeNode(val, left, right) {
+  this.val = (val === undefined ? 0 : val)
+  this.left = (left === undefined ? null : left)
+  this.right = (right === undefined ? nill : right)
+}
 
+function zigzagLevelOrder(root) {
+  //if root is null return an empty array
+  if(!root) return []
+  
+  //initialize the queue with root
+  const queue = [root]
+  //declare the output array
+  const levels = []
+  let leftToRight = true
+  
+  while(queue.length !== 0) {
+    //get the length prior to deque?
+    const queueLength = queue.length
+    //declare the current level
+    const currentLevel = []
+    
+    //loop through to exhaust all aoption and only to include nodes at current Level
+    for (let i = 0; i < queueLength; i++) {
+      //get the next node
+      const currentNode = queue.shift()
+      
+      //add the node to the current level based on the traverse direction
+      if(leftToRight) {
+        currentLevel.push(currentNode.val)
+      } else {
+        currentLevel.unshift(currentNode.val)
+      }
+      
+      //insert the children of current node in the queue
+      if(currentNode.left !== null) {
+        queue.push(currentNode.left) 
+      }
+      if(currentNode.right !== null) {
+        queue.push(currentNode.right)
+      }
+    }
+    //Level has been finished. push to the out put arra
+    levels.push(currentLevel)
+    
+    //reverse the traversal direction 
+    leftToRight = !leftToRight
+  }
+  return levels
+}
+
+zigzagLevelOrder([1, 2, 3, 4, 5, 6, 7])
+zigzagLevelOrder([3,9,20,null,null,15,7])
+zigzagLevelOrder([1])
+zigzagLevelOrder([])
+````
+- The time complexity of the above algorithm is O(N)O(N), where ‘N’ is the total number of nodes in the tree. This is due to the fact that we traverse each node once.
+- The space complexity of the above algorithm will be O(N)O(N) as we need to return a list containing the level order traversal. We will also need O(N)O(N) space for the queue. Since we can have a maximum of N/2N/2 nodes at any level (this could happen only at the lowest level), therefore we will need O(N)O(N) space to store them in the queue.
 
 
