@@ -277,5 +277,49 @@ console.log(`Level order traversal: ${traverse(root)}`);
 ````
 
 - The time complexity of the above algorithm is `O(N)`, where `N` is the total number of nodes in the tree. This is due to the fact that we traverse each node once.
-- The space complexity of the above algorithm will be `O(N)` as we need to return a list containing the level order traversal. We will also need `O(N)` space for the queue. Since we can have a maximum of `N/2N/2` nodes at any level (this could happen only at the lowest level), therefore we will need `O(N)` space to store them in the queue.
+- The space complexity of the above algorithm will be `O(N)` as we need to return a list containing the level order traversal. We will also need `O(N)` space for the queue. Since we can have a maximum of `N/2` nodes at any level (this could happen only at the lowest level), therefore we will need `O(N)` space to store them in the queue.
+
+#### Easier to understand solution 
+````
+function TreeNode(val, left, right) {
+  this.val = (val===undefined ? 0 : val)
+  this.left = (left===undefined ? null : left)
+  this.right = (right===undefined ? null : right)
+ }
+ 
+ const levelOrder = function  (root) {
+  //If root is null return an empty array
+  if(!root) return []
+  
+  const queue = [root] //initialize the queue with root
+  const levels = [] //declare output array
+  
+  while(queue.length !== 0) {
+    const queueLength = queue.length//get the length prior to deque
+    const currLevel = []//declare this level
+    //loop through to exahuast all options and only to include nodes at currLevel
+    for(let i = 0; i < queueLength; i++) {
+      //get next node
+      const current = queue.shift()
+      if(current.left) {
+        queue.push(current.left)
+      }
+      if(current.right) {
+        queue.push(current.right)
+      }
+      //after we add left and right for current, we add to currLevel
+      currLevel.push(current.val)
+    }
+    //Level has been finished. Push into output array
+    levels.push(currLevel) 
+  }
+  return levels
+};
+
+
+
+levelOrder([3,9,20,null,null,15,7])//[[3],[9,20],[15,7]]
+levelOrder([1])//[[1]]
+levelOrder([])//[]
+````
 
