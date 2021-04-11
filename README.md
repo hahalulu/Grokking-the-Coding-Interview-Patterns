@@ -182,6 +182,74 @@ longest_substring_with_k_distinct("cbbebi", 3)//5, The longest substrings with n
 - The above algorithm’s time complexity will be `O(N)`, where `N` is the number of characters in the input string. The outer for loop runs for all characters, and the inner while loop processes each character only once; therefore, the time complexity of the algorithm will be `O(N+N)`, which is asymptotically equivalent to `O(N)`
 - The algorithm’s space complexity is `O(K)`, as we will be storing a maximum of `K+1` characters in the HashMap.
 
+## Pattern: Two Pointer
+
+### Pair with Target Sum  aka "Two Sum" (easy) 🌴
+
+#### Hash Table Solution 
+````
+function pair_with_targetsum(nums, target) {
+  //Instead of using a two-pointer or a binary search approach, we can utilize a HashTable to search for the required pair. We can iterate through the array one number at a time. Let’s say during our iteration we are at number ‘X’, so we need to find ‘Y’ such that “X + Y == TargetX+Y==Target”. We will do two things here:
+  const arr = {}
+  for(let i = 0; i < nums.length; i ++){
+    let item = nums[i]
+     //Search for ‘Y’ (which is equivalent to “Target - XTarget−X”) in the HashTable. If it is there, we have found the required pair
+  //Otherwise, insert “X” in the HashTable, so that we can search it for the later numbers.
+    if(target - item in arr) {
+      return [arr[target - item], i]
+    }
+    arr[nums[i]] = i
+  }
+  return [-1, -1]
+}
+
+pair_with_targetsum([1, 2, 3, 4, 6], 6)//[1, 3]
+pair_with_targetsum([2, 5, 9, 11], 11)//[0, 2]
+pair_with_targetsum([2, 7, 11, 15], 9)//[0, 1]
+pair_with_targetsum([3, 2, 4], 6)//[1, 2]
+pair_with_targetsum([3, 3], 6)//[0, 1]
+````
+
+#### Brute Force
+
+````
+function pair_with_targetsum(nums, target) {
+  for (let i = 0; i < nums.length; i++) {
+    for(let j = 1; j < nums.length; j++) {
+      if((nums[i] + nums[j]) === target) {
+        //they cannot be at the same index
+        if(i !== j) {
+          return [i, j]
+        }
+      } 
+    }
+  }
+}
+````
+
+#### Two pointer Solution
+* Assume the input is sorted
+````
+function pair_with_targetsum(nums, target) {
+  let start = 0
+  let end = nums.length - 1
+  
+  while(start < end) {
+    let currentSum = nums[start] + nums[end]
+    if(currentSum === target) {
+      return [start, end]
+    }
+    if (target > currentSum) {
+      start++
+    }
+    else {
+      end--
+    }
+  }
+    return [-1, -1]
+}
+````
+
 
 ## Pattern: Tree Breadth First Search
 
