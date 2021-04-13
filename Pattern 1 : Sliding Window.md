@@ -1,6 +1,6 @@
 ## Pattern 1 : Sliding Window
 
-### Find Averages of Sub Arrays
+## Find Averages of Sub Arrays
 
 #### Brute Force
 ````
@@ -44,7 +44,7 @@ return results
 
 find_averages_of_subarrays(5, [1, 3, 2, 6, -1, 4, 1, 8, 2])
 ````
-### Maximum Sum Subarray of Size K (easy)
+## Maximum Sum Subarray of Size K (easy)
 
 #### Brute Force 
 ````
@@ -70,7 +70,8 @@ max_sub_array_of_size_k(3, [2, 1, 5, 1, 3, 2])//9
 max_sub_array_of_size_k(2, [2, 3, 4, 1, 5])//7
 ````
 - time complexity will be `O(N*K)`, where `N` is the total number of elements in the given array
-#### Sliding Window Approach
+
+### Sliding Window Approach
 ````
 function max_sub_array_of_size_k(k, arr) {
   //sliding window
@@ -95,9 +96,9 @@ max_sub_array_of_size_k(2, [2, 3, 4, 1, 5])//7
 ````
 - The time complexity of the above algorithm will be `O(N)`
 
-### Smallest Subarray with a given sum (easy)
+## Smallest Subarray with a given sum (easy)
 
-#### Sliding Window Approach
+### Sliding Window Approach
 
 ````
 function smallest_subarray_with_given_sum(s, arr) {
@@ -136,9 +137,9 @@ smallest_subarray_with_given_sum(8, [3, 4, 1, 1, 6])//3
 - The time complexity of the above algorithm will be `O(N)`. The outer for loop runs for all elements, and the inner while loop processes each element only once; therefore, the time complexity of the algorithm will be `O(N+N)`), which is asymptotically equivalent to `O(N)`.
 - The algorithm runs in constant space O(1)O(1).
 
-### Longest Substring with K Distinct Characters (medium)
+## Longest Substring with K Distinct Characters (medium)
 
-#### Sliding Window Approach
+### Sliding Window Approach
 
 ````
 function longest_substring_with_k_distinct(str, k) {
@@ -179,3 +180,37 @@ longest_substring_with_k_distinct("cbbebi", 3)//5, The longest substrings with n
 ````
 - The above algorithm’s time complexity will be `O(N)`, where `N` is the number of characters in the input string. The outer for loop runs for all characters, and the inner while loop processes each character only once; therefore, the time complexity of the algorithm will be `O(N+N)`, which is asymptotically equivalent to `O(N)`
 - The algorithm’s space complexity is `O(K)`, as we will be storing a maximum of `K+1` characters in the HashMap.
+
+## Fruits into Baskets (medium)
+https://leetcode.com/problems/fruit-into-baskets/
+
+````
+function fruitsInBaskets(fruits) {
+  let windowStart = 0; 
+  let maxLength = 0; 
+  let fruitFrequency = {};
+  
+  //try to extend the range
+  for(let windowEnd = 0; windowEnd < fruits.length; window++) {
+    const rightFruit = fruits[windowEnd]
+    if(!(rightFruit in fruitFrequency)) {
+      fruitFrequency[rightFruit] = 0
+    }
+    fruitFrequency[rightFruit]++
+    //shrink the sliding window, until we are left with '2' fruits in the fruitFrequency hashMap
+    while(Object.keys(fruitFrequency).length > 2) {
+      const leftFruit = fruits[windowStart];
+      fruitFrequency[leftFruit]--
+      if(fruitFrequency[leftFruit] === 0) {
+        delete fruitFrequency[leftFruit]
+      }
+      windowStart++
+    }
+    maxLength = Math.max(maxLength, windowEnd - windowStart + 1)
+  }
+  return maxLength
+}
+
+fruitsInBaskets(['A', 'B', 'C', 'A', 'C'])//3 
+fruitsInBaskets(['A', 'B', 'C', 'B', 'B', 'C'])//5
+````
