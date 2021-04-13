@@ -39,5 +39,8 @@ root.right.left = new TreeNode(10)
 root.right.right = new TreeNode(5)
 console.log(`Tree has path: ${has_path(root, 23)}`)
 console.log(`Tree has path: ${has_path(root, 16)}`)
-
 ````
+- The time complexity of the above algorithm is O(N)O(N), where ‘N’ is the total number of nodes in the tree. This is due to the fact that we traverse each node once.
+- The space complexity of the above algorithm will be O(N)O(N) in the worst case. This space will be used to store the recursion stack. The worst case will happen when the given tree is a linked list (i.e., every node has only one child).
+
+
