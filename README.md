@@ -12,7 +12,7 @@ The efficient way to solve this problem would be to visualize each contiguous su
 
 In problems where we deal with sorted arrays (or LinkedLists) and need to find a set of elements that fulfill certain constraints, the Two Pointers approach becomes quite useful. The set of elements could be a pair, a triplet or even a subarray. For example, take a look at the following problem:
 
-`Given an array of sorted numbers and a target sum, find a pair in the array whose sum is equal to the given target.`
+> Given an array of sorted numbers and a target sum, find a pair in the array whose sum is equal to the given target.
 
 To solve this problem, we can consider each element one by one (pointed out by the first pointer) and iterate through the remaining elements (pointed out by the second pointer) to find a pair with the given sum. The time complexity of this algorithm will be `O(N^2)` where `‘N’` is the number of elements in the input array.
 
