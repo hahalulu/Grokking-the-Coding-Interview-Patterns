@@ -1,5 +1,15 @@
 # Pattern: Two Pointer
 
+In problems where we deal with sorted arrays (or LinkedLists) and need to find a set of elements that fulfill certain constraints, the Two Pointers approach becomes quite useful. The set of elements could be a pair, a triplet or even a subarray. For example, take a look at the following problem:
+
+`Given an array of sorted numbers and a target sum, find a pair in the array whose sum is equal to the given target.`
+
+To solve this problem, we can consider each element one by one (pointed out by the first pointer) and iterate through the remaining elements (pointed out by the second pointer) to find a pair with the given sum. The time complexity of this algorithm will be `O(N^2)` where `‘N’` is the number of elements in the input array.
+
+Given that the input array is sorted, an efficient way would be to start with one pointer in the beginning and another pointer at the end. At every step, we will see if the numbers pointed by the two pointers add up to the target sum. If they do not, we will do one of two things:
+1. If the sum of the two numbers pointed by the two pointers is greater than the target sum, this means that we need a pair with a smaller sum. So, to try more pairs, we can decrement the end-pointer.
+2. If the sum of the two numbers pointed by the two pointers is smaller than the target sum, this means that we need a pair with a larger sum. So, to try more pairs, we can increment the start-pointer.
+
 ## Pair with Target Sum  aka "Two Sum" (easy) 🌴
 
 ### Hash Table Solution 
@@ -115,3 +125,35 @@ removeElement([2, 11, 2, 2, 1], 2)//2
 ````
 - The time complexity of the above algorithm will be `O(N)`, where `‘N’` is the total number of elements in the given array.
 - The algorithm runs in constant space O(1)O(1).
+
+## Squaring a Sorted Array (easy)
+````
+function makeSquares(arr) {
+  const n = arr.length
+  squares = Array(n).fill(0)
+  let highestSquareIndex = n -1
+  let left = 0
+  let right = n -1
+  while(left <= right){
+    let leftSquare = arr[left] * arr[left]
+    let rightSquare = arr[right] * arr[right]
+    
+    if(leftSquare > rightSquare) {
+      squares[highestSquareIndex] = leftSquare
+      left++
+    } else {
+      squares[highestSquareIndex] = rightSquare
+      right--
+    }
+    highestSquareIndex--
+  }
+  
+  return squares;
+};
+
+
+makeSquares([-2, -1, 0, 2, 3])//[0, 1, 4, 4, 9]
+makeSquares([-3, -1, 0, 1, 2])//[0, 1, 1, 4, 9]
+````
+- The above algorithm’s time complexity will be `O(N)` as we are iterating the input array only once.
+- The above algorithm’s space complexity will also be `O(N)`; this space will be used for the output array.
