@@ -1,8 +1,13 @@
 ## Pattern 1 : Sliding Window
+In many problems dealing with an array (or a LinkedList), we are asked to find or calculate something among all the contiguous subarrays (or sublists) of a given size. For example, take a look at this problem:
+
+> Given an array, find the average of all contiguous subarrays of size ‘K’ in it.
+
+The efficient way to solve this problem would be to visualize each contiguous subarray as a sliding window of `‘5’` elements. This means that we will slide the window by one element when we move on to the next subarray. To reuse the sum from the previous subarray, we will subtract the element going out of the window and add the element now being included in the sliding window. This will save us from going through the whole subarray to find the sum and, as a result, the algorithm complexity will reduce to `O(N)`.
 
 ## Find Averages of Sub Arrays
 
-#### Brute Force
+### Brute Force
 ````
 function find_averages_of_subarrays(K, arr) {
   //brute force
@@ -23,7 +28,7 @@ function find_averages_of_subarrays(K, arr) {
 find_averages_of_subarrays(5, [1, 3, 2, 6, -1, 4, 1, 8, 2])
 ````
 
-#### Sliding Window Approach
+### Sliding Window Approach
 ````
 function find_averages_of_subarrays(K, arr) {
   //sliding window approach
