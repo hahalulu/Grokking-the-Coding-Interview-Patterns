@@ -14,18 +14,46 @@ Given that the input array is sorted, an efficient way would be to start with on
 1. If the sum of the two numbers pointed by the two pointers is greater than the target sum, this means that we need a pair with a smaller sum. So, to try more pairs, we can decrement the end-pointer.
 2. If the sum of the two numbers pointed by the two pointers is smaller than the target sum, this means that we need a pair with a larger sum. So, to try more pairs, we can increment the start-pointer.
 
-## Pattern 8: Tree Breadth First Search
+## Pattern 3: Fast & Slow pointers
 
-## Pattern 9: Depth First Search (DFS)
+## Pattern 4: Merge Intervals
+
+## Pattern 5: Cyclic Sort
+
+## Pattern 6: In-place Reversal of a LinkedList
+
+## Pattern 7: Tree Breadth First Search
+
+## Pattern 8: Depth First Search (DFS)
 
 This pattern is based on the <b>Depth First Search (DFS)</b> technique to traverse a tree.
 
 We will be using recursion (or we can also use a stack for the iterative approach) to keep track of all the previous (parent) nodes while traversing. This also means that the space complexity of the algorithm will be `O(H)`, where `‘H’` is the maximum height of the tree.
 
-## Pattern 14: Top 'K' Elements
+## Pattern 9: Two Heaps
+
+## Pattern 10: Subsets
+
+## Pattern 11: Modified Binary Search
+
+## Pattern 12: Bitwise XOR
+
+## Pattern 13: Top 'K' Elements
 
 Any problem that asks us to find the top/smallest/frequent ‘K’ elements among a given set falls under this pattern.
 
 The best data structure that comes to mind to keep track of ‘K’ elements is Heap. This pattern will make use of the Heap to solve multiple problems dealing with ‘K’ elements at a time from a set of given elements.
+
+## Pattern 14: K-way merge
+
+## Pattern 15: 0/1 Knapsack (Dynamic Programming)
+
+## Pattern 16: Topological Sort (Graph)
+
+
+
+
+
+
 
 
