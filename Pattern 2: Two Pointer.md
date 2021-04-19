@@ -2,7 +2,7 @@
 
 In problems where we deal with sorted arrays (or LinkedLists) and need to find a set of elements that fulfill certain constraints, the Two Pointers approach becomes quite useful. The set of elements could be a pair, a triplet or even a subarray. For example, take a look at the following problem:
 
-`Given an array of sorted numbers and a target sum, find a pair in the array whose sum is equal to the given target.`
+> Given an array of sorted numbers and a target sum, find a pair in the array whose sum is equal to the given target.
 
 To solve this problem, we can consider each element one by one (pointed out by the first pointer) and iterate through the remaining elements (pointed out by the second pointer) to find a pair with the given sum. The time complexity of this algorithm will be `O(N^2)` where `‘N’` is the number of elements in the input array.
 
@@ -10,7 +10,8 @@ Given that the input array is sorted, an efficient way would be to start with on
 1. If the sum of the two numbers pointed by the two pointers is greater than the target sum, this means that we need a pair with a smaller sum. So, to try more pairs, we can decrement the end-pointer.
 2. If the sum of the two numbers pointed by the two pointers is smaller than the target sum, this means that we need a pair with a larger sum. So, to try more pairs, we can increment the start-pointer.
 
-## Pair with Target Sum  aka "Two Sum" (easy) 🌴
+## Pair with Target Sum  aka "Two Sum" (easy) 🌴 
+https://leetcode.com/problems/two-sum/
 
 ### Hash Table Solution 
 ````
@@ -56,27 +57,30 @@ function pair_with_targetsum(nums, target) {
 ### Two pointer Solution
 * Assume the input is sorted
 ````
-function pair_with_targetsum(nums, target) {
+function pairWithTargetSum(arr, target) {
   let start = 0
-  let end = nums.length - 1
+  let end = arr.length-1
   
   while(start < end) {
-    let currentSum = nums[start] + nums[end]
+    let currentSum = arr[start] + arr[end]
+    
     if(currentSum === target) {
       return [start, end]
     }
-    if (target > currentSum) {
+    
+    if(currentSum < target) {
       start++
-    }
-    else {
+    } else {
       end--
     }
   }
-    return [-1, -1]
+  return 0  
 }
-````
-### Remove Duplicates (easy)
 
+pairWithTargetSum([1, 2, 3, 4, 6], 6)//[1,3]
+pairWithTargetSum([2, 5, 9, 11], 11)//[0,2]
+````
+## Remove Duplicates (easy)
 ````
 function remove_duplicates(arr) {
   
