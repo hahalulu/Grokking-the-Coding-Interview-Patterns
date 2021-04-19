@@ -82,94 +82,113 @@ find_averages_of_subarrays(5, [1, 3, 2, 6, -1, 4, 1, 8, 2])
 
 #### Brute Force 
 ````
-function max_sub_array_of_size_k(k, arr) {
+function maxSubarrayOfSizeK(arr, k) {
   //brute force
-  let maxWindowSum = 0
-  let currentwindowSum = 0
+  let maxSum = 0
+  let windowSum = 0
+  
   //loop through array
-  for(let i = 0; i < arr.length-k+1; i++) {
-    currentwindowSum = 0
+  for(let i = 0; i < arr.length -k + 1; i++) {
+    
     //keep track of sum in current window
-    for(j = i; j < i + k; j++) {
-      currentwindowSum += arr[j]
+    windowSum = 0
+    for(let j = i; j < i + k; j++) {
+      windowSum += arr[j]
     }
+    
     //if currentWindowSum is > maxWindowSum
-    //set currentWindwoSum to maxWindowSum
-    maxWindowSum = Math.max(maxWindowSum, currentwindowSum)
+    //set currentWindwoSum to maxWindowSu
+    maxSum = Math.max(maxSum, windowSum)
   }
-  return maxWindowSum
-};
+  return maxSum
+}
 
 max_sub_array_of_size_k(3, [2, 1, 5, 1, 3, 2])//9
 max_sub_array_of_size_k(2, [2, 3, 4, 1, 5])//7
 ````
-- time complexity will be `O(N*K)`, where `N` is the total number of elements in the given array
+- Time complexity will be `O(N*K)`, where `N` is the total number of elements in the given array
 
 ### Sliding Window Approach
 ````
-function max_sub_array_of_size_k(k, arr) {
+function maxSubarrayOfSizeK(arr, k) {
   //sliding window
-  let maxWindowSum = 0, currentwindowSum = 0, windowStart = 0
+  let maxSum = 0
+  let windowSum = 0
+  let windowStart = 0
   
-  for(windowEnd = 0; windowEnd < arr.length; windowEnd++) {
-    currentwindowSum += arr[windowEnd]//add the next element 
-    //slide the window
-    //we don't need to slide if we have not hit 
-    //the required window size of k
-    if(windowEnd >= k - 1) {
-      maxWindowSum = Math.max(maxWindowSum, currentwindowSum);
-      currentwindowSum -= arr[windowStart]//subtract the element going out
-      windowStart += 1 //slide the window ahead
+  //loop through array
+  for(let windowEnd = 0; windowEnd < arr.length; windowEnd++) {
+    //add the next element
+    windowSum += arr[windowEnd]
+    
+    //slide the window, we dont need to slid if we
+    //haven't hit the required window size of 'k'
+    if(windowEnd >= k -1) {
+      maxSum = Math.max(maxSum, windowSum)
+      
+      //subtract the element going out
+      windowSum -= arr[windowStart]
+      
+      //slide the window ahead
+      windowStart ++
     }
   }
-  return maxWindowSum
-};
+  return maxSum
+}
 
-max_sub_array_of_size_k(3, [2, 1, 5, 1, 3, 2])//9
-max_sub_array_of_size_k(2, [2, 3, 4, 1, 5])//7
+
+maxSubarrayOfSizeK([2, 1, 5, 1, 3, 2], 3)//9 
+maxSubarrayOfSizeK([2, 3, 4, 1, 5], 2)//7 
 ````
 - The time complexity of the above algorithm will be `O(N)`
+- The space complexity of the above algorithm will be `O(1)`
 
 ## Smallest Subarray with a given sum (easy)
 
 ### Sliding Window Approach
 
 ````
-function smallest_subarray_with_given_sum(s, arr) {
-  let windowSum = 0, minLength = Infinity, windowStart = 0;
+function smallestSubarrayWithGivenSum(arr, s) {
+  //sliding window, BUT the window size is not fixed
+  let windowSum = 0
+  let minLength = Infinity
+  let windowStart = 0
   
-  for(windowEnd = 0; windowEnd < arr.length; windowEnd++){
-    //add elements from the beggining of the array 
-    //until thier sum becomes >= to s
+  //First, we will add-up elements from the beginning of the array until their sum becomes greater than or equal to ‘S.’
+  for(windowEnd = 0; windowEnd < arr.length; windowEnd++) {
+    
+    //add the next element
     windowSum += arr[windowEnd]
-    //remember the length of this window at the 
-    //smallest window so far
-    //keep adding one element in the sliding window
+    
+    //shrink the window as small as possible
+    //until windowSum is small than s
     while(windowSum >= s) {
-      //1. check if the current window length is the small so far,
-      //if so remeber it's length
-      minLength = Math.min(minLength, windowEnd-windowStart+1)
-      //while trying to shrink the window from the beggining
-      //shrink the window until the window's sum 
-  //is smaller than s again
+      //These elements will constitute our sliding window. We are asked to find the smallest such window having a sum greater than or equal to ‘S.’ We will remember the length of this window as the smallest window so far.
+      //After this, we will keep adding one element in the sliding window (i.e., slide the window ahead) in a stepwise fashion.
+       //In each step, we will also try to shrink the window from the beginning. We will shrink the window until the window’s sum is smaller than ‘S’ again. This is needed as we intend to find the smallest window. This shrinking will also happen in multiple steps; in each step, we will do two things:
+  //Check if the current window length is the smallest so far, and if so, remember its length.
+      minLength = Math.min(minLength, windowEnd - windowStart + 1)
+      
+  //Subtract the first element of the window from the running sum to shrink the sliding window.
       windowSum -= arr[windowStart]
-      //2. subtract the first element of the window from the running sum to shrink the sliding window
-      windowStart += 1
+      windowStart++
     }
-  }
+  } 
   if(minLength === Infinity) {
     return 0
   }
-  return minLength;
-};
+  return minLength
+}
 
-smallest_subarray_with_given_sum(7, [2, 1, 5, 2, 3, 2])//2
-smallest_subarray_with_given_sum(7, [2, 1, 5, 2, 8])//1
-smallest_subarray_with_given_sum(8, [3, 4, 1, 1, 6])//3
+
+smallestSubarrayWithGivenSum([2, 1, 5, 2, 3, 2], 7)//2
+smallestSubarrayWithGivenSum([2, 1, 5, 2, 8], 7)//1
+smallestSubarrayWithGivenSum([3, 4, 1, 1, 6], 8)//3
+
 ````
 
 - The time complexity of the above algorithm will be `O(N)`. The outer for loop runs for all elements, and the inner while loop processes each element only once; therefore, the time complexity of the algorithm will be `O(N+N)`), which is asymptotically equivalent to `O(N)`.
-- The algorithm runs in constant space O(1)O(1).
+- The algorithm runs in constant space `O(1)`.
 
 ## Longest Substring with K Distinct Characters (medium)
 
