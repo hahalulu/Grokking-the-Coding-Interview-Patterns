@@ -5,6 +5,35 @@ In many problems dealing with an array (or a LinkedList), we are asked to find o
 
 The efficient way to solve this problem would be to visualize each contiguous subarray as a sliding window of `‘5’` elements. This means that we will slide the window by one element when we move on to the next subarray. To reuse the sum from the previous subarray, we will subtract the element going out of the window and add the element now being included in the sliding window. This will save us from going through the whole subarray to find the sum and, as a result, the algorithm complexity will reduce to `O(N)`.
 
+````
+function findAveragesOfSubarrays(arr, k) {
+  const result = []
+  let windowSum = 0.0
+  let windowStart = 0
+  
+  for(let windowEnd = 0; windowEnd < arr.length; windowEnd++) {
+  
+  //add the next element
+   windowSum += arr[windowEnd]
+   
+    //slide the window, we dont need to slide if we've not hit the required window size of k
+    if(windowEnd >= k-1) {
+    
+      //calculate the average
+      result.push(windowSum/k)
+      
+      //subtract the element going out
+      windowSum -= arr[windowStart]
+      
+      //slide the window ahead
+      windowStart++
+    }
+  }
+  return result  
+}
+
+findAveragesOfSubarrays([1, 3, 2, 6, -1, 4, 1, 8, 2], 5)
+````
 ## Find Averages of Sub Arrays
 
 ### Brute Force
