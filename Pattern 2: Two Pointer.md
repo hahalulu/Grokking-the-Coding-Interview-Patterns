@@ -13,8 +13,6 @@ Given that the input array is sorted, an efficient way would be to start with on
 ## Pair with Target Sum  aka "Two Sum" (easy) 🌴 
 https://leetcode.com/problems/two-sum/
 
-
-
 ### Brute Force
 
 ````
@@ -150,30 +148,38 @@ removeElement([2, 11, 2, 2, 1], 2)//2
 - The algorithm runs in constant space `O(1)`.
 
 ## Squaring a Sorted Array (easy)
+https://leetcode.com/problems/squares-of-a-sorted-array/
+
 ````
 function makeSquares(arr) {
-  const n = arr.length
-  squares = Array(n).fill(0)
-  let highestSquareIndex = n -1
-  let left = 0
-  let right = n -1
-  while(left <= right){
-    let leftSquare = arr[left] * arr[left]
-    let rightSquare = arr[right] * arr[right]
+ 
+  //The only trick is that we can have negative numbers in the input array, which will make it a bit difficult to generate the output array with squares in sorted order.
+//An easier approach could be to first find the index of the first non-negative number in the array. 
+  //After that, we can use Two Pointers to iterate the array. 
+  //One pointer will move forward to iterate the non-negative numbers
+  //the other pointer will move backward to iterate the negative numbers. At any step, whichever number gives us a bigger square will be added to the output array.
+  //Since the numbers at both ends can give us the largest square, an alternate approach could be to use two pointers starting at both ends of the input array. At any step, whichever pointer gives us the bigger square, we add it to the result array and move to the next/previous number according to the pointer. 
+  
+  const n = arr.length;
+  let squares = Array(n).fill(0)
+  let highestSquareIndex = n - 1
+  let start = 0
+  let end = n-1
+  while(start<= end) {
+    let startSquare = arr[start] * arr[start]
+    let endSquare = arr[end] * arr[end]
     
-    if(leftSquare > rightSquare) {
-      squares[highestSquareIndex] = leftSquare
-      left++
+    if(startSquare > endSquare) {
+      squares[highestSquareIndex]  = startSquare
+      start++
     } else {
-      squares[highestSquareIndex] = rightSquare
-      right--
+      squares[highestSquareIndex]  = endSquare
+      end--
     }
     highestSquareIndex--
   }
-  
-  return squares;
-};
-
+  return squares
+}
 
 makeSquares([-2, -1, 0, 2, 3])//[0, 1, 4, 4, 9]
 makeSquares([-3, -1, 0, 1, 2])//[0, 1, 1, 4, 9]
