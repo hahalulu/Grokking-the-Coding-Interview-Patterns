@@ -13,29 +13,7 @@ Given that the input array is sorted, an efficient way would be to start with on
 ## Pair with Target Sum  aka "Two Sum" (easy) 🌴 
 https://leetcode.com/problems/two-sum/
 
-### Hash Table Solution 
-````
-function pair_with_targetsum(nums, target) {
-  //Instead of using a two-pointer or a binary search approach, we can utilize a HashTable to search for the required pair. We can iterate through the array one number at a time. Let’s say during our iteration we are at number ‘X’, so we need to find ‘Y’ such that “X + Y == TargetX+Y==Target”. We will do two things here:
-  const arr = {}
-  for(let i = 0; i < nums.length; i ++){
-    let item = nums[i]
-     //Search for ‘Y’ (which is equivalent to “Target - XTarget−X”) in the HashTable. If it is there, we have found the required pair
-  //Otherwise, insert “X” in the HashTable, so that we can search it for the later numbers.
-    if(target - item in arr) {
-      return [arr[target - item], i]
-    }
-    arr[nums[i]] = i
-  }
-  return [-1, -1]
-}
 
-pair_with_targetsum([1, 2, 3, 4, 6], 6)//[1, 3]
-pair_with_targetsum([2, 5, 9, 11], 11)//[0, 2]
-pair_with_targetsum([2, 7, 11, 15], 9)//[0, 1]
-pair_with_targetsum([3, 2, 4], 6)//[1, 2]
-pair_with_targetsum([3, 3], 6)//[0, 1]
-````
 
 ### Brute Force
 
@@ -80,55 +58,96 @@ function pairWithTargetSum(arr, target) {
 pairWithTargetSum([1, 2, 3, 4, 6], 6)//[1,3]
 pairWithTargetSum([2, 5, 9, 11], 11)//[0,2]
 ````
-## Remove Duplicates (easy)
+- The time complexity of the above algorithm will be `O(N)`, where `‘N’` is the total number of elements in the given array.
+- The algorithm runs in constant space `O(1)`.
+
+### Hash Table Solution 
 ````
-function remove_duplicates(arr) {
+function pair_with_targetsum(nums, target) {
+  //Instead of using a two-pointer or a binary search approach, 
+  //we can utilize a HashTable to search for the required pair. 
+  //We can iterate through the array one number at a time. 
+  //Let’s say during our iteration we are at number ‘X’, 
+  //so we need to find ‘Y’ such that “X + Y == TargetX+Y==Target”. 
   
-  // assume array is sorted
+  //We will do two things here:
+  const arr = {}
+  for(let i = 0; i < nums.length; i ++){
+    let item = nums[i]
+     //1. Search for ‘Y’ (which is equivalent to “Target - XTarget−X”) in the HashTable. 
+     //If it is there, we have found the required pair
+     
+     //2. Otherwise, insert “X” in the HashTable, so that we can search it for the later numbers.
+    if(target - item in arr) {
+      return [arr[target - item], i]
+    }
+    arr[nums[i]] = i
+  }
+  return [-1, -1]
+}
+
+pair_with_targetsum([1, 2, 3, 4, 6], 6)//[1, 3]
+pair_with_targetsum([2, 5, 9, 11], 11)//[0, 2]
+pair_with_targetsum([2, 7, 11, 15], 9)//[0, 1]
+pair_with_targetsum([3, 2, 4], 6)//[1, 2]
+pair_with_targetsum([3, 3], 6)//[0, 1]
+````
+
+- The time complexity of the above algorithm will be `O(N)`, where `‘N’` is the total number of elements in the given array.
+- The space complexity will also be `O(N)`, as, in the worst case, we will be pushing `‘N’` numbers in the HashTable.
+## Remove Duplicates (easy)
+https://leetcode.com/problems/remove-duplicates-from-sorted-array/
+
+* Assume the input is sorted
+````
+function removeDuplicates(arr) {
+
+  //shift the elements left when we encounter duplicates
   
-  //two-pointers
-  //keep one pointer for the iterating array
+  //one pointer for iterating
   let i = 1
-  //one point for placing the next non dupe number
-  let nextNonDupe = 1
   
-  // shift elements whenever we encounter dupes
+  //one pointer for placing this next non-duplicate
+  let nextNonDupe = 1
+
   while(i < arr.length) {
-    if(arr[nextNonDupe - 1] !== arr[i]) {
+    if(arr[nextNonDupe -1] !== arr[i]) {
       arr[nextNonDupe] = arr[i]
       nextNonDupe++
     }
     i++
   }
-  return nextNonDupe
-};
+  return nextNonDupe  
+}
 
-remove_duplicates([2, 3, 3, 3, 6, 9, 9])//4 
-remove_duplicates([2, 2, 2, 11])//2 
+removeDuplicates([2, 3, 3, 3, 6, 9, 9])//4
+removeDuplicates([2, 2, 2, 11])//2
 ````
-- The time complexity of the above algorithm will be `O(N`), where `‘N’` is the total number of elements in the given array.
+- The time complexity of the above algorithm will be `O(N)`, where `‘N’` is the total number of elements in the given array.
 - The algorithm runs in constant space `O(1)`.
+
+### Remove Element
+https://leetcode.com/problems/remove-element/
 
 ````
 function removeElement(arr, key) {
-  //two-pointers
   //index of the next element which is not 'key'
   let nextElement = 0
   
-  for(let i = 0; i< arr.length; i++) {
+  for(i=0; i < arr.length; i++){
     if(arr[i] !== key) {
       arr[nextElement] = arr[i]
       nextElement++
     }
   }
   return nextElement
-};
+}
 
 removeElement([3, 2, 3, 6, 3, 10, 9, 3], 3)//4
 removeElement([2, 11, 2, 2, 1], 2)//2
 ````
 - The time complexity of the above algorithm will be `O(N)`, where `‘N’` is the total number of elements in the given array.
-- The algorithm runs in constant space O(1)O(1).
+- The algorithm runs in constant space `O(1)`.
 
 ## Squaring a Sorted Array (easy)
 ````
