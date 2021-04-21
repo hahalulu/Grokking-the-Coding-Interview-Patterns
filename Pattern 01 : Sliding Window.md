@@ -35,7 +35,7 @@ function findAveragesOfSubarrays(arr, k) {
 findAveragesOfSubarrays([1, 3, 2, 6, -1, 4, 1, 8, 2], 5)
 ````
 ## Find Averages of Sub Arrays
-
+https://leetcode.com/problems/maximum-average-subarray-i/
 ### Brute Force
 ````
 function find_averages_of_subarrays(K, arr) {
@@ -79,7 +79,7 @@ return results
 find_averages_of_subarrays(5, [1, 3, 2, 6, -1, 4, 1, 8, 2])
 ````
 ## Maximum Sum Subarray of Size K (easy)
-
+https://leetcode.com/problems/largest-subarray-length-k/
 #### Brute Force 
 ````
 function maxSubarrayOfSizeK(arr, k) {
@@ -145,8 +145,6 @@ maxSubarrayOfSizeK([2, 3, 4, 1, 5], 2)//7
 
 ## Smallest Subarray with a given sum (easy)
 
-### Sliding Window Approach
-
 ````
 function smallestSubarrayWithGivenSum(arr, s) {
   //sliding window, BUT the window size is not fixed
@@ -191,8 +189,7 @@ smallestSubarrayWithGivenSum([3, 4, 1, 1, 6], 8)//3
 - The algorithm runs in constant space `O(1)`.
 
 ## Longest Substring with K Distinct Characters (medium)
-
-### Sliding Window Approach
+https://leetcode.com/problems/longest-substring-with-at-most-k-distinct-characters/
 
 ````
 function longest_substring_with_k_distinct(str, k) {
