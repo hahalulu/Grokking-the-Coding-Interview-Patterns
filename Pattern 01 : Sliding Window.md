@@ -191,7 +191,7 @@ smallestSubarrayWithGivenSum([3, 4, 1, 1, 6], 8)//3
 ## Longest Substring with K Distinct Characters (medium)
 https://leetcode.com/problems/longest-substring-with-at-most-k-distinct-characters/
 
-This problem follows the Sliding Window pattern, and we can use a similar dynamic sliding window strategy as discussed in Smallest Subarray with a given sum. We can use a HashMap to remember the frequency of each character we have processed. Here is how we will solve this problem:
+This problem follows the Sliding Window pattern, and we can use a similar dynamic sliding window strategy as discussed in <b>Smallest Subarray with a given sum</b>. We can use a HashMap to remember the frequency of each character we have processed. Here is how we will solve this problem:
 
 1. First, we will insert characters from the beginning of the string until we have `K` distinct characters in the HashMap.
 2. These characters will constitute our sliding window. We are asked to find the longest such window having no more than `K` distinct characters. We will remember the length of this window as the longest window so far.
@@ -289,6 +289,8 @@ fruitsInBaskets(['A', 'B', 'C', 'B', 'B', 'C'])//5 , We can put 3 'B' in one bas
 ## No-repeat Substring (hard)
 https://leetcode.com/problems/longest-substring-without-repeating-characters/
 
+This problem follows the <b>Sliding Window pattern</b>, and we can use a similar dynamic sliding window strategy as discussed in <b>Longest Substring with K Distinct Characters</b>. We can use a HashMap to remember the last index of each character we have processed. Whenever we get a repeating character, we will shrink our sliding window to ensure that we always have distinct characters in the sliding window.
+
 ````
 function nonRepeatSubstring(str) {
   // sliding window with hashmap
@@ -300,10 +302,12 @@ function nonRepeatSubstring(str) {
   //try to extend the range [windowStart, windowEnd]
   for(let windowEnd = 0; windowEnd < str.length; windowEnd++) {
     const endChar = str[windowEnd]
+    
     //if the map already contains the endChar, 
     //shrink the window from the beginning 
     //so that we only have on occurance of endChar
     if(endChar in charIndexMap) {
+    
       //this is tricky; in the current window, 
       //we will not have any endChar after
       //it's previous index. and if windowStart
@@ -311,8 +315,10 @@ function nonRepeatSubstring(str) {
       //endChar, we'll keep windowStart
       windowStart = Math.max(windowStart, charIndexMap[endChar] + 1)
     }
+    
     //insert the endChar into the map
     charIndexMap[endChar] = windowEnd
+    
     //remember the maximum length so far
     maxLength = Math.max(maxLength, windowEnd - windowStart+1)
   } 
