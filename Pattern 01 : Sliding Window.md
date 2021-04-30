@@ -331,3 +331,54 @@ nonRepeatSubstring("abccde")//3
 ````
 - The above algorithm’s time complexity will be `O(N)`, where `‘N’` is the number of characters in the input string.
 - The algorithm’s space complexity will be `O(K)`, where `K` is the number of distinct characters in the input string. This also means `K<=N`, because in the worst case, the whole string might not have any repeating character, so the entire string will be added to the HashMap. Having said that, since we can expect a fixed set of characters in the input string (e.g., 26 for English letters), we can say that the algorithm runs in fixed space `O(1)`; in this case, we can use a fixed-size array instead of the HashMap.
+
+## Longest Substring with Same Letters after Replacement (hard)
+https://leetcode.com/problems/longest-repeating-character-replacement/
+
+This problem follows the <b>Sliding Window pattern</b>, and we can use a similar dynamic sliding window strategy as discussed in <b>No-repeat Substring</b>. We can use a HashMap to count the frequency of each letter.
+
+- We will iterate through the string to add one letter at a time in the window.
+- We will also keep track of the count of the maximum repeating letter in any window (let’s call it `maxRepeatLetterCount`).
+- So, at any time, we know that we do have a window with one letter repeating `maxRepeatLetterCount` times; this means we should try to replace the remaining letters.
+  - If the remaining letters are less than or equal to `‘k’`, we can replace them all.
+  - If we have more than `‘k’` remaining letters, we should shrink the window as we cannot replace more than `‘k’` letters.
+
+While shrinking the window, we don’t need to update `maxRepeatLetterCount` (hence, it represents the maximum repeating count of ANY letter for ANY window). Why don’t we need to update this count when we shrink the window? Since we have to replace all the remaining letters to get the longest substring having the same letter in any window, we can’t get a better answer from any other window even though all occurrences of the letter with frequency `maxRepeatLetterCount` is not in the current window.
+````
+function lengthOfLongestSubstring(str, k) {
+  let windowStart = 0
+  let maxLength = 0
+  let maxRepeatLetterCount = 0
+  let charFrequency = {}
+  
+  //Try to extend the range [windowStart, windowEnd]
+  for(let windowEnd = 0; windowEnd < str.length; windowEnd++) {
+    const endChar = str[windowEnd]
+    if(!(endChar in charFrequency)) {
+      charFrequency[endChar] = 0
+    }
+    charFrequency[endChar]++
+    maxRepeatLetterCount = Math.max(maxRepeatLetterCount, charFrequency[endChar])
+    
+    //current window size is from windowStart to windowEnd, overall we have a letter which is
+    //repeating maxRepeatLetterCount times, this mean we can have a window which has one letter
+    //repeating maxRepeatLetterCount times and the remaining letters we should replace
+    //if the remaining letters are more than k, it is the time to shrink the window as we
+    //are not allowed to replace more than k letters
+    if((windowEnd - windowStart + 1 - maxRepeatLetterCount) > k) {
+      const startChar = str[windowStart]
+      charFrequency[startChar]--
+      windowStart++
+    }
+    maxLength = Math.max(maxLength, windowEnd - windowStart + 1)
+  }
+  return maxLength
+}
+
+lengthOfLongestSubstring("aabccbb", 2)//5, Replace the two 'c' with 'b' to have a longest repeating substring "bbbbb".
+lengthOfLongestSubstring("abbcb", 1)//4, Replace the 'c' with 'b' to have a longest repeating substring "bbbb".
+lengthOfLongestSubstring("abccde", 1)//3, Replace the 'b' or 'd' with 'c' to have the longest repeating substring "ccc".
+````
+
+- The above algorithm’s time complexity will be `O(N)`, where `‘N’` is the number of letters in the input string.
+- As we expect only the lower case letters in the input string, we can conclude that the space complexity will be `O(26)` to store each letter’s frequency in the HashMap, which is asymptotically equal to `O(1)`.
