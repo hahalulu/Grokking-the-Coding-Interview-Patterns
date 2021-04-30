@@ -246,7 +246,7 @@ longestSubstringWithKdistinct("cbbebi", 3)//5, The longest substrings with no mo
 ## Fruits into Baskets (medium)
 https://leetcode.com/problems/fruit-into-baskets/
 
-This problem follows the Sliding Window pattern and is quite similar to `Longest Substring with K Distinct Characters`. 
+This problem follows the Sliding Window pattern and is quite similar to <b>Longest Substring with K Distinct Characters</b>. 
 > In this problem, we need to find the length of the longest subarray with no more than two distinct characters (or fruit types!). 
 
 This transforms the current problem into Longest Substring with K Distinct Characters where K=2.
