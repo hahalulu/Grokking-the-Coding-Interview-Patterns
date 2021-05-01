@@ -521,6 +521,8 @@ Every anagram is a permutation of a string. As we know, when we are not allowed 
 > Write a function to return a list of starting indices of the anagrams of the pattern in the given string.
 
 ## 🌟 Smallest Window containing Substring (hard)
+https://leetcode.com/problems/minimum-window-substring/
 ## 🌟 Words Concatenation (hard)
+https://leetcode.com/problems/concatenated-words/
 
 
