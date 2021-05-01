@@ -505,3 +505,22 @@ findPermutation("aaacb", "abc")//true, The string contains "acb" which is a perm
 - The above algorithm’s time complexity will be `O(N + M)`, where `‘N’` and `‘M’` are the number of characters in the input string and the pattern, respectively.
 - The algorithm’s space complexity is `O(M)` since, in the worst case, the whole pattern can have distinct characters that will go into the HashMap.
 
+## 🌟 String Anagrams (hard)
+https://leetcode.com/problems/find-all-anagrams-in-a-string/
+
+Given a string and a pattern, find all anagrams of the pattern in the given string.
+
+Every anagram is a permutation of a string. As we know, when we are not allowed to repeat characters while finding permutations of a string, we get `N!` permutations (or anagrams) of a string having `N` characters. For example, here are the six anagrams of the string `“abc”`:
+- abc
+- acb
+- bac
+- bca
+- cab
+- cba
+
+> Write a function to return a list of starting indices of the anagrams of the pattern in the given string.
+
+## 🌟 Smallest Window containing Substring (hard)
+## 🌟 Words Concatenation (hard)
+
+
