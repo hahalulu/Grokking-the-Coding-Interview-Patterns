@@ -429,4 +429,79 @@ lengthOfLongestSubstring ([0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0, 1, 1], 3)//9, Replac
 - The above algorithm’s time complexity will be `O(N)`, where `‘N’` is the count of numbers in the input array.
 - The algorithm runs in constant space `O(1)`.
 
+## 🌟 Permutation in a String (hard)
+https://leetcode.com/problems/permutation-in-string/
+
+> Given a string and a pattern, find out if the string contains any permutation of the pattern.
+
+<b>Permutation</b> is defined as the re-arranging of the characters of the string. For example, `“abc”` has the following six permutations:
+- abc
+- acb
+- bac
+- bca
+- cab
+- cba
+
+If a string has `‘n’` distinct characters, it will have `n!` permutations.
+
+This problem follows the <b>Sliding Window</b> pattern, and we can use a similar sliding window strategy as discussed in <b>Longest Substring with K Distinct Characters</b>. We can use a HashMap to remember the frequencies of all characters in the given pattern. Our goal will be to match all the characters from this HashMap with a sliding window in the given string. Here are the steps of our algorithm:
+- Create a HashMap to calculate the frequencies of all characters in the pattern.
+- Iterate through the string, adding one character at a time in the sliding window.
+- If the character being added matches a character in the HashMap, decrement its frequency in the map. If the character frequency becomes zero, we got a complete match.
+- If at any time, the number of characters matched is equal to the number of distinct characters in the pattern (i.e., total characters in the HashMap), we have gotten our required permutation.
+- If the window size is greater than the length of the pattern, shrink the window to make it equal to the pattern’s size. At the same time, if the character going out was part of the pattern, put it back in the frequency HashMap.
+
+````
+function findPermutation(str, pattern) {
+  //sliding window
+  let windowStart = 0
+  let isMatch = 0
+  let charFrequency = {}
+  
+ for(i = 0; i < pattern.length; i++) {
+   const char = pattern[i]
+   if(!(char in charFrequency)) {
+     charFrequency[char] = 0
+   }
+   charFrequency[char]++
+ }
+  
+  //our goal is to math all the characters from charFrequency with the current window
+  //try to extend the range [windowStart, windowEnd]
+  for(windowEnd = 0; windowEnd < str.length; windowEnd++) {
+    const endChar = str[windowEnd]
+    if(endChar in charFrequency) {
+      //decrement the frequency of the matched character
+      charFrequency[endChar]--
+      if(charFrequency[endChar] === 0) {
+        isMatch++
+      }
+    }
+    if(isMatch === Object.keys(charFrequency).length) {
+      return true
+    }
+    
+    //shrink the sliding window
+    if(windowEnd >= pattern.length - 1) {
+      let startChar = str[windowStart]
+      windowStart++
+      if(startChar in charFrequency) {
+        if(charFrequency[startChar] === 0) {
+          isMatch--
+        }
+        charFrequency[startChar]++
+      }
+    }
+  }
+  return false
+}
+
+findPermutation("oidbcaf", "abc")//true, The string contains "bca" which is a permutation of the given pattern.
+findPermutation("odicf", "dc")//false
+findPermutation("bcdxabcdy", "bcdxabcdy")//true
+findPermutation("aaacb", "abc")//true, The string contains "acb" which is a permutation of the given pattern.
+````
+
+- The above algorithm’s time complexity will be `O(N + M)`, where `‘N’` and `‘M’` are the number of characters in the input string and the pattern, respectively.
+- The algorithm’s space complexity is `O(M)` since, in the worst case, the whole pattern can have distinct characters that will go into the HashMap.
 
