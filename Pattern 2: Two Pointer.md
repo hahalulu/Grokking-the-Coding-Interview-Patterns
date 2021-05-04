@@ -12,7 +12,15 @@ Given that the input array is sorted, an efficient way would be to start with on
 
 ## Pair with Target Sum  aka "Two Sum" (easy) 🌴 
 https://leetcode.com/problems/two-sum/
+> Given an array of sorted numbers and a target sum, find a pair in the array whose sum is equal to the given target.
 
+Write a function to return the indices of the two numbers (i.e. the pair) such that they add up to the given target.
+
+Since the given array is sorted, a brute-force solution could be to iterate through the array, taking one number at a time and searching for the second number through <b>Binary Search</b>. The time complexity of this algorithm will be `O(N*logN)`. Can we do better than this?
+
+We can follow the <b>Two Pointers</b> approach. We will start with one pointer pointing to the beginning of the array and another pointing at the end. At every step, we will see if the numbers pointed by the two pointers add up to the target sum. If they do, we have found our pair; otherwise, we will do one of two things:
+1. If the sum of the two numbers pointed by the two pointers is greater than the target sum, this means that we need a pair with a smaller sum. So, to try more pairs, we can decrement the end-pointer.
+2. If the sum of the two numbers pointed by the two pointers is smaller than the target sum, this means that we need a pair with a larger sum. So, to try more pairs, we can increment the start-pointer.
 ### Brute Force
 
 ````
@@ -60,6 +68,10 @@ pairWithTargetSum([2, 5, 9, 11], 11)//[0,2]
 - The algorithm runs in constant space `O(1)`.
 
 ### Hash Table Solution 
+
+Instead of using a two-pointer or a binary search approach, we can utilize a <b>HashTable</b> to search for the required pair. We can iterate through the array one number at a time. Let’s say during our iteration we are at number `‘X’`, so we need to find `‘Y’` such that `“X + Y == TargetX+Y==Target”`. We will do two things here:
+1. Search for `‘Y’` (which is equivalent to `“Target - XTarget−X”`) in the HashTable. If it is there, we have found the required pair.
+2. Otherwise, insert `“X”` in the HashTable, so that we can search it for the later numbers.
 ````
 function pair_with_targetsum(nums, target) {
   //Instead of using a two-pointer or a binary search approach, 
