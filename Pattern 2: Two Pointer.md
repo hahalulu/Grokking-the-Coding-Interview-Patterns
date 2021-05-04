@@ -1,4 +1,4 @@
-# Pattern: Two Pointer
+# Pattern: Two Pointers
 
 In problems where we deal with sorted arrays (or LinkedLists) and need to find a set of elements that fulfill certain constraints, the Two Pointers approach becomes quite useful. The set of elements could be a pair, a triplet or even a subarray. For example, take a look at the following problem:
 
@@ -428,3 +428,5 @@ function searchPair(arr, targetSum, first, triplets){
 ````
 - Sorting the array will take `O(N * logN)`. The `searchPair()`, in this case, will take `O(N^2)`; the main while loop will run in `O(N)` but the nested for loop can also take `O(N)` - this will happen when the target sum is bigger than every triplet in the array.  So, overall `searchTriplets()` will take `O(N * logN + N^3)`, which is asymptotically equivalent to `O(N^3)`.
 - Ignoring the space required for the output array, the space complexity of the above algorithm will be `O(N)` which is required for sorting.
+## Subarrays with Product Less than a Target (medium)
+https://leetcode.com/problems/subarray-product-less-than-k/
