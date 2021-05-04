@@ -342,3 +342,89 @@ tripletSumCloseToTarget([-1,2,1,-4], 1)//2, The sum that is closest to the targe
 ````
 - Sorting the array will take `O(N* logN)`. Overall, the function will take `O(N * logN + N^2)`, which is asymptotically equivalent to `O(N^2)`
 - The above algorithm’s space complexity will be `O(N)`, which is required for sorting.
+## Triplets with Smaller Sum (medium)
+https://leetcode.com/problems/3sum-smaller/
+
+> Given an array `arr` of unsorted numbers and a `target` sum, count all triplets in it such that `arr[i] + arr[j] + arr[k] < target` where `i`, `j`, and `k` are three different indices. Write a function to return the count of such triplets.
+
+This problem follows the <b>Two Pointers pattern</b> and shares similarities with <b>Triplet Sum to Zero</b>. The only difference is that, in this problem, we need to find the triplets whose sum is less than the given target. To meet the condition `i != j != k` we need to make sure that each number is not used more than once.
+
+Following a similar approach, first, we can sort the array and then iterate through it, taking one number at a time. Let’s say during our iteration we are at number `‘X’`, so we need to find `‘Y’` and `‘Z’` such that `X + Y + Z < target`. At this stage, our problem translates into finding a pair whose sum is less than `“target - X”` (as from the above equation `Y + Z == target - X`). We can use a similar approach as discussed in <b>Triplet Sum to Zero</b>.
+
+````
+function tripletWithSmallerSum (arr, target) {
+  arr.sort((a, b) => a -b)
+  let count = 0;
+  
+  for(let i = 0; i < arr.length - 2; i++){
+    count += searchPair(arr, target - arr[i], i)
+  }
+  return count;
+};
+
+function searchPair(arr, targetSum, first){
+  let count = 0
+  let start = first + 1
+  let end = arr.length -1
+  
+  while(start < end) {
+    if(arr[start] + arr[end] < targetSum) {
+      //we found the a triplet
+      //since arr[end] >= arr[start], therefore, we can replace arr[end]
+      //by any number between start and end to get a sum less than the targetSum
+      count += end - start
+      start++
+    } else {
+      //we need a pair with a smaller sum
+      end--
+    }
+  }
+  return count
+  
+}
+
+tripletWithSmallerSum ([-1, 0, 2, 3], 3)//2, There are two triplets whose sum is less than the target: [-1, 0, 3], [-1, 0, 2]
+tripletWithSmallerSum ([-1, 4, 2, 1, 3], 5)//4, There are four triplets whose sum is less than the target: [-1, 1, 4], [-1, 1, 3], [-1, 1, 2], [-1, 2, 3]
+tripletWithSmallerSum ([-2,0,1,3], 2)//2, Because there are two triplets which sums are less than 2: [-2,0,1], [-2,0,3]
+tripletWithSmallerSum ([], 0)//0
+tripletWithSmallerSum ([0], 0)//0
+````
+- Sorting the array will take `O(N * logN)`. The `searchPair()` will take `O(N)`. So, overall `searchTriplets()` will take `O(N * logN + N^2)`, which is asymptotically equivalent to `O(N^2)`.
+- The space complexity of the above algorithm will be `O(N)` which is required for sorting if we are not using an in-place sorting algorithm.
+
+> Write a function to return the list of all such triplets instead of the count. How will the time complexity change in this case?
+
+````
+function tripletWithSmallerSum (arr, target) {
+  arr.sort((a, b) => a -b)
+  const triplets = []
+  
+  for(let i = 0; i < arr.length - 2; i++){
+    searchPair(arr, target - arr[i], i, triplets)
+  }
+  return triplets;
+};
+
+function searchPair(arr, targetSum, first, triplets){
+  
+  let start = first + 1
+  let end = arr.length -1
+  
+  while(start < end) {
+    if(arr[start] + arr[end] < targetSum) {
+      //we found the a triplet
+      //since arr[end] >= arr[start], therefore, we can replace arr[end]
+      //by any number between start and end to get a sum less than the targetSum
+      for(let i = end; i > start; i--){
+        triplets.push(arr[first], arr[start], arr[end])
+      }
+      start++
+    } else {
+      //we need a pair with a smaller sum
+      end--
+    }
+  }
+}
+````
+- Sorting the array will take `O(N * logN)`. The `searchPair()`, in this case, will take `O(N^2)`; the main while loop will run in `O(N)` but the nested for loop can also take `O(N)` - this will happen when the target sum is bigger than every triplet in the array.  So, overall `searchTriplets()` will take `O(N * logN + N^3)`, which is asymptotically equivalent to `O(N^3)`.
+- Ignoring the space required for the output array, the space complexity of the above algorithm will be `O(N)` which is required for sorting.
