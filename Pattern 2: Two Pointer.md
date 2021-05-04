@@ -283,3 +283,62 @@ searchTriplets([-5, 2, -1, -2, 3]) //[[-5, 2, 3], [-2, -1, 3]]
 ````
 - Sorting the array will take `O(N * logN)`. The `searchPair()` function will take `O(N)`. As we are calling `searchPair()` for every number in the input array, this means that overall `searchTriplets()` will take `O(N * logN + N^2)`, which is asymptotically equivalent to `O(N^2)`.
 - Ignoring the space required for the output array, the space complexity of the above algorithm will be `O(N)` which is required for sorting.
+
+## Triplet Sum Close to Target (medium)
+https://leetcode.com/problems/3sum-closest/
+
+> Given an array of unsorted numbers and a target number, find a <b>triplet in the array whose sum is as close to the target number as possible</b>, return the sum of the triplet. If there are more than one such triplet, return the sum of the triplet with the smallest sum.
+
+This problem follows the <b>Two Pointers</b> pattern and is quite similar to <b>Triplet Sum to Zero</b>.
+
+We can follow a similar approach to iterate through the array, taking one number at a time. At every step, we will save the difference between the triplet and the target number, so that in the end, we can return the triplet with the closest sum.
+
+````
+function tripletSumCloseToTarget(arr, targetSum){
+  arr.sort((a, b) => a - b)
+  
+  let smallestDifference = Infinity
+  
+  for(let i = 0; i < arr.length - 2; i++) {
+    let start = i + 1
+    let end = arr.length - 1
+    
+    while(start < end) {
+      const targetDifference = targetSum - arr[i] - arr[start] - arr[end]
+      
+      if(targetDifference === 0) {
+        //we've found a triplet with an exact sum
+        //so return the sum of all the numbers
+        return targetSum - targetDifference
+      }
+      
+      if(Math.abs(targetDifference) < Math.abs(smallestDifference)) {
+        //save the closet difference
+        smallestDifference = targetDifference
+      }
+      //the second part of the followinf 'if' is to handle the smallest sum
+      //when we have more than one solution
+      if(Math.abs(targetDifference) < Math.abs(smallestDifference) || (Math.abs(targetDifference) === Math.abs(smallestDifference) && targetDifference > smallestDifference)) {
+        //save the closest and the biggest difference
+        smallestDifference = targetDifference
+      }
+      
+      if(targetDifference > 0) {
+        //we need a triplet with a bigger sum
+        start++
+      } else {
+        //we need a triplet with a smaller sum
+        end--
+      }
+    }
+  }
+  return targetSum - smallestDifference
+}
+
+tripletSumCloseToTarget([-2, 0, 1, 2], 2)//1, he triplet [-2, 1, 2] has the closest sum to the target.
+tripletSumCloseToTarget([-3, -1, 1, 2], 1)//0, The triplet [-3, 1, 2] has the closest sum to the target.
+tripletSumCloseToTarget([1, 0, 1, 1], 100)//3, The triplet [1, 1, 1] has the closest sum to the target.
+tripletSumCloseToTarget([-1,2,1,-4], 1)//2, The sum that is closest to the target is 2. (-1 + 2 + 1 = 2).
+````
+- Sorting the array will take `O(N* logN)`. Overall, the function will take `O(N * logN + N^2)`, which is asymptotically equivalent to `O(N^2)`
+- The above algorithm’s space complexity will be `O(N)`, which is required for sorting.
