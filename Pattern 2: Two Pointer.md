@@ -108,6 +108,10 @@ pair_with_targetsum([3, 3], 6)//[0, 1]
 ## Remove Duplicates (easy)
 https://leetcode.com/problems/remove-duplicates-from-sorted-array/
 
+> Given an array of sorted numbers, <b>remove all duplicates</b> from it. You should <b>not use any extra space</b>; after removing the duplicates in-place return the length of the subarray that has no duplicate in it.
+
+In this problem, we need to remove the duplicates in-place such that the resultant length of the array remains sorted. As the input array is sorted, therefore, one way to do this is to shift the elements left whenever we encounter duplicates. In other words, we will keep one pointer for iterating the array and one pointer for placing the next non-duplicate number. So our algorithm will be to iterate the array and whenever we see a non-duplicate number we move it next to the last non-duplicate number we’ve seen.
+
 * Assume the input is sorted
 ````
 function removeDuplicates(arr) {
@@ -130,8 +134,8 @@ function removeDuplicates(arr) {
   return nextNonDupe  
 }
 
-removeDuplicates([2, 3, 3, 3, 6, 9, 9])//4
-removeDuplicates([2, 2, 2, 11])//2
+removeDuplicates([2, 3, 3, 3, 6, 9, 9])//4, The first four elements after removing the duplicates will be [2, 3, 6, 9].
+removeDuplicates([2, 2, 2, 11])//2, The first two elements after removing the duplicates will be [2, 11].
 ````
 - The time complexity of the above algorithm will be `O(N)`, where `‘N’` is the total number of elements in the given array.
 - The algorithm runs in constant space `O(1)`.
@@ -139,12 +143,14 @@ removeDuplicates([2, 2, 2, 11])//2
 ### Remove Element
 https://leetcode.com/problems/remove-element/
 
+> Given an unsorted array of numbers and a target ‘key’, remove all instances of ‘key’ in-place and return the new length of the array.
+
 ````
 function removeElement(arr, key) {
-  //index of the next element which is not 'key'
+  //pointed for index of the next element which is not the key
   let nextElement = 0
   
-  for(i=0; i < arr.length; i++){
+  for(i = 0; i < arr.length; i++) {
     if(arr[i] !== key) {
       arr[nextElement] = arr[i]
       nextElement++
@@ -153,8 +159,8 @@ function removeElement(arr, key) {
   return nextElement
 }
 
-removeElement([3, 2, 3, 6, 3, 10, 9, 3], 3)//4
-removeElement([2, 11, 2, 2, 1], 2)//2
+removeElement([3, 2, 3, 6, 3, 10, 9, 3], 3)//4, The first four elements after removing every 'Key' will be [2, 6, 10, 9].
+removeElement([2, 11, 2, 2, 1], 2)//2, The first four elements after removing every 'Key' will be [2, 6, 10, 9].
 ````
 - The time complexity of the above algorithm will be `O(N)`, where `‘N’` is the total number of elements in the given array.
 - The algorithm runs in constant space `O(1)`.
