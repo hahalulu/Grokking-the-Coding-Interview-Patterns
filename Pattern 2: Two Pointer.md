@@ -213,6 +213,14 @@ makeSquares([-3, -1, 0, 1, 2])//[0, 1, 1, 4, 9]
 ## Triplet Sum to Zero (medium)
 https://leetcode.com/problems/3sum/
 
+> Given an array of unsorted numbers, find all unique triplets in it that add up to zero.
+
+This problem follows the <b>Two Pointers</b> pattern and shares similarities with <b>Pair with Target Sum</b>. A couple of differences are that the input array is not sorted and instead of a pair we need to find triplets with a target sum of zero.
+
+To follow a similar approach, first, we will sort the array and then iterate through it taking one number at a time. Let’s say during our iteration we are at number `‘X’`, so we need to find `‘Y’` and `‘Z’` such that `X + Y + Z == 0`. At this stage, our problem translates into finding a pair whose sum is equal to `“-X”` (as from the above equation `Y + Z == -X`).
+
+Another difference from Pair with Target Sum is that we need to find all the unique triplets. To handle this, we have to skip any duplicate number. Since we will be sorting the array, so all the duplicate numbers will be next to each other and are easier to skip.
+
 ````
 function searchTriplets(arr) {
   arr.sort((a, b) => a-b)
@@ -229,26 +237,39 @@ function searchTriplets(arr) {
   return triplets;
 };
 
+function searchTriplets(arr) {
+  arr.sort((a, b) => a -b)
+  const triplets = []
+  
+  for(i = 0; i < arr.length; i++) {
+    if(i > 0 && arr[i] === arr[i -1]){
+      //skip same element to avoid duplicates
+      continue
+    }
+    searchPair(arr, -arr[i], i + 1, triplets)
+  }
+  return triplets
+};
+
 function searchPair(arr, targetSum, start, triplets) {
   let end = arr.length -1
-  while(start< end) {
+  while(start < end) {
     const currentSum = arr[start] + arr[end]
-    
     if(currentSum === targetSum) {
       //found the triplet
       triplets.push([-targetSum, arr[start], arr[end]])
       start++
       end--
-      while(start< end && arr[start] === arr[start-1]) {
-        //skip same element to avoid duplicate triplets
+      while(start < end && arr[start] === arr[start-1]) {
+        //skip same element to avoid duplicates
         start++
       }
-       while(start< end && arr[end] === arr[end-1]) {
-        //skip same element to avoid duplicate triplets
+      while(start < end && arr[end] === arr[end + 1]) {
+        //skip same element to avoid duplicates
         end--
       }
     } else if(targetSum > currentSum) {
-      //we need a pair with a biggger sum
+      //we need a pair with a bigger sum
       start++
     } else {
       //we need a pair with a smaller sum
