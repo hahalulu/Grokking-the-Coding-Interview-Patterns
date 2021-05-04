@@ -210,7 +210,7 @@ makeSquares([-3, -1, 0, 1, 2])//[0, 1, 1, 4, 9]
 - The above algorithm’s time complexity will be `O(N)` as we are iterating the input array only once.
 - The above algorithm’s space complexity will also be `O(N)`; this space will be used for the output array.
 
-## Triplet Sum to Zero (medium)
+## 🌟 Triplet Sum to Zero (medium)
 https://leetcode.com/problems/3sum/
 
 > Given an array of unsorted numbers, find all unique triplets in it that add up to zero.
