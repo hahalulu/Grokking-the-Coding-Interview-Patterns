@@ -292,6 +292,7 @@ Step ‘13’ leads us back to step ‘5’ as the number becomes equal to ‘89
 4. 1² + 0² + 0² = 1
 
 `findHappyNumber(2)//false`
+`2` is not a happy number
 
 - The time complexity of the algorithm is difficult to determine. However we know the fact that all unhappy numbers eventually get stuck in the cycle: 4 -> 16 -> 37 -> 58 -> 89 -> 145 -> 42 -> 20 -> 4
 
