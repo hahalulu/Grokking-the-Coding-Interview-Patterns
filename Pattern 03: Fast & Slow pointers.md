@@ -313,3 +313,9 @@ https://leetcode.com/problems/middle-of-the-linked-list/
 > Given the head of a <b>Singly LinkedList</b>, write a method to return the <b>middle node</b> of the LinkedList.
 >
 > If the total number of nodes in the LinkedList is even, return the second middle node.
+
+## 🌟 Palindrome LinkedList (medium)
+https://leetcode.com/problems/palindrome-linked-list/
+## 🌟 Rearrange a LinkedList (medium)
+## 🌟 Cycle in a Circular Array (hard)
+
