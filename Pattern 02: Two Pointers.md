@@ -522,11 +522,11 @@ console.log(dutchFlagSort([2, 2, 0, 1, 2, 0]))//[0 0 1 2 2 2 ]
 - The time complexity of the above algorithm will be `O(N)` as we are iterating the input array only once.
 - The algorithm runs in constant space `O(1)`.
 
-## Quadruple Sum to Target (medium)
+## 🌟 Quadruple Sum to Target (medium)
 https://leetcode.com/problems/4sum/
 
-## Comparing Strings containing Backspaces (medium)
+## 🌟 Comparing Strings containing Backspaces (medium)
 https://leetcode.com/problems/backspace-string-compare/
 
-## Minimum Window Sort (medium)
+## 🌟 Minimum Window Sort (medium)
 https://leetcode.com/problems/shortest-subarray-to-be-removed-to-make-array-sorted/
