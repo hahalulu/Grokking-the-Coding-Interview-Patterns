@@ -307,3 +307,9 @@ This means:
 3. Therefore: `N1 < 81 * log(N+1) => N1 = O(logN)`
 - This concludes that the above algorithm will have a time complexity of `O(logN)`.
 - The algorithm runs in constant space `O(1)`.
+
+## Middle of the LinkedList (easy)
+https://leetcode.com/problems/middle-of-the-linked-list/
+> Given the head of a <b>Singly LinkedList</b>, write a method to return the <b>middle node</b> of the LinkedList.
+>
+> If the total number of nodes in the LinkedList is even, return the second middle node.
