@@ -86,7 +86,24 @@ for(i=0; i < merged_intervals.length; i++) {
 console.log(`Merged intervals: ${result}`)
 //Output: [[1,6]]
 //Explanation: Since all the given intervals overlap, we merged them into one.
-
+````
+OR 
+````
+function merge(intervals) {
+    if(intervals.length < 2) return intervals
+  //sort
+  intervals.sort((a, b) => a[0] - b[0])
+  for(let i = 1; i < intervals.length; i++) {
+    let current = intervals[i]
+    let previous = intervals[i-1]
+    if(current[0] <= previous[1]) {
+      intervals[i] =[previous[0], Math.max(previous[1], current[1])]
+      intervals.splice(i-1, 1)
+      i--
+       }
+  }
+  return intervals
+};
 ````
 
 - The time complexity of the above algorithm is `O(N * logN)`, where `N` is the total number of intervals. We are iterating the intervals only once which will take `O(N)`, in the beginning though, since we need to sort the intervals, our algorithm will take `O(N * logN)`.
