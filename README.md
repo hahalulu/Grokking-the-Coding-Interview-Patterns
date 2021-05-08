@@ -41,6 +41,7 @@ Given two intervals (`a` and `b`), there will be six different ways the two inte
 6. `a` and `b` do not overlap
 
 Understanding the above six cases will help us in solving all intervals related problems.
+![](mergeintervals.png)
 
 ## Pattern 5: Cyclic Sort
 
