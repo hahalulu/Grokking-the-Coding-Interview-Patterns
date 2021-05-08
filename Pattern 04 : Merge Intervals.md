@@ -256,3 +256,15 @@ function insert (intervals, newInterval) {
 
 - As we are iterating through all the intervals only once, the time complexity of the above algorithm is `O(N)`, where `N` is the total number of intervals.
 - The space complexity of the above algorithm will be `O(N)` as we need to return a list containing all the merged intervals.
+
+## Intervals Intersection (medium)
+https://leetcode.com/problems/interval-list-intersections/
+
+## Conflicting Appointments (medium)
+https://leetcode.com/problems/meeting-rooms/
+
+## 🌟 Minimum Meeting Rooms (hard) 
+https://leetcode.com/problems/meeting-rooms-ii/
+## 🌟 Maximum CPU Load (hard)
+## 🌟 Employee Free Time (hard)
+https://leetcode.com/problems/employee-free-time/
