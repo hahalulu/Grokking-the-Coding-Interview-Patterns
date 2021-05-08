@@ -164,7 +164,7 @@ function insert (intervals, newInterval) {
     i++
   }
   
-  //insert the newInterval
+  // merge all intervals that overlap with newInterval
   while(i < intervals.length && intervals[i].start <= newInterval.end) {
     newInterval.start = Math.min(intervals[i].start, newInterval.start)
     newInterval.end = Math.max(intervals[i].end, newInterval.end)
@@ -221,6 +221,37 @@ for (i = 0; i < result.length; i++) {
   result[i].print_interval();
 }
 console.log();
+````
+
+OR 
+
+````
+function insert (intervals, newInterval) {
+    let merged = []
+    let i = 0
+    
+    //skip and add to output all intervals that come before the newInterval
+    while(i < intervals.length && intervals[i][1] < newInterval[0]) {
+        merged.push(intervals[i])
+        i++
+    }
+    
+    //merge all intervals that overlap with newInterval
+    while(i < intervals.length && intervals[i][0] <= newInterval[1]) {
+        newInterval[0] = Math.min(intervals[i][0], newInterval[0])
+        newInterval[1] = Math.max(intervals[i][1], newInterval[1])
+        i++
+    }
+    //insert the newInterval
+    merged.push(newInterval)
+    
+    //add all the remaining intervals to the output
+    while(i < intervals.length) {
+        merged.push(intervals[i])
+        i++
+    }
+    return merged
+};
 ````
 
 - As we are iterating through all the intervals only once, the time complexity of the above algorithm is `O(N)`, where `N` is the total number of intervals.
