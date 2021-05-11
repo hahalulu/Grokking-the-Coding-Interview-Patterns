@@ -137,6 +137,38 @@ findMissingNumbers([2, 3, 2, 1])//4
 
 ## Find the Duplicate Number (easy)
 https://leetcode.com/problems/find-the-duplicate-number/
+
+> We are given an unsorted array containing ‘n+1’ numbers taken from the range 1 to ‘n’. The array has only one duplicate but it can be repeated multiple times. <b>Find that duplicate number without using any extra space</b>. You are, however, allowed to modify the input array.
+
+This problem follows the <b>Cyclic Sort</b> pattern and shares similarities with <b>Find the Missing Number</b>. Following a similar approach, we will try to place each number on its correct index. Since there is only one duplicate, if while swapping the number with its index both the numbers being swapped are same, we have found our duplicate!
+
+````
+function findDuplicate(nums) {
+  let i = 0
+  
+  while(i < nums.length) {
+    if(nums[i] !== i + 1) {
+      let j = nums[i] - 1
+      if(nums[i] !== nums[j]) {
+        //swap
+        [nums[i], nums[j]] = [nums[j], nums[i]]
+      } else {
+        //we have found the duplicate
+        return nums[i]
+      }
+    } else {
+      i++
+    }
+  }
+  return -1
+}
+
+findDuplicate([1, 4, 4, 3, 2])//4 
+findDuplicate([2, 1, 3, 3, 5, 4])//3 
+findDuplicate([2, 4, 1, 4, 4])//4 
+````
+- The time complexity of the above algorithm is `O(n)`.
+- The algorithm runs in constant space `O(1)` but modifies the input array.
 ## Find all Duplicate Numbers (easy)
 https://leetcode.com/problems/find-all-duplicates-in-an-array/
 ## 🌟 Find the Corrupt Pair (easy)
