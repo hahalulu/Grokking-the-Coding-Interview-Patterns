@@ -91,12 +91,55 @@ findMissingNumber([4, 0, 3, 1])//2
 findMissingNumber([8, 3, 5, 2, 4, 6, 0, 1])//7
 ````
 - The time complexity of the above algorithm is `O(n)`. In the while loop, although we are not incrementing the index `i` when swapping the numbers, this will result in more than `n` iterations of the loop, but in the worst-case scenario, the while loop will swap a total of `n-1` numbers and once a number is at its correct index, we will move on to the next number by incrementing `i`. In the end, we iterate the input array again to find the first number missing from its index, so overall, our algorithm will take `O(n) + O(n-1) + O(n)` which is asymptotically equivalent to `O(n)`.
-
 - The algorithm runs in constant space `O(1)`.
 
 ## Find all Missing Numbers (easy)
+https://leetcode.com/problems/find-all-numbers-disappeared-in-an-array/
+
+> We are given an unsorted array containing numbers taken from the range `1 to ‘n’`. The array can have duplicates, which means some numbers will be missing. Find all those missing numbers.
+
+This problem follows the <b>Cyclic Sort</b> pattern and shares similarities with <b>Find the Missing Number</b> with one difference. In this problem, there can be many duplicates whereas in <b>Find the Missing Number</b> there were no duplicates and the range was greater than the length of the array.
+
+However, we will follow a similar approach though as discussed in <b>Find the Missing Number</b> to place the numbers on their correct indices. Once we are done with the cyclic sort we will iterate the array to find all indices that are missing the correct numbers.
+
+````
+function findMissingNumbers(nums) {
+  let i = 0
+  
+  while(i < nums.length) {
+    const j = nums[i] - 1;
+    
+    if(nums[i] !== nums[j]) {
+      //swap
+      [nums[i], nums[j]] = [nums[j], nums[i]]
+    } else {
+      i++
+    }
+  }
+  
+  let missingNumbers = []
+  
+  for( i = 0; i < nums.length; i++) {
+    if(nums[i] !== i + 1) {
+      missingNumbers.push(i + 1)
+    }
+  }
+  
+  return missingNumbers
+}
+
+findMissingNumbers([2, 3, 1, 8, 2, 3, 5, 1])//[4, 6, 7], The array should have all numbers from 1 to 8, due to duplicates 4, 6, and 7 are missing.
+findMissingNumbers([2, 4, 1, 2])//3
+findMissingNumbers([2, 3, 2, 1])//4
+````
+- The time complexity of the above algorithm is `O(n)`.
+- Ignoring the space required for the output array, the algorithm runs in constant space `O(1)`.
+
 ## Find the Duplicate Number (easy)
+https://leetcode.com/problems/find-the-duplicate-number/
 ## Find all Duplicate Numbers (easy)
+https://leetcode.com/problems/find-all-duplicates-in-an-array/
 ## 🌟 Find the Corrupt Pair (easy)
 ## 🌟 Find the Smallest Missing Positive Number (medium)
+https://leetcode.com/problems/first-missing-positive/
 ## 🌟 Find the First K Missing Positive Numbers (hard)
