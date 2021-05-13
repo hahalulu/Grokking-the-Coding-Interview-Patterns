@@ -169,8 +169,6 @@ findDuplicate([2, 4, 1, 4, 4])//4
 ````
 - The time complexity of the above algorithm is `O(n)`.
 - The algorithm runs in constant space `O(1)` but modifies the input array.
-## Find all Duplicate Numbers (easy)
-https://leetcode.com/problems/find-all-duplicates-in-an-array/
 
 > Can we solve the above problem in `O(1)` space and without modifying the input array?
 
@@ -218,6 +216,11 @@ findDuplicate([2, 4, 1, 4, 4])//4
 ````
 
 - The time complexity of the above algorithm is `O(n)` and the space complexity is `O(1)`.
+
+## Find all Duplicate Numbers (easy)
+https://leetcode.com/problems/find-all-duplicates-in-an-array/
+
+
 
 ## 🌟 Find the Corrupt Pair (easy)
 ## 🌟 Find the Smallest Missing Positive Number (medium)
