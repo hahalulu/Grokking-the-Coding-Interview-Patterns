@@ -220,7 +220,43 @@ findDuplicate([2, 4, 1, 4, 4])//4
 ## Find all Duplicate Numbers (easy)
 https://leetcode.com/problems/find-all-duplicates-in-an-array/
 
+> We are given an unsorted array containing `‘n’` numbers taken from the range `1` to `‘n’`. The array has some numbers appearing twice, <b>find all these duplicate numbers without using any extra space</b>.
 
+This problem follows the <b>Cyclic Sort</b> pattern and shares similarities with <b>Find the Duplicate Number</b>. Following a similar approach, we will place each number at its correct index. After that, we will iterate through the array to find all numbers that are not at the correct indices. All these numbers are duplicates.
+
+````
+function findAllDuplicates(nums) {
+  let i = 0
+  
+  while(i < nums.length) {
+    //??
+    let j = nums[i] - 1
+    
+    if(nums[i] !== nums[j]) {
+      //swap
+      [nums[i], nums[j]] = [nums[j], nums[i]]
+    } else {
+        i++
+      }
+    } 
+  
+  let duplicateNumbers = []
+  
+  for(i = 0; i < nums.length; i++) {
+    if(nums[i] !== i + 1) {
+      //we have found the duplicate
+        duplicateNumbers.push(nums[i])
+       } 
+  }
+  
+  return duplicateNumbers
+}
+
+findAllDuplicates([3, 4, 4, 5, 5])//[4, 5]
+findAllDuplicates([5, 4, 7, 2, 3, 5, 3])//[3, 5]
+````
+- The time complexity of the above algorithm is `O(n)`.
+- Ignoring the space required for storing the duplicates, the algorithm runs in constant space `O(1)`.
 
 ## 🌟 Find the Corrupt Pair (easy)
 ## 🌟 Find the Smallest Missing Positive Number (medium)
