@@ -54,6 +54,10 @@ For example, to efficiently sort the array, we can try placing each number in it
 
 ## Pattern 6: In-place Reversal of a LinkedList
 
+In a lot of problems, we are asked to reverse the links between a set of nodes of a <b>LinkedList. Often, the constraint is that we need to do this in-place, i.e., using the existing node objects and without using extra memory.
+
+<b>In-place Reversal of a LinkedList pattern</b> describes an efficient way to solve the above problem.
+
 ## Pattern 7: Tree Breadth First Search
 
 ## Pattern 8: Depth First Search (DFS)
