@@ -171,6 +171,54 @@ findDuplicate([2, 4, 1, 4, 4])//4
 - The algorithm runs in constant space `O(1)` but modifies the input array.
 ## Find all Duplicate Numbers (easy)
 https://leetcode.com/problems/find-all-duplicates-in-an-array/
+
+> Can we solve the above problem in `O(1)` space and without modifying the input array?
+
+While doing the cyclic sort, we realized that the array will have a cycle due to the duplicate number and that the start of the cycle will always point to the duplicate number. This means that we can use the <b>fast & the slow</b> pointer method to find the duplicate number or the start of the cycle similar to Start of LinkedList Cycle.
+````
+function findDuplicate(nums) {
+  //using fast & slow pointer method
+  let slow = nums[0]
+  let fast = nums[nums[0]]
+  while(slow !== fast) {
+    slow = nums[slow]
+    fast = nums[nums[fast]]
+  }
+  //find the cycle length 
+  let current = nums[nums[slow]]
+  let cycleLength = 1
+  while(current !== nums[slow]) {
+    current = nums[current]
+    cycleLength++
+  }
+  
+  return findStart(nums, cycleLength)
+}
+
+function findStart(nums, cycleLength){
+  let pointer1 = nums[0]
+  let pointer2 = nums[0]
+  //move pointer2 ahead by cycleLength steps
+  while(cycleLength > 0) {
+    pointer2 = nums[pointer2]
+    cycleLength--
+  }
+  //increment both pointers until they meet at the start of the cycle
+  while(pointer1 !== pointer2) {
+    pointer1 = nums[pointer1]
+    pointer2 = nums[pointer2]
+  }
+  
+  return pointer1
+}
+
+findDuplicate([1, 4, 4, 3, 2])//4 
+findDuplicate([2, 1, 3, 3, 5, 4])//3 
+findDuplicate([2, 4, 1, 4, 4])//4 
+````
+
+- The time complexity of the above algorithm is `O(n)` and the space complexity is `O(1)`.
+
 ## 🌟 Find the Corrupt Pair (easy)
 ## 🌟 Find the Smallest Missing Positive Number (medium)
 https://leetcode.com/problems/first-missing-positive/
