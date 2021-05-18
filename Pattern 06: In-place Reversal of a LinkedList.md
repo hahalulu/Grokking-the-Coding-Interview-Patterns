@@ -181,5 +181,6 @@ When `n` is odd, our algorithm will look like:
 Please note the function call in the second step. We’re skipping two elements as we will be skipping the middle element.
 
 ## Reverse every K-element Sub-list (medium)
+
 ## 🌟 Reverse alternating K-element Sub-list (medium)
 ## 🌟 Rotate a LinkedList (medium)
