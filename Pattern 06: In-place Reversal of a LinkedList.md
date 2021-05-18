@@ -66,6 +66,120 @@ console.log(`Nodes of reversed LinkedList are: ${reverse(head).printList()}`)
 - We only used constant space, therefore, the space complexity of our algorithm is `O(1)`.
 
 ## Reverse a Sub-list (medium)
+https://leetcode.com/problems/reverse-linked-list-ii/
+> Given the head of a LinkedList and two positions `p` and `q`, reverse the LinkedList from position `p` to `q`.
+
+The problem follows the <b>In-place Reversal</b> of a LinkedList pattern. We can use a similar approach as discussed in <b>Reverse a LinkedList</b>. Here are the steps we need to follow:
+1. Skip the first `p-1` nodes, to reach the node at position `p`.
+2. Remember the node at position `p-1` to be used later to connect with the reversed sub-list.
+3. Next, reverse the nodes from `p` to `q` using the same approach discussed in <b>Reverse a LinkedList</b>.
+4. Connect the `p-1` and `q+1` nodes to the reversed sub-list.
+
+````
+class Node {
+  constructor(value, next = null) {
+    this.value = value
+    this.next = next
+  }
+  
+  getList() {
+    let result = ""
+    let temp = this
+    while(temp !== null) {
+      result += temp.value + " "
+      temp = temp.next
+    }
+    return result
+  }
+}
+
+function reverseSubList(head, p, q) {
+  if(p === q) {
+    return head
+  }
+  
+  //after skipping p-1 nodes, current will 
+  //point to the p th node
+  
+  let current = head
+  let previous = null
+  
+  let i = 0
+  
+  while(current !== null && i < p - 1) {
+    previous = current
+    current = current.next
+    i++
+  }
+  
+  //we are interested in three parts of
+  //the LL, the part before index p
+  //the part between p and q
+  //and the part after index q
+  const lastNodeOfFirstPart = previous
+  
+  //after reversing the LL current will
+  //become the last node of the subList
+  const lastNodeOfSubList = current
+  
+  //will be used to temporarily store the next node
+  let next = null
+  
+  i = 0
+  //reverse nodes between p and q
+  
+  while (current !== null && i < q - p + 1) {
+    next = current.next
+    current.next = previous
+    previous = current
+    current = next
+    i++
+  }
+  
+  //connect with the first part
+  if(lastNodeOfFirstPart !== null) {
+    //previous is now the first node of the sub list
+    lastNodeOfFirstPart.next = previous
+    //this means p === 1 i.e., we are changing
+    //the first node(head) of the LL
+  } else {
+    head = previous
+  }
+  
+  //conect with the last part
+  lastNodeOfSubList.next = current
+  return head
+}
+
+head = new Node(1)
+head.next = new Node(2);
+head.next.next = new Node(3);
+head.next.next.next = new Node(4);
+head.next.next.next.next = new Node(5);
+
+console.log(`Nodes of original LinkedList are: ${head.getList()}`)
+console.log(`Nodes of reversed LinkedList are: ${reverseSubList(head, 2, 4).getList()}`)
+````
+- The time complexity of our algorithm will be `O(N)` where `N` is the total number of nodes in the LinkedList.
+- We only used constant space, therefore, the space complexity of our algorithm is `O(1)`.
+
+>  Reverse the first `k` elements of a given LinkedList.
+
+This problem can be easily converted to our parent problem; to reverse the first `k` nodes of the list, we need to pass `p=1` and `q=k`.
+
+> Given a LinkedList with `n` nodes, reverse it based on its size in the following way:
+> 1. If `n` is even, reverse the list in a group of `n/2` nodes.
+> 2. If `n` is odd, keep the middle node as it is, reverse the first `n/2` nodes and reverse the last `n/2` nodes.
+
+When `n` is even we can perform the following steps:
+1. Reverse first `n/2` nodes: `head = reverse(head, 1, n/2)`
+2. Reverse last `n/2` nodes: `head = reverse(head, n/2 + 1, n)`
+
+When `n` is odd, our algorithm will look like:
+1. `head = reverse(head, 1, n/2)`
+2. `head = reverse(head, n/2 + 2, n)`
+Please note the function call in the second step. We’re skipping two elements as we will be skipping the middle element.
+
 ## Reverse every K-element Sub-list (medium)
 ## 🌟 Reverse alternating K-element Sub-list (medium)
 ## 🌟 Rotate a LinkedList (medium)
