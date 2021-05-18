@@ -163,11 +163,11 @@ console.log(`Nodes of reversed LinkedList are: ${reverseSubList(head, 2, 4).getL
 - The time complexity of our algorithm will be `O(N)` where `N` is the total number of nodes in the LinkedList.
 - We only used constant space, therefore, the space complexity of our algorithm is `O(1)`.
 
->  Reverse the first `k` elements of a given LinkedList.
+> 🌟 Reverse the first `k` elements of a given LinkedList.
 
 This problem can be easily converted to our parent problem; to reverse the first `k` nodes of the list, we need to pass `p=1` and `q=k`.
 
-> Given a LinkedList with `n` nodes, reverse it based on its size in the following way:
+> 🌟 Given a LinkedList with `n` nodes, reverse it based on its size in the following way:
 > 1. If `n` is even, reverse the list in a group of `n/2` nodes.
 > 2. If `n` is odd, keep the middle node as it is, reverse the first `n/2` nodes and reverse the last `n/2` nodes.
 
