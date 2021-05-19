@@ -1,7 +1,15 @@
-# Pattern: Tree Breadth First Search
+# Pattern 7: Tree Breadth First Search
+
+This pattern is based on the <b>Breadth First Search (BFS)</b> technique to traverse a tree.
+
+Any problem involving the traversal of a tree in a level-by-level order can be efficiently solved using this approach. We will use a <b>Queue</b> to keep track of all the nodes of a level before we jump onto the next level. This also means that the space complexity of the algorithm will be `O(W)`, where `W` is the maximum number of nodes on any level.
 
 
 ## Binary Tree Level Order Traversal (easy) 😕
+https://leetcode.com/problems/binary-tree-level-order-traversal/
+
+> Given a binary tree, populate an array to represent its level-by-level traversal. You should populate the values of all nodes of each level from left to right in separate sub-arrays.
+
 ````
 class Deque {
     constructor() {
@@ -234,3 +242,10 @@ zigzagLevelOrder([])
 ````
 - The time complexity of the above algorithm is `O(N)`, where `N` is the total number of nodes in the tree. This is due to the fact that we traverse each node once.
 - The space complexity of the above algorithm will be `O(N)` as we need to return a list containing the level order traversal. We will also need `O(N)` space for the queue. Since we can have a maximum of `N/2` nodes at any level (this could happen only at the lowest level), therefore we will need `O(N)` space to store them in the queue.
+
+## Level Averages in a Binary Tree (easy)
+## Minimum Depth of a Binary Tree (easy)
+## Level Order Successor (easy)
+## Connect Level Order Siblings (medium)
+## 🌟 Connect All Level Order Siblings (medium) 
+## 🌟 Right View of a Binary Tree (easy) 
