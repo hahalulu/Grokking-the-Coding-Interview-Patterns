@@ -186,6 +186,87 @@ Please note the function call in the second step. We’re skipping two elements 
 > If, in the end, you are left with a sub-list with less than ‘k’ elements, reverse it too.
 
 The problem follows the <b>In-place Reversal of a LinkedList</b> pattern and is quite similar to <b>Reverse a Sub-list</b>. The only difference is that we have to reverse all the sub-lists. We can use the same approach, starting with the first sub-list (i.e. `p=1, q=k`) and keep reversing all the sublists of size ‘k’.
+
+````
+class Node {
+  constructor(value, next=null) {
+    this.value = value
+    this.next = next
+  }
   
+  getList() {
+    let result = ""
+    let temp = this
+    while(temp !== null) {
+      result += temp.value + " "
+      temp = temp.next
+    }
+    return result
+  }
+}
+
+function reverseEveryKElements(head, k) {
+  //edge cases
+  if(k <= 1 || head === null) {
+    return head
+  }
+  
+  let current = head
+  let previous = null
+  
+  while(true) {
+    const lastNodeOfPreviousPart = previous
+    
+    //after reversing the LL current will
+    //become the last node of the sublist
+    const lastNodeOfSubList = current
+    
+    //will be used to temporaily store the next node
+    let next = null
+    
+    let i = 0;
+    
+    //reverse k nodes
+    while(current !== null && i < k) {
+      next = current.next
+      current.next = previous
+      previous = current
+      current = next
+      i++
+    }
+    
+    //connect with the previous part
+    if(lastNodeOfPreviousPart !== null) {
+      lastNodeOfPreviousPart.next = previous
+    } else {
+      head = previous
+    }
+    
+    //connect with the next part
+    lastNodeOfSubList.next = current
+    
+    if(current === null) {
+      break
+    }
+    previous = lastNodeOfSubList
+  }
+  return head
+}
+
+head = new Node(1)
+head.next = new Node(2)
+head.next.next = new Node(3)
+head.next.next.next = new Node(4)
+head.next.next.next.next = new Node(5)
+head.next.next.next.next.next = new Node(6)
+head.next.next.next.next.next.next = new Node(7)
+head.next.next.next.next.next.next.next = new Node(8)
+
+console.log(`Nodes of original LinkedList are: ${head.getList()}`)
+console.log(`Nodes of reversed LinkedList are: ${reverseEveryKElements(head, 3).getList()}`)
+````
+- The time complexity of our algorithm will be `O(N)` where `N` is the total number of nodes in the LinkedList. 
+- We only used constant space, therefore, the space complexity of our algorithm is `O(1)`. 
+
 ## 🌟 Reverse alternating K-element Sub-list (medium)
 ## 🌟 Rotate a LinkedList (medium)
