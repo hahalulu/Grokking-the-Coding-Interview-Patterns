@@ -150,14 +150,16 @@ function TreeNode(val, left, right) {
   return levels
 };
 
-
-
 levelOrder([3,9,20,null,null,15,7])//[[3],[9,20],[15,7]]
 levelOrder([1])//[[1]]
 levelOrder([])//[]
 ````
 
 ## Reverse Level Order Traversal (easy)
+https://leetcode.com/problems/binary-tree-level-order-traversal-ii/
+> Given a binary tree, populate an array to represent its level-by-level traversal in reverse order, i.e., <b>the lowest level comes first</b>. You should populate the values of all nodes in each level from left to right in separate sub-arrays.
+
+This problem follows the <b>Binary Tree Level Order Traversal</b> pattern. We can follow the same <b>BFS</b> approach. The only difference will be that instead of appending the current level at the end, we will append the current level at the beginning of the result list.
 ````
 function TreeNode(val, left, right) {
   this.val = (val===undefined ? 0 : val)
@@ -192,7 +194,11 @@ function TreeNode(val, left, right) {
  
  traverse([[12], [7,1], [9, 10, null, 5]])
 ````
+- The time complexity of the above algorithm is `O(N)`, where `N` is the total number of nodes in the tree. This is due to the fact that we traverse each node once.
+-The space complexity of the above algorithm will be `O(N)` as we need to return a list containing the level order traversal. We will also need `O(N)` space for the queue. Since we can have a maximum of `N/2` nodes at any level (this could happen only at the lowest level), therefore we will need `O(N)` space to store them in the queue.
+
 ## Zigzag Traversal (medium) 🌴
+https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/
 ````
 function TreeNode(val, left, right) {
   this.val = (val === undefined ? 0 : val)
