@@ -199,6 +199,12 @@ function TreeNode(val, left, right) {
 
 ## Zigzag Traversal (medium) 🌴
 https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/
+
+> Given a binary tree, populate an array to represent its zigzag level order traversal. You should populate the values of all <b>nodes of the first level from left to right</b>, then <b>right to left for the next level</b> and keep alternating in the same manner for the following levels.
+
+This problem follows the <b>Binary Tree Level Order Traversal</b> pattern. We can follow the same <b>BFS</b> approach. The only additional step we have to keep in mind is to alternate the level order traversal, which means that for every other level, we will traverse similar to <b>Reverse Level Order Traversal</b>.
+
+
 ````
 function TreeNode(val, left, right) {
   this.val = (val === undefined ? 0 : val)
@@ -260,6 +266,76 @@ zigzagLevelOrder([])
 - The space complexity of the above algorithm will be `O(N)` as we need to return a list containing the level order traversal. We will also need `O(N)` space for the queue. Since we can have a maximum of `N/2` nodes at any level (this could happen only at the lowest level), therefore we will need `O(N)` space to store them in the queue.
 
 ## Level Averages in a Binary Tree (easy)
+https://leetcode.com/problems/average-of-levels-in-binary-tree/
+
+> Given a binary tree, populate an array to represent the <b>averages of all of its levels</b>
+
+This problem follows the <b>Binary Tree Level Order Traversal</b> pattern. We can follow the same <b>BFS</b> approach. The only difference will be that instead of keeping track of all nodes of a level, we will only track the running sum of the values of all nodes in each level. In the end, we will append the average of the current level to the result array.
+
+````
+class TreeNode {
+  constructor(value) {
+    this.value = value
+    this.left = null
+    this.right = null
+  }
+}
+
+function findLevelAverages(root) {
+  let result = []
+  
+  //edge case => no root
+  if(!root) { 
+    return result
+  }
+  
+  const queue = [root]
+  
+  while(queue.length > 0) {
+    let levelSize = queue.length
+    let levelSum = 0.0
+    
+    for(let i = 0; i < levelSize; i++){
+      let currentNode = queue.shift()
+      
+      //add the node's value to the running sum
+      levelSum += currentNode.value
+      
+      //insert the children of the current node to the queue
+      if(currentNode.left !== null) {
+        queue.push(currentNode.left)
+      }
+      
+      if(currentNode.right !== null) {
+        queue.push(currentNode.right)
+      }
+    }
+    
+    //append the current level's average to the result array
+    result.push(levelSum/levelSize)
+  }
+  return result
+}
+
+var root = new TreeNode(12)
+root.left = new TreeNode(7)
+root.right = new TreeNode(1)
+root.left.left = new TreeNode(9)
+root.left.right = new TreeNode(2)
+root.right.left = new TreeNode(10)
+root.right.right = new TreeNode(5)
+
+console.log(`Level averages are: ${findLevelAverages(root)}`)
+````
+- The time complexity of the above algorithm is `O(N)`, where `N` is the total number of nodes in the tree. This is due to the fact that we traverse each node once.
+- The space complexity of the above algorithm will be `O(N)` which is required for the queue. Since we can have a maximum of `N/2` nodes at any level (this could happen only at the lowest level), therefore we will need `O(N)` space to store them in the queue
+
+> 🌟  Find the largest value on each level of a binary tree.
+
+We will follow a similar approach, but instead of having a running sum we will track the maximum value of each level.
+
+`maxValue = Math.max(maxValue, currentNode.val)`
+
 ## Minimum Depth of a Binary Tree (easy)
 ## Level Order Successor (easy)
 ## Connect Level Order Siblings (medium)
