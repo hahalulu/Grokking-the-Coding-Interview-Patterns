@@ -195,7 +195,7 @@ function TreeNode(val, left, right) {
  traverse([[12], [7,1], [9, 10, null, 5]])
 ````
 - The time complexity of the above algorithm is `O(N)`, where `N` is the total number of nodes in the tree. This is due to the fact that we traverse each node once.
--The space complexity of the above algorithm will be `O(N)` as we need to return a list containing the level order traversal. We will also need `O(N)` space for the queue. Since we can have a maximum of `N/2` nodes at any level (this could happen only at the lowest level), therefore we will need `O(N)` space to store them in the queue.
+- The space complexity of the above algorithm will be `O(N)` as we need to return a list containing the level order traversal. We will also need `O(N)` space for the queue. Since we can have a maximum of `N/2` nodes at any level (this could happen only at the lowest level), therefore we will need `O(N)` space to store them in the queue.
 
 ## Zigzag Traversal (medium) 🌴
 https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/
@@ -337,6 +337,70 @@ We will follow a similar approach, but instead of having a running sum we will t
 `maxValue = Math.max(maxValue, currentNode.val)`
 
 ## Minimum Depth of a Binary Tree (easy)
+https://leetcode.com/problems/minimum-depth-of-binary-tree/
+
+> Find the minimum depth of a binary tree. The minimum depth is the number of nodes along the <b>shortest path from the root node to the nearest leaf node</b>.
+
+This problem follows the <b>Binary Tree Level Order Traversal</b> pattern. We can follow the same <b>BFS</b> approach. The only difference will be, instead of keeping track of all the nodes in a level, we will only track the depth of the tree. As soon as we find our first leaf node, that level will represent the minimum depth of the tree.
+````
+class TreeNode {
+  constructor(value) {
+    this.value = value
+    this.left = null
+    this.right = null
+  }
+}
+
+function findMinimumDepth(root) {
+  //edge case => no root
+  if(!root) {
+    return 0
+  }
+  
+  const queue = [root]
+  
+  let minimumTreeDepth = 0
+  while(queue.length > 0) {
+    minimumTreeDepth++
+    let levelSize = queue.length
+    
+    for(let i = 0; i < levelSize; i++) {
+      let currentNode = queue.shift()
+      
+      //check if this is a leaf node
+      if(currentNode.left === null && currentNode.right === null) {
+        return minimumTreeDepth
+      }
+      
+      //insert the children of current node in the queue
+      if(currentNode.left !== null) {
+        queue.push(currentNode.left)
+      }
+      if(currentNode.right !== null) {
+        queue.push(currentNode.right)
+      }  
+    }
+  }  
+}
+
+const root = new TreeNode(12)
+root.left = new TreeNode(7)
+root.right = new TreeNode(1)
+root.right.left = new TreeNode(10)
+root.right.right = new TreeNode(5)
+console.log(`Tree Minimum Depth: ${findMinimumDepth(root)}`)
+root.left.left = new TreeNode(9)
+root.right.left.left = new TreeNode(11)
+console.log(`Tree Minimum Depth: ${findMinimumDepth(root)}`)
+````
+- The time complexity of the above algorithm is `O(N)`, where `N` is the total number of nodes in the tree. This is due to the fact that we traverse each node once.
+- The space complexity of the above algorithm will be `O(N)` which is required for the queue. Since we can have a maximum of `N/2` nodes at any level (this could happen only at the lowest level), therefore we will need `O(N)` space to store them in the queue.
+
+> Given a binary tree, find its maximum depth (or height).
+
+We will follow a similar approach. Instead of returning as soon as we find a leaf node, we will keep traversing for all the levels, incrementing `maximumDepth` each time we complete a level. 
+````
+````
 ## Level Order Successor (easy)
 ## Connect Level Order Siblings (medium)
 ## 🌟 Connect All Level Order Siblings (medium) 
