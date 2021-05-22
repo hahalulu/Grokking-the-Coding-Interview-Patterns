@@ -330,6 +330,7 @@ console.log(`Level averages are: ${findLevelAverages(root)}`)
 - The time complexity of the above algorithm is `O(N)`, where `N` is the total number of nodes in the tree. This is due to the fact that we traverse each node once.
 - The space complexity of the above algorithm will be `O(N)` which is required for the queue. Since we can have a maximum of `N/2` nodes at any level (this could happen only at the lowest level), therefore we will need `O(N)` space to store them in the queue
 
+### Level Maximum in a Binary Tree 
 > 🌟  Find the largest value on each level of a binary tree.
 
 We will follow a similar approach, but instead of having a running sum we will track the maximum value of each level.
@@ -396,10 +397,58 @@ console.log(`Tree Minimum Depth: ${findMinimumDepth(root)}`)
 - The time complexity of the above algorithm is `O(N)`, where `N` is the total number of nodes in the tree. This is due to the fact that we traverse each node once.
 - The space complexity of the above algorithm will be `O(N)` which is required for the queue. Since we can have a maximum of `N/2` nodes at any level (this could happen only at the lowest level), therefore we will need `O(N)` space to store them in the queue.
 
+### Maximum Depth of a Binary Tree
+https://leetcode.com/problems/maximum-depth-of-binary-tree/
 > Given a binary tree, find its maximum depth (or height).
 
 We will follow a similar approach. Instead of returning as soon as we find a leaf node, we will keep traversing for all the levels, incrementing `maximumDepth` each time we complete a level. 
 ````
+class TreeNode {
+  constructor(value) {
+    this.value = value
+    this.left = null
+    this.right = null
+  }
+}
+
+function findMaximumDepth(root) {
+  //edge case => no root
+  if(!root) {
+    return 0
+  }
+  
+  const queue = [root]
+  
+  let maximumTreeDepth = 0
+  
+  while(queue.length > 0) {
+    maximumTreeDepth++
+    const levelSize = queue.length
+    
+    for(let i = 0; i < levelSize; i++) {
+      let currentNode = queue.shift()
+      
+      //insert the children of current node in the queue
+      if(currentNode.left !== null) {
+        queue.push(currentNode.left)
+      }
+      if(currentNode.right !== null) {
+        queue.push(currentNode.right)
+      }  
+    }
+  }  
+  return maximumTreeDepth
+}
+
+const root = new TreeNode(12);
+root.left = new TreeNode(7);
+root.right = new TreeNode(1);
+root.right.left = new TreeNode(10);
+root.right.right = new TreeNode(5);
+console.log(`Tree Maximum Depth: ${findMaximumDepth(root)}`);
+root.left.left = new TreeNode(9);
+root.right.left.left = new TreeNode(11);
+console.log(`Tree Maximum Depth: ${findMaximumDepth(root)}`);
 ````
 ## Level Order Successor (easy)
 ## Connect Level Order Siblings (medium)
