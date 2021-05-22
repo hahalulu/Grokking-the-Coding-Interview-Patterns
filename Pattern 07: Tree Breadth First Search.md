@@ -331,6 +331,7 @@ console.log(`Level averages are: ${findLevelAverages(root)}`)
 - The space complexity of the above algorithm will be `O(N)` which is required for the queue. Since we can have a maximum of `N/2` nodes at any level (this could happen only at the lowest level), therefore we will need `O(N)` space to store them in the queue
 
 ### Level Maximum in a Binary Tree 
+https://leetcode.com/problems/maximum-level-sum-of-a-binary-tree/
 > 🌟  Find the largest value on each level of a binary tree.
 
 We will follow a similar approach, but instead of having a running sum we will track the maximum value of each level.
@@ -450,7 +451,97 @@ root.left.left = new TreeNode(9);
 root.right.left.left = new TreeNode(11);
 console.log(`Tree Maximum Depth: ${findMaximumDepth(root)}`);
 ````
-## Level Order Successor (easy)
+## Level Order Successor (easy) 😕
+> Given a binary tree and a node, find the level order successor of the given node in the tree. The level order successor is the node that appears right after the given node in the level order traversal.
+
+This problem follows the <b>Binary Tree Level Order Traversal</b> pattern. We can follow the same <b>BFS</b> approach. The only difference will be that we will not keep track of all the levels. Instead we will keep inserting child nodes to the queue. As soon as we find the given node, we will return the next node from the queue as the level order successor.
+
+````
+class Deque {
+    constructor() {
+        this.front = this.back = undefined;
+    }
+    addFront(value) {
+        if (!this.front) this.front = this.back = { value };
+        else this.front = this.front.next = { value, prev: this.front };
+    }
+    removeFront() {
+        let value = this.peekFront();
+        if (this.front === this.back) this.front = this.back = undefined;
+        else (this.front = this.front.prev).next = undefined;
+        return value;
+    }
+    peekFront() { 
+        return this.front && this.front.value;
+    }
+    addBack(value) {
+        if (!this.front) this.front = this.back = { value };
+        else this.back = this.back.prev = { value, next: this.back };
+    }
+    removeBack() {
+        let value = this.peekBack();
+        if (this.front === this.back) this.front = this.back = undefined;
+        else (this.back = this.back.next).back = undefined;
+        return value;
+    }
+    peekBack() { 
+        return this.back && this.back.value;
+    }
+}
+
+class TreeNode {
+  constructor(value) {
+    this.value = value
+    this.left = null
+    this.right = null
+  }
+}
+
+function findSuccessor(root, key) {
+  //edge case => no root
+  // if(!root) {
+  //   return null
+  // }
+ if (root === null) {
+    return null;
+  }
+
+  const queue = new Deque();
+  queue.addFront(root);
+  while (queue.length > 0) {
+    currentNode = queue.shift();
+    // insert the children of current node in the queue
+    if (currentNode.left !== null) {
+      queue.push(currentNode.left);
+    }
+    if (currentNode.right !== null) {
+      queue.push(currentNode.right);
+    }
+    // break if we have found the key
+    if (currentNode.val === key) {
+      break;
+    }
+  }
+
+  if (queue.length > 0) {
+    return queue.peek();
+  }
+  return null;
+}
+
+var root = new TreeNode(12)
+root.left = new TreeNode(7)
+root.right = new TreeNode(1)
+root.left.left = new TreeNode(9)
+root.right.left = new TreeNode(10)
+root.right.right = new TreeNode(5)
+result = findSuccessor(root, 12)
+if (result != null)
+  console.log(result.val)
+result = findSuccessor(root, 9)
+if (result != null)
+  console.log(result.val)
+````
 ## Connect Level Order Siblings (medium)
 ## 🌟 Connect All Level Order Siblings (medium) 
 ## 🌟 Right View of a Binary Tree (easy) 
