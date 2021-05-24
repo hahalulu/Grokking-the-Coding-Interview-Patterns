@@ -547,5 +547,6 @@ if (result != null)
 - The space complexity of the above algorithm will be `O(N)` which is required for the queue. Since we can have a maximum of `N/2` nodes at any level (this could happen only at the lowest level), therefore we will need `O(N)` space to store them in the queue.
 
 ## Connect Level Order Siblings (medium)
+> Given a binary tree, connect each node with its level order successor. The last node of each level should point to a `null` node.
 ## 🌟 Connect All Level Order Siblings (medium) 
 ## 🌟 Right View of a Binary Tree (easy) 
