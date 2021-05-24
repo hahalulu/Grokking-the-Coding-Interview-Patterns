@@ -83,3 +83,12 @@ Following are some important properties of XOR to remember:
 - XOR is Associative & Commutative, which means:
   - (a ^ b) ^ c = a ^ (b ^ c)
   - a ^ b = b ^ a
+## Single Number (easy)
+https://leetcode.com/problems/single-number/
+> In a non-empty array of integers, every number appears twice except for one, find that single number.
+## Two Single Numbers (medium)
+https://leetcode.com/problems/single-number-iii/
+## Complement of Base 10 Number (medium)
+https://leetcode.com/problems/complement-of-base-10-integer/
+## 🌟 Flip Binary Matrix(hard)
+## 
