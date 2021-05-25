@@ -83,7 +83,7 @@ Following are some important properties of XOR to remember:
 - XOR is Associative & Commutative, which means:
   - (a ^ b) ^ c = a ^ (b ^ c)
   - a ^ b = b ^ a
-## Single Number (easy)
+## 😕 Single Number (easy)
 https://leetcode.com/problems/single-number/
 > In a non-empty array of integers, every number appears twice except for one, find that single number.
 
@@ -133,8 +133,8 @@ singleNumber([7, 9, 7])//9
 ````
 - Time complexity of this solution is `O(n)` as we iterate through all numbers of the input once.
 - The algorithm runs in constant space `O(1)`.
-## Two Single Numbers (medium)
-https://leetcode.com/problems/single-number-iii/\
+## 😕 Two Single Numbers (medium)
+https://leetcode.com/problems/single-number-iii/
 
 > In a non-empty array of numbers, every number appears exactly twice except two numbers that appear only once. Find the two numbers that appear only once.
 
@@ -189,7 +189,72 @@ findSingleNumbers([2, 1, 3, 2])//[1, 3]
 ````
 - The time complexity of this solution is `O(n)` where `n` is the number of elements in the input array.
 - The algorithm runs in constant space `O(1)`.
-## Complement of Base 10 Number (medium)
+## 😕 Complement of Base 10 Number (medium)
 https://leetcode.com/problems/complement-of-base-10-integer/
+
+Every non-negative integer N has a binary representation, for example, 8 can be represented as “1000” in binary and 7 as “0111” in binary.
+
+The complement of a binary representation is the number in binary that we get when we change every 1 to a 0 and every 0 to a 1. For example, the binary complement of “1010” is “0101”.
+
+For a given positive number N in base-10, return the complement of its binary representation as a base-10 integer.
+
+Recall the following properties of XOR:
+1. It will return 1 if we take XOR of two different bits i.e. `1^0 = 0^1 = 1`.
+2. It will return 0 if we take XOR of two same bits i.e. `0^0 = 1^1 = 0`. In other words, XOR of two same numbers is 0.
+3. It returns the same number if we XOR with 0.
+
+From the above-mentioned first property, we can conclude that XOR of a number with its complement will result in a number that has all of its bits set to 1. For example, the binary complement of “101” is “010”; and if we take XOR of these two numbers, we will get a number with all bits set to 1, i.e., `101 ^ 010 = 111`
+
+We can write this fact in the following equation:
+
+`number ^ complement = all_bits_set`
+
+Let’s add ‘number’ on both sides:
+
+`number ^ number ^ complement = number ^ all_bits_set`
+
+From the above-mentioned second property:
+
+`0 ^ complement = number ^ all_bits_set`
+
+From the above-mentioned third property:
+
+`complement = number ^ all_bits_set`
+
+We can use the above fact to find the complement of any number.
+
+<b>How do we calculate `all_bits_set`?</b> One way to calculate `all_bits_set` will be to first count the bits required to store the given number. We can then use the fact that for a number which is a complete power of ‘2’ i.e., it can be written as pow(2, n), if we subtract ‘1’ from such a number, we get a number which has ‘n’ least significant bits set to ‘1’. For example, ‘4’ which is a complete power of ‘2’, and ‘3’ (which is one less than 4) has a binary representation of ‘11’ i.e., it has ‘2’ least significant bits set to ‘1’.
+
+````
+function calculateBitwiseComplement(num) {
+  //count number of total bits in num
+  let bitCount = 0
+  let n = num
+  while(n > 0) {
+    bitCount ++
+    n = n >> 1
+    //The right shift operator ( >> ) shifts the first operand the specified number of bits to the right. 
+    //Excess bits shifted off to the right are discarded.
+  }
+  
+  //for a number which is a complete power of two, 
+  //i.e., it can be wrtiten as pow(1, n),
+  //if we subtract 1 from such a number, we get a number
+  //which has n least significant bits set to 1
+  //For example, 4 which is a complete power of 2, 
+  //and 3 (which is one less than 4) ahs a binary
+  //representation of 11 i.e., it has 2 least significant bits set to 1
+  let allBitsSet = Math.pow(2, bitCount) -1
+  
+  //from the solution description: complement = number ^ allBitsSet
+  return num ^ allBitsSet
+}
+
+calculateBitwiseComplement(8)//7, 8 is 1000 in binary, its complement is 0111 in binary, which is 7 in base-10.
+calculateBitwiseComplement(10)//5, 10 is 1010 in binary, its complement is 0101 in binary, which is 5 in base-10.
+````
+
+- Time complexity of this solution is `O(b)`where `b` is the number of bits required to store the given number.
+- Space complexity of this solution is `O(1)`.
 ## 🌟 Flip Binary Matrix(hard)
-## 
+
