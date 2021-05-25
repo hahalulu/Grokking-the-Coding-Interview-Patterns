@@ -43,7 +43,7 @@ findMissingNumber([1,5,2,6,4])//3
 
 How can we avoid this? Can XOR help us here?
 
-Remember the important property of XOR that it returns 0 if both the bits in comparison are the same. In other words, XOR of a number with itself will always result in 0. This means that if we XOR all the numbers in the input array with all numbers from the range 11 to nn then each number in the input is going to get zeroed out except the missing number. Following are the set of steps to find the missing number using XOR:
+Remember the important property of XOR that it returns 0 if both the bits in comparison are the same. In other words, XOR of a number with itself will always result in 0. This means that if we XOR all the numbers in the input array with all numbers from the range `1` to `n` then each number in the input is going to get zeroed out except the missing number. Following are the set of steps to find the missing number using XOR:
 1. XOR all the numbers from `1` to `n`, let’s call it `x1`.
 2. XOR all the numbers in the input array, let’s call it `x2`.
 3. The missing number can be found by `x1` XOR `x2`.
