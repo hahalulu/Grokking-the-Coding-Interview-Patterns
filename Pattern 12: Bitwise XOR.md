@@ -86,6 +86,53 @@ Following are some important properties of XOR to remember:
 ## Single Number (easy)
 https://leetcode.com/problems/single-number/
 > In a non-empty array of integers, every number appears twice except for one, find that single number.
+
+One straight forward solution can be to use a <b>HashMap</b> kind of data structure and iterate through the input:
+- If number is already present in <b>HashMap</b>, remove it.
+- If number is not present in <b>HashMap</b>, add it.
+- In the end, only number left in the <b>HashMap</b> is our required single number.
+````
+function singleNumber(arr) {
+  //HashMap
+  let numberMap = {}
+  //if number is not in HashMap, add it
+  for(let i of arr) {
+    numberMap[i] = (numberMap[i] || 0) + 1
+  }
+  //if number is already in HashMap, remove it
+  //number left at the end is out rquired single number
+  return numberMap
+}
+
+findMissingNumber([1, 4, 2, 1, 3, 2, 3])//4
+findMissingNumber([7, 9, 7])//9
+````
+Time and space complexity Time Complexity of the above solution will be `O(n)`and space complexity will also be `O(n)`.
+
+Can we do better than this using the <b>XOR</b> Pattern?
+
+Recall the following two properties of XOR:
+- It returns zero if we take XOR of two same numbers.
+- It returns the same number if we XOR with zero.
+So we can XOR all the numbers in the input; duplicate numbers will zero out each other and we will be left with the single number.
+
+````
+function singleNumber(arr) {
+  //So we can XOR all the numbers in the input; duplicate numbers will zero out each other and we will be left with the single number.
+  let num = 0
+  
+  for(let i = 0; i < arr.length; i++) {
+    //console.log(num, arr[i], num^arr[i], "CL")
+    num ^= arr[i]
+  }
+  return num
+}
+
+singleNumber([1, 4, 2, 1, 3, 2, 3])//4
+singleNumber([7, 9, 7])//9
+````
+- Time complexity of this solution is `O(n)` as we iterate through all numbers of the input once.
+- The algorithm runs in constant space `O(1)`.
 ## Two Single Numbers (medium)
 https://leetcode.com/problems/single-number-iii/
 ## Complement of Base 10 Number (medium)
