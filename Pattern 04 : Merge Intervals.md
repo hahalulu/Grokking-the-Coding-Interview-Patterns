@@ -323,6 +323,37 @@ merge([[1, 3], [5, 7], [9, 12]], [[5, 10]])//[5, 7], [9, 10], The output list co
 ## Conflicting Appointments (medium)
 https://leetcode.com/problems/meeting-rooms/
 
+> Given an array of intervals representing ‘N’ appointments, find out if a person can <b>attend all the appointments</b>.
+
+The problem follows the <b>Merge Intervals</b> pattern. We can sort all the intervals by start time and then check if any two intervals overlap. A person will not be able to attend all appointments if any two appointments overlap.
+````
+function canAttendAllAppointments(appointmentTimes) {
+  //sort intervals by start time
+  appointmentTimes.sort((a,b) => a[0] -b[0])
+  
+  //check if any two intervals overlap
+  for(let i = 1; i < appointmentTimes.length; i++) {
+    if(appointmentTimes[i][0] < appointmentTimes[i-1][1]) {
+      //note that in the comparison above, it is < and not <=
+      //while merging we needed <= comparison, as we will be merging the two 
+      //intervals have conditions appointmentTimes[i][0] === appointmentTimes[i-1][1]
+      //but such intervals don't represent conflicting appointments
+      //as one starts right after the other
+      return false
+    }
+  }
+  return true
+}
+
+canAttendAllAppointments([[1,4], [2,5], [7,9]])//false, Since [1,4] and [2,5] overlap, a person cannot attend both of these appointments.
+canAttendAllAppointments([[6,7], [2,4], [8,12]])//true, None of the appointments overlap, therefore a person can attend all of them.
+canAttendAllAppointments([[4,5], [2,3], [3,6]])//false, Since [4,5] and [3,6] overlap, a person cannot attend both of these appointments.
+````
+- The time complexity of the above algorithm is `O(N*logN)`, where `‘N’` is the total number of appointments. Though we are iterating the intervals only once, our algorithm will take `O(N * logN)` since we need to sort them in the beginning.
+- The space complexity of the above algorithm will be `O(N)`, which we need for sorting. 
+
+> 🌟 Given a list of appointments, find all the conflicting appointments.
+
 ## 🌟 Minimum Meeting Rooms (hard) 
 https://leetcode.com/problems/meeting-rooms-ii/
 ## 🌟 Maximum CPU Load (hard)
