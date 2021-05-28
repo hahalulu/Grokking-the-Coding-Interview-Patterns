@@ -181,6 +181,7 @@ When `n` is odd, our algorithm will look like:
 Please note the function call in the second step. We’re skipping two elements as we will be skipping the middle element.
 
 ## Reverse every K-element Sub-list (medium)
+https://leetcode.com/problems/reverse-nodes-in-k-group/
 
 > Given the head of a LinkedList and a number ‘k’, <b>reverse every ‘k’ sized sub-list</b> starting from the head.
 > If, in the end, you are left with a sub-list with less than ‘k’ elements, reverse it too.
