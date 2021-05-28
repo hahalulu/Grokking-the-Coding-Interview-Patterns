@@ -1,4 +1,16 @@
 # Pattern 4 : Merge Intervals
+This pattern describes an efficient technique to deal with overlapping intervals. In a lot of problems involving intervals, we either need to find overlapping intervals or merge intervals if they overlap.
+
+Given two intervals (`a` and `b`), there will be six different ways the two intervals can relate to each other:
+1. `a` and `b`do not overlap
+2. `a` and `b` overlap, `b` ends after `a`
+3. `a` completely overlaps `b`
+4. `a` and `b` overlap, `a` ends after `b`
+5. `b` completly overlaps `a`
+6. `a` and `b` do not overlap
+
+Understanding the above six cases will help us in solving all intervals related problems.
+![](mergeintervals.png)
 
 ## Merge Intervals (medium)
 https://leetcode.com/problems/merge-intervals/
@@ -260,6 +272,54 @@ function insert (intervals, newInterval) {
 ## Intervals Intersection (medium)
 https://leetcode.com/problems/interval-list-intersections/
 
+> Given two lists of intervals, find the <b>intersection of these two lists</b>. Each list consists of <b>disjoint intervals sorted on their start time</b>.
+
+This problem follows the <b>Merge Intervals</b> pattern. As we have discussed under <b>Insert Interval</b>, there are five overlapping possibilities between two intervals ‘a’ and ‘b’. A close observation will tell us that whenever the two intervals overlap, one of the interval’s start time lies within the other interval. This rule can help us identify if any two intervals overlap or not.
+
+![](mergeintervals.png)
+
+Now, if we have found that the two intervals overlap, how can we find the overlapped part?
+
+Again from the above diagram, the overlapping interval will be equal to:
+
+    start = max(a.start, b.start)
+    end = min(a.end, b.end) 
+That is, the highest start time and the lowest end time will be the overlapping interval.
+
+So our algorithm will be to iterate through both the lists together to see if any two intervals overlap. If two intervals overlap, we will insert the overlapped part into a result list and move on to the next interval which is finishing early.
+````
+function merge(intervalA, intervalB) {
+  let result = []
+  let i = 0
+  let j = 0
+  
+  while(i < intervalA.length && j < intervalB.length) {
+    //check if intervals overlap and intervalA[i]'s start time
+    //lies with the other intervalB[j]
+    let aOverlapsB = intervalA[i][0] >= intervalB[j][0] && intervalA[i][0] <= intervalB[j][1]
+    
+    //check if intervals overlap and intervalA[j]'s start time lies with the other intervalB[i]
+    let bOverlapsA = intervalB[j][0] >= intervalA[i][0] && intervalB[j][0] <= intervalA[i][1]
+    
+    //store the intersection part
+    if(aOverlapsB || bOverlapsA) {
+      result.push([Math.max(intervalA[i][0], intervalB[j][0]), Math.min(intervalA[i][1],intervalB[j][1])])
+    }
+    //move next from the intercal which is finishing first
+    if(intervalA[i][1] < intervalB[j][1]) {
+      i++
+    } else {
+      j++
+    }
+  }
+  return result
+}
+
+merge([[1, 3], [5, 6], [7, 9]], [[2, 3], [5, 7]])//[2, 3], [5, 6], [7, 7], The output list contains the common intervals between the two lists.
+merge([[1, 3], [5, 7], [9, 12]], [[5, 10]])//[5, 7], [9, 10], The output list contains the common intervals between the two lists.
+````
+- As we are iterating through both the lists once, the time complexity of the above algorithm is `O(N + M)`, where `‘N’` and `‘M’` are the total number of intervals in the input arrays respectively.
+- Ignoring the space needed for the result list, the algorithm runs in constant space `O(1)`.
 ## Conflicting Appointments (medium)
 https://leetcode.com/problems/meeting-rooms/
 
