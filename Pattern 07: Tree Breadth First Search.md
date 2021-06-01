@@ -546,7 +546,101 @@ if (result != null)
 - The time complexity of the above algorithm is `O(N)`, where `N` is the total number of nodes in the tree. This is due to the fact that we traverse each node once.
 - The space complexity of the above algorithm will be `O(N)` which is required for the queue. Since we can have a maximum of `N/2` nodes at any level (this could happen only at the lowest level), therefore we will need `O(N)` space to store them in the queue.
 
-## Connect Level Order Siblings (medium)
+## 😕 Connect Level Order Siblings (medium)
 > Given a binary tree, connect each node with its level order successor. The last node of each level should point to a `null` node.
+
+This problem follows the <b>Binary Tree Level Order Traversal</b> pattern. We can follow the same <b>BFS</b> approach. The only difference is that while traversing a level we will remember the previous node to connect it with the current node.
+````
+class TreeNode {
+  constructor(val) {
+    this.val = val
+    this.left = null
+    this.right = null
+    this.next = null
+  }
+}
+
+  // level order traversal using 'next' pointer
+ function printLevelOrder() {
+    console.log("Level order traversal using 'next' pointer: ");
+    let nextLevelRoot = this;
+    while (nextLevelRoot !== null) {
+      let currentNode = nextLevelRoot;
+      nextLevelRoot = null;
+      while (currentNode != null) {
+        process.stdout.write(`${currentNode.val} `);
+        if (nextLevelRoot === null) {
+          if (currentNode.left !== null) {
+            nextLevelRoot = currentNode.left;
+          } else if (currentNode.right !== null) {
+            nextLevelRoot = currentNode.right;
+          }
+        }
+        currentNode = currentNode.next;
+      }
+      console.log();
+    }
+  }
+
+
+function connectLevelOrderSiblings(root) {
+  //if root is null return an empty array
+  if(!root) return []
+  
+  //initilize the queue with root
+  const queue = [root]
+  
+  // //declare output array
+  // const levels = []
+  
+  while(queue.length > 0) {
+    let previousNode = null
+    
+    //get length prior to dequeue
+    const levelSize = queue.length
+    
+    // //declare this level
+    // const currLevel = []
+    
+    //connect all nodes of this level
+    for(let i = 0; i < levelSize; i++) {
+      //get the next node
+      const currentNode = queue.shift()
+      if(previousNode !== null) {
+        previousNode.next = currentNode
+      }
+      previousNode = currentNode
+      
+      //insert the children of currentNode in the queue
+      if(currentNode.left !== null) {
+        queue.push(currentNode.left)
+      }
+      if(currentNode.right !== null) {
+        queue.push(currentNode.right)
+      }
+      
+    //   //after we add left and right for current, we add to currLevel
+    //   currLevel.push(current.val)
+    }
+    
+    // //level has been finished. Push into output array
+    // levels.push(currLevel)
+  }
+  // return levels
+}
+
+const root = new TreeNode(12);
+root.left = new TreeNode(7);
+root.right = new TreeNode(1);
+root.left.left = new TreeNode(9);
+root.right.left = new TreeNode(10);
+root.right.right = new TreeNode(5);
+connectLevelOrderSiblings(root);
+
+printLevelOrder(root)
+````
+- The time complexity of the above algorithm is `O(N)`, where `‘N’` is the total number of nodes in the tree. This is due to the fact that we traverse each node once.
+- The space complexity of the above algorithm will be `O(N)`, which is required for the queue. Since we can have a maximum of `N/2`nodes at any level (this could happen only at the lowest level), therefore we will need `O(N)` space to store them in the queue.
+
 ## 🌟 Connect All Level Order Siblings (medium) 
 ## 🌟 Right View of a Binary Tree (easy) 
