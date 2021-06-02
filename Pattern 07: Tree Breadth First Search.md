@@ -547,6 +547,7 @@ if (result != null)
 - The space complexity of the above algorithm will be `O(N)` which is required for the queue. Since we can have a maximum of `N/2` nodes at any level (this could happen only at the lowest level), therefore we will need `O(N)` space to store them in the queue.
 
 ## 😕 Connect Level Order Siblings (medium)
+https://leetcode.com/problems/populating-next-right-pointers-in-each-node/
 > Given a binary tree, connect each node with its level order successor. The last node of each level should point to a `null` node.
 
 This problem follows the <b>Binary Tree Level Order Traversal</b> pattern. We can follow the same <b>BFS</b> approach. The only difference is that while traversing a level we will remember the previous node to connect it with the current node.
