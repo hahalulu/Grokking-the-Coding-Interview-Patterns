@@ -1,6 +1,6 @@
 # Pattern 8: Tree Depth First Search (DFS)
 
-This pattern is based on the Depth First Search (DFS) technique to traverse a tree.
+This pattern is based on the <b>Depth First Search (DFS)</b> technique to traverse a tree.
 
 We will be using recursion (or we can also use a stack for the iterative approach) to keep track of all the previous (parent) nodes while traversing. This also means that the space complexity of the algorithm will be `O(H)`, where `‘H’` is the maximum height of the tree.
 
@@ -261,7 +261,71 @@ console.log(`Tree has path sequence: ${findPath(root, [1, 1, 6])}`)
 - The time complexity of the above algorithm is `O(N)`, where `‘N’` is the total number of nodes in the tree. This is due to the fact that we traverse each node once.
 - The space complexity of the above algorithm will be `O(N)` in the worst case. This space will be used to store the recursion stack. The worst case will happen when the given tree is a linked list (i.e., every node has only one child).
 ## Count Paths for a Sum (medium)
+https://leetcode.com/problems/path-sum-iii/
 
+> Given a binary tree and a number `‘S’`, find all paths in the tree such that the sum of all the node values of each path equals `‘S’`. Please note that the paths can start or end at any node but all paths must follow direction from parent to child (top to bottom).
 
+This problem follows the <b>Binary Tree Path Sum</b> pattern. We can follow the same <b>DFS</b> approach. But there will be four differences:
+1. We will keep track of the current path in a list which will be passed to every recursive call.
+2. Whenever we traverse a node we will do two things:
+
+    - Add the current node to the current path.
+    - As we added a new node to the current path, we should find the sums of all sub-paths ending at the current node. If the sum of any sub-path is equal to ‘S’ we will increment our path count.
+3. We will traverse all paths and will not stop processing after finding the first path.
+4. Remove the current node from the current path before returning from the function. This is needed to Backtrack while we are going up the recursive call stack to process other paths.
+````
+class TreeNode {
+  constructor(value, right = null, left = null) {
+    this.value = value
+    this.right = right
+    this.left = left
+  }
+}
+
+function countPaths(root, S) {
+  let currentPath = []
+  return countPathsRecursive(root, S, currentPath)
+}
+
+function countPathsRecursive(currentNode, S, currentPath) {
+  if(currentNode === null) return 0
+  
+  //add the currentNode to the path
+  currentPath.push(currentNode.value)
+  
+  let pathCount = 0
+  let pathSum = 0
+  
+  //find the sums of all aub-paths in the current path list
+  for(let i = currentPath.length - 1; i >= 0; i--) {
+    pathSum += currentPath[i]
+    
+    //if the sum of any sub-path is equal S we increment our path count
+    if(pathSum === S) {
+      pathCount++
+    }
+  }
+  
+  //traverse the left sub-tree
+  pathCount += countPathsRecursive(currentNode.left, S, currentPath)
+  //traverse the right sub-tree
+  pathCount += countPathsRecursive(currentNode.right, S, currentPath)
+  
+  //remove the current node from the path to backtrack
+  //we need to remove the current node while we are going upp the recursive call stack
+  currentPath.pop()
+  return pathCount
+}
+
+const root = new TreeNode(12)
+root.left = new TreeNode(7)
+root.right = new TreeNode(1)
+root.left.left = new TreeNode(4)
+root.right.left = new TreeNode(10)
+root.right.right = new TreeNode(5)
+console.log(`Tree has ${countPaths(root, 11)} paths`)
+````
+- The time complexity of the above algorithm is `O(N²)` in the worst case, where `‘N’` is the total number of nodes in the tree. This is due to the fact that we traverse each node once, but for every node, we iterate the current path. The current path, in the worst case, can be `O(N)` (in the case of a skewed tree). But, if the tree is balanced, then the current path will be equal to the height of the tree, i.e., `O(logN)`. So the best case of our algorithm will be `O(NlogN)`.
+- The space complexity of the above algorithm will be `O(N)`. This space will be used to store the recursion stack. The worst case will happen when the given tree is a linked list (i.e., every node has only one child). We also need `O(N)` space for storing the currentPath in the worst case.  Overall space complexity of our algorithm is `O(N)`.
 ## 🌟 Tree Diameter (medium)
 ## 🌟 Path with Maximum Sum (hard)
