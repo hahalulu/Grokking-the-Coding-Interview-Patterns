@@ -1,4 +1,4 @@
-# Depth First Search (DFS)
+# Pattern 8: Tree Depth First Search (DFS)
 
 This pattern is based on the Depth First Search (DFS) technique to traverse a tree.
 
@@ -134,3 +134,9 @@ for (i = 0; i < result.length; i++) {
 - The time complexity of the above algorithm is `O(N^2)`, where `‘N’` is the total number of nodes in the tree. This is due to the fact that we traverse each node once (which will take `O(N)`), and for every leaf node, we might have to store its path (by making a copy of the current path) which will take `O(N)`.
   - We can calculate a tighter time complexity of `O(NlogN)` from the space complexity discussion below.
 - If we ignore the space required for the `allPaths` list, the space complexity of the above algorithm will be `O(N)` in the worst case. This space will be used to store the recursion stack. The worst-case will happen when the given tree is a linked list (i.e., every node has only one child).
+
+## Sum of Path Numbers (medium)
+## Path With Given Sequence (medium)
+## Count Paths for a Sum (medium)
+## 🌟 Tree Diameter (medium)
+## 🌟 Path with Maximum Sum (hard)
