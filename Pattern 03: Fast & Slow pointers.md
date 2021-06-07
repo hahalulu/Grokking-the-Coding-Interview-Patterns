@@ -1,4 +1,4 @@
-## Pattern 3: Fast & Slow pointers
+# Pattern 3: Fast & Slow pointers
 
 The <b>Fast & Slow</b> pointer approach, also known as the <b>Hare & Tortoise algorithm</b>, is a pointer algorithm that uses two pointers which move through the array (or sequence/LinkedList) at different speeds. This approach is quite useful when dealing with cyclic LinkedLists or arrays.
 
