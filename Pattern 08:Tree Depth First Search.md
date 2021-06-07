@@ -213,6 +213,55 @@ console.log(`Total Sum of Path Numbers: ${findSumOfPathNumbers(root)}`)
 - The time complexity of the above algorithm is `O(N)`, where `‘N’` is the total number of nodes in the tree. This is due to the fact that we traverse each node once.
 - The space complexity of the above algorithm will be `O(N)` in the worst case. This space will be used to store the recursion stack. The worst case will happen when the given tree is a linked list (i.e., every node has only one child).
 ## Path With Given Sequence (medium)
+> Given a binary tree and a number sequence, find if the sequence is present as a root-to-leaf path in the given tree.
+
+This problem follows the <b>Binary Tree Path Sum</b> pattern. We can follow the same <b>DFS</b> approach and additionally, track the element of the given sequence that we should match with the current node. Also, we can return false as soon as we find a mismatch between the sequence and the node value.
+````
+class TreeNode {
+  constructor(value) {
+    this.value = value
+    this.right = null
+    this.left = null
+  }
+}
+
+function findPath(root, sequence) {
+  if(!root) {
+    return sequence.length === 0
+  }
+  
+  return findPathRecursive(root, sequence, 0)
+}
+
+function findPathRecursive(currentNode, sequence, sequenceIndex) {
+  if(currentNode === null) return false
+  
+  const sequenceLength = sequence.length
+  if(sequenceIndex >= sequenceLength || currentNode.value !== sequence[sequenceIndex]) return false
+  
+  //if the current node is a leaf, and it is the end of the sequence, then we have found a path
+  if(currentNode.left === null && currentNode.right === null && sequenceIndex === sequenceLength - 1) return true
+  
+  //recursively call to traverse the left and right sub-tree
+  //return true if any of the two recursive calls return true
+  
+  return findPathRecursive(currentNode.left, sequence, sequenceIndex + 1) || findPathRecursive(currentNode.right, sequence, sequenceIndex + 1)
+}
+
+const root = new TreeNode(1)
+root.left = new TreeNode(0)
+root.right = new TreeNode(1)
+root.left.left = new TreeNode(1)
+root.right.left = new TreeNode(6)
+root.right.right = new TreeNode(5)
+
+console.log(`Tree has path sequence: ${findPath(root, [1, 0, 7])}`)
+console.log(`Tree has path sequence: ${findPath(root, [1, 1, 6])}`)
+````
+- The time complexity of the above algorithm is `O(N)`, where `‘N’` is the total number of nodes in the tree. This is due to the fact that we traverse each node once.
+- The space complexity of the above algorithm will be `O(N)` in the worst case. This space will be used to store the recursion stack. The worst case will happen when the given tree is a linked list (i.e., every node has only one child).
 ## Count Paths for a Sum (medium)
+
+
 ## 🌟 Tree Diameter (medium)
 ## 🌟 Path with Maximum Sum (hard)
