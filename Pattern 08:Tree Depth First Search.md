@@ -165,6 +165,53 @@ Solution: We can follow a similar approach. We just need to remove the “check 
 Solution: We need to find the path with the maximum sum. As we traverse all paths, we can keep track of the path with the maximum sum.
 
 ## Sum of Path Numbers (medium)
+https://leetcode.com/problems/sum-root-to-leaf-numbers/
+> Given a binary tree where each node can only have a digit (0-9) value, each root-to-leaf path will represent a number. Find the total sum of all the numbers represented by all paths.
+
+This problem follows the <b>Binary Tree Path Sum</b> pattern. We can follow the same <b>DFS</b> approach. The additional thing we need to do is to keep track of the number representing the current path.
+
+How do we calculate the path number for a node? Taking the first example mentioned above, say we are at node ‘7’. As we know, the path number for this node is ‘17’, which was calculated by: `1 * 10 + 7 => 17`. We will follow the same approach to calculate the path number of each node.
+
+````
+class TreeNode {
+  constructor(value) {
+    this.value = value
+    this.left = null
+    this.right = null
+  }
+}
+
+function findSumOfPathNumbers(root) {
+  return findRootToLeafPathNumbers(root, 0)
+}
+
+function findRootToLeafPathNumbers(currentNode, pathSum) {
+    if(currentNode === null) {
+      return 0
+    } 
+    
+    //calculate the path number of the current node
+    pathSum = 10 * pathSum + currentNode.value
+    
+    //if the currentNode is a leaf, retuen the current pathSum
+    if(currentNode.left === null && currentNode.right === null) {
+      return pathSum
+    }
+    
+    //traverse the left and the right sub-tree
+    return findRootToLeafPathNumbers(currentNode.left, pathSum) + findRootToLeafPathNumbers(currentNode.right, pathSum)
+}
+
+const root = new TreeNode(1)
+root.left = new TreeNode(0)
+root.right = new TreeNode(1)
+root.left.left = new TreeNode(1)
+root.right.left = new TreeNode(6)
+root.right.right = new TreeNode(5)
+console.log(`Total Sum of Path Numbers: ${findSumOfPathNumbers(root)}`)
+````
+- The time complexity of the above algorithm is `O(N)`, where `‘N’` is the total number of nodes in the tree. This is due to the fact that we traverse each node once.
+- The space complexity of the above algorithm will be `O(N)` in the worst case. This space will be used to store the recursion stack. The worst case will happen when the given tree is a linked list (i.e., every node has only one child).
 ## Path With Given Sequence (medium)
 ## Count Paths for a Sum (medium)
 ## 🌟 Tree Diameter (medium)
