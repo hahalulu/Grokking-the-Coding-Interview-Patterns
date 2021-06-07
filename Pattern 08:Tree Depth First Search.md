@@ -59,6 +59,12 @@ console.log(`Tree has path: ${has_path(root, 16)}`)
 - The space complexity of the above algorithm will be `O(N)` in the worst case. This space will be used to store the recursion stack. The worst case will happen when the given tree is a linked list (i.e., every node has only one child).
 
 ## All Paths for a Sum (medium)
+https://leetcode.com/problems/path-sum-ii/
+> Given a binary tree and a number `‘S’`, find all paths from root-to-leaf such that the sum of all the node values of each path equals `‘S’`.
+
+This problem follows the <b>Binary Tree Path Sum</b> pattern. We can follow the same <b>DFS</b> approach. There will be two differences:
+1. Every time we find a root-to-leaf path, we will store it in a list.
+2. We will traverse all paths and will not stop processing after finding the first path.
 
 ````
 class Deque {
@@ -149,6 +155,14 @@ for (i = 0; i < result.length; i++) {
 - The time complexity of the above algorithm is `O(N^2)`, where `‘N’` is the total number of nodes in the tree. This is due to the fact that we traverse each node once (which will take `O(N)`), and for every leaf node, we might have to store its path (by making a copy of the current path) which will take `O(N)`.
   - We can calculate a tighter time complexity of `O(NlogN)` from the space complexity discussion below.
 - If we ignore the space required for the `allPaths` list, the space complexity of the above algorithm will be `O(N)` in the worst case. This space will be used to store the recursion stack. The worst-case will happen when the given tree is a linked list (i.e., every node has only one child).
+
+> 🌟 Given a binary tree, return all root-to-leaf paths.
+
+Solution: We can follow a similar approach. We just need to remove the “check for the path sum.”
+
+> 🌟 Given a binary tree, find the root-to-leaf path with the maximum sum.
+
+Solution: We need to find the path with the maximum sum. As we traverse all paths, we can keep track of the path with the maximum sum.
 
 ## Sum of Path Numbers (medium)
 ## Path With Given Sequence (medium)
