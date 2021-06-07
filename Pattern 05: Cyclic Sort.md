@@ -1,4 +1,4 @@
-## Pattern 5: Cyclic Sort
+# Pattern 5: Cyclic Sort
 
 This pattern describes an interesting approach to deal with problems involving arrays containing numbers in a given range. For example, take the following problem:
 
