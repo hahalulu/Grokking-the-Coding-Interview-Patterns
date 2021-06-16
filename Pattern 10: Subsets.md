@@ -112,3 +112,16 @@ subsetsWithDupe([1, 3, 3])
 ````
 - Since, in each step, the number of subsets doubles (if not duplicate) as we add each element to all the existing subsets, therefore, we will have a total of `O(2ᴺ)` subsets, where `‘N’` is the total number of elements in the input set. And since we construct a new subset from an existing set, therefore, the time complexity of the above algorithm will be `O(N*2ᴺ)`.
 - All the additional space used by our algorithm is for the output list. Since, at most, we will have a total of `O(2ᴺ)` subsets, and each subset can take up to `O(N)` space, therefore, the space complexity of our algorithm will be `O(N*2ᴺ)`.
+## Permutations (medium)
+https://leetcode.com/problems/permutations/
+## String Permutations by changing case (medium)
+## Balanced Parentheses (hard)
+https://leetcode.com/problems/generate-parentheses/
+## Unique Generalized Abbreviations (hard)
+https://leetcode.com/problems/generalized-abbreviation/
+## 🌟 Evaluate Expression (hard)
+https://leetcode.com/problems/different-ways-to-add-parentheses/
+## 🌟 Structurally Unique Binary Search Trees (hard)
+https://leetcode.com/problems/unique-binary-search-trees-ii/
+## 🌟 Count of Structurally Unique Binary Search Trees (hard)
+https://leetcode.com/problems/unique-binary-search-trees/
