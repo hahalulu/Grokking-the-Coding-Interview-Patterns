@@ -77,6 +77,8 @@ This pattern uses two <b>Heaps</b> to solve these problems; A <b>Min Heap</b> to
 
 ## Pattern 10: Subsets
 
+A huge number of coding interview problems involve dealing with <b>Permutations</b> and <b>Combinations</b> of a given set of elements. This pattern describes an efficient <b>Breadth First Search (BFS)</b> approach to handle all these problems.
+
 ## Pattern 11: Modified Binary Search
 
 ## Pattern 12: Bitwise XOR
