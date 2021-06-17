@@ -54,29 +54,44 @@ function find_averages_of_subarrays(K, arr) {
 
 }
 
-find_averages_of_subarrays(5, [1, 3, 2, 6, -1, 4, 1, 8, 2])
+find_averages_of_subarrays(5, [1, 3, 2, 6, -1, 4, 1, 8, 2])//[2.2, 2.8, 2.4, 3.6, 2.8]
 ````
 
 ### Sliding Window Approach
 ````
-function find_averages_of_subarrays(K, arr) {
+function findAveragesOfSubarrays(arr, k) {
   //sliding window approach
+  
   const results = []
-  let sum = 0
-  let windowStart = 0;
+  let windowSum = 0
+  let windowStart = 0
+  
   for(let windowEnd = 0; windowEnd < arr.length; windowEnd++) {
-    sum += arr[windowEnd]//add the next element
-    //slide the window, we don't need to slide if we've not hit the require window size of 'k'
-    if(windowEnd >= K -1) {
-      results.push(sum/K)//calculate the average
-      sum -= arr[windowStart] //subtract the element going out
-      windowStart += 1//slide the window ahead
-    }
+    //add the next element
+    windowSum += arr[windowEnd]
+    
+    //slide the window forward 
+    //we don't need to slide if we have not hit the required window size of k
+    
+    if (windowEnd >= k - 1) {
+      //we are **AUTOMATICALLY** returning the window average once we hit the window size of k
+      //and pushing to the output array
+      results.push(windowSum/k)
+      
+      //subtracting the element going out
+      windowSum -= arr[windowStart]
+      
+      //then sliding the window forward
+      windowStart++
+      
+      //adding the element coming in, in the outer/previous loop
+      //and repeating this process until we hit the end of the array
+    } 
   }
-return results
+  return results
 }
 
-find_averages_of_subarrays(5, [1, 3, 2, 6, -1, 4, 1, 8, 2])
+findAveragesOfSubarrays([1, 3, 2, 6, -1, 4, 1, 8, 2], 5)//[2.2, 2.8, 2.4, 3.6, 2.8]
 ````
 ## Maximum Sum Subarray of Size K (easy)
 https://leetcode.com/problems/largest-subarray-length-k/
