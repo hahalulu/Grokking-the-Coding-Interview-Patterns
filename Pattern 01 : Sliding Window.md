@@ -407,6 +407,8 @@ nonRepeatSubstring("abccde")//3
 ## Longest Substring with Same Letters after Replacement (hard)
 https://leetcode.com/problems/longest-repeating-character-replacement/
 
+> Given a string with lowercase letters only, if you are allowed to <b>replace no more than ‘k’ letters</b> with any letter, find the <b>length of the longest substring having the same letters</b> after replacement.
+
 This problem follows the <b>Sliding Window pattern</b>, and we can use a similar dynamic sliding window strategy as discussed in <b>No-repeat Substring</b>. We can use a HashMap to count the frequency of each letter.
 
 - We will iterate through the string to add one letter at a time in the window.
@@ -430,6 +432,7 @@ function lengthOfLongestSubstring(str, k) {
       charFrequency[endChar] = 0
     }
     charFrequency[endChar]++
+    //*REVIEW THIS LINE*
     maxRepeatLetterCount = Math.max(maxRepeatLetterCount, charFrequency[endChar])
     
     //current window size is from windowStart to windowEnd, overall we have a letter which is
