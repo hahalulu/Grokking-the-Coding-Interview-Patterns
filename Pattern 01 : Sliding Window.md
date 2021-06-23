@@ -1,6 +1,9 @@
 # Pattern 1: Sliding Window
 In many problems dealing with an array (or a LinkedList), we are asked to find or calculate something among all the contiguous subarrays (or sublists) of a given size. For example, take a look at this problem:
 
+### Find Averages of Sub Arrays
+https://leetcode.com/problems/maximum-average-subarray-i/
+
 > Given an array, find the average of all contiguous subarrays of size ‘K’ in it.
 
 Let’s understand this problem with a real input:
@@ -39,59 +42,6 @@ The efficient way to solve this problem would be to visualize each contiguous su
 Here is the algorithm for the <b>Sliding Window</b> approach:
 ````
 function findAveragesOfSubarrays(arr, k) {
-  const result = []
-  let windowSum = 0.0
-  let windowStart = 0
-  
-  for(let windowEnd = 0; windowEnd < arr.length; windowEnd++) {
-  
-  //add the next element
-   windowSum += arr[windowEnd]
-   
-    //slide the window, we dont need to slide if we've not hit the required window size of k
-    if(windowEnd >= k-1) {
-    
-      //calculate the average
-      result.push(windowSum/k)
-      
-      //subtract the element going out
-      windowSum -= arr[windowStart]
-      
-      //slide the window ahead
-      windowStart++
-    }
-  }
-  return result  
-}
-
-findAveragesOfSubarrays([1, 3, 2, 6, -1, 4, 1, 8, 2], 5)
-````
-## Find Averages of Sub Arrays
-https://leetcode.com/problems/maximum-average-subarray-i/
-### Brute Force
-````
-function find_averages_of_subarrays(K, arr) {
-  //brute force
-   let result = []
-   for(let i = 0; i < arr.length-K+1; i++){
-     //find sum of next k elements
-     sum = 0
-     for(let j = i; j < i + K; j++) {
-       sum += arr[j]
-     }
-     result.push(sum/K)
-   }
-   return result
-  
-
-}
-
-find_averages_of_subarrays(5, [1, 3, 2, 6, -1, 4, 1, 8, 2])//[2.2, 2.8, 2.4, 3.6, 2.8]
-````
-
-### Sliding Window Approach
-````
-function findAveragesOfSubarrays(arr, k) {
   //sliding window approach
   
   const results = []
@@ -127,7 +77,10 @@ findAveragesOfSubarrays([1, 3, 2, 6, -1, 4, 1, 8, 2], 5)//[2.2, 2.8, 2.4, 3.6, 2
 ````
 ## Maximum Sum Subarray of Size K (easy)
 https://leetcode.com/problems/largest-subarray-length-k/
-#### Brute Force 
+> Given an array of positive numbers and a positive number `‘k’`, find the maximum sum of any contiguous subarray of size `‘k’`.
+### Brute Force
+
+A basic brute force solution will be to calculate the sum of all `‘k’` sized subarrays of the given array to find the subarray with the highest sum. We can start from every index of the given array and add the next `‘k’` elements to find the subarray’s sum.
 ````
 function maxSubarrayOfSizeK(arr, k) {
   //brute force
@@ -144,7 +97,7 @@ function maxSubarrayOfSizeK(arr, k) {
     }
     
     //if currentWindowSum is > maxWindowSum
-    //set currentWindwoSum to maxWindowSu
+    //set currentWindwoSum to maxWindowSum
     maxSum = Math.max(maxSum, windowSum)
   }
   return maxSum
@@ -156,6 +109,11 @@ max_sub_array_of_size_k(2, [2, 3, 4, 1, 5])//7
 - Time complexity will be `O(N*K)`, where `N` is the total number of elements in the given array
 
 ### Sliding Window Approach
+If you observe closely, you will realize that to calculate the sum of a contiguous subarray, we can utilize the sum of the previous subarray. For this, consider each subarray as a <b>Sliding Window</b> of size `‘k’`. To calculate the sum of the next subarray, we need to slide the window ahead by one element. So to slide the window forward and calculate the sum of the new position of the sliding window, we need to do two things:
+1. Subtract the element going out of the sliding window, i.e., subtract the first element of the window.
+2. Add the new element getting included in the sliding window, i.e., the element coming right after the end of the window.
+
+This approach will save us from re-calculating the sum of the overlapping part of the sliding window. 
 ````
 function maxSubarrayOfSizeK(arr, k) {
   //sliding window
