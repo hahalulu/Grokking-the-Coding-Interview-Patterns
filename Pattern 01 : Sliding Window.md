@@ -149,6 +149,7 @@ maxSubarrayOfSizeK([2, 3, 4, 1, 5], 2)//7
 - The space complexity of the above algorithm will be `O(1)`
 
 ## Smallest Subarray with a given sum (easy)
+https://leetcode.com/problems/minimum-size-subarray-sum/
 > Given an array of positive numbers and a positive number ‘S,’ find the length of the <b>smallest contiguous subarray whose sum is greater than or equal to ‘S’</b>. 
 > 
 > Return 0 if no such subarray exists.
