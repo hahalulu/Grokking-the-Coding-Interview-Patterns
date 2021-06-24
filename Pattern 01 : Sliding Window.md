@@ -507,7 +507,7 @@ lengthOfLongestSubstring ([0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0, 1, 1], 3)//9, Replac
 ## 🌟 Permutation in a String (hard)
 https://leetcode.com/problems/permutation-in-string/
 
-> Given a string and a pattern, find out if the string contains any permutation of the pattern.
+> Given a string and a pattern, find out if the <b>string contains any permutation of the pattern</b>.
 
 <b>Permutation</b> is defined as the re-arranging of the characters of the string. For example, `“abc”` has the following six permutations:
 - abc
