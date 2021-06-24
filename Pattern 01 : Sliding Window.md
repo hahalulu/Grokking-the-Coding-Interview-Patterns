@@ -583,9 +583,11 @@ findPermutation("aaacb", "abc")//true, The string contains "acb" which is a perm
 ## 🌟 String Anagrams (hard)
 https://leetcode.com/problems/find-all-anagrams-in-a-string/
 
-Given a string and a pattern, find all anagrams of the pattern in the given string.
+> Given a string and a pattern, <b>find all anagrams of the pattern in the given string</b>.
 
-Every anagram is a permutation of a string. As we know, when we are not allowed to repeat characters while finding permutations of a string, we get `N!` permutations (or anagrams) of a string having `N` characters. For example, here are the six anagrams of the string `“abc”`:
+Every <b>anagram</b> is a <b>permutation</b> of a string. 
+
+As we know, when we are not allowed to repeat characters while finding permutations of a string, we get `N!` permutations (or anagrams) of a string having `N` characters. For example, here are the six anagrams of the string `“abc”`:
 - abc
 - acb
 - bac
@@ -594,6 +596,64 @@ Every anagram is a permutation of a string. As we know, when we are not allowed 
 - cba
 
 > Write a function to return a list of starting indices of the anagrams of the pattern in the given string.
+
+This problem follows the <b>Sliding Window</b> pattern and is very similar to <b>Permutation in a String</b>. In this problem, we need to find every occurrence of any permutation of the pattern in the string. We will use a list to store the starting indices of the anagrams of the pattern in the string.
+````
+function findStringAnagrams(str, pattern){
+  let windowStart = 0, matched = 0, charFreq = {}
+  
+  for(let i = 0; i < pattern.length; i++){
+    const char = pattern[i]
+    if(!(char in charFreq)) {
+      charFreq[char] = 0
+    }
+    charFreq[char]++
+  }
+  const resultIndex = []
+  
+  //our goal is to match all the characters from the charFreq
+  //with the current window try to 
+  //extend the range [windowStart, windowEnd]
+  for(let windowEnd = 0; windowEnd < str.length; windowEnd++) {
+    const endChar = str[windowEnd]
+    if(endChar in charFreq) {
+      //decrement the frequency of matched character
+      charFreq[endChar]--
+      if(charFreq[endChar] === 0) {
+        matched++
+      }
+    }
+    
+    if(matched === Object.keys(charFreq).length){
+      //have we found an anagram
+      resultIndex.push(windowStart)
+    }
+    
+    //shrink the sliding window
+    if(windowEnd >= pattern.length -1) {
+      const startChar = str[windowStart]
+      windowStart++
+      if(endChar in charFreq) {
+        if(charFreq[startChar] === 0) {
+          //before putting the character back
+          //decrement the matched count
+          matched--
+        }
+        //put the character back
+        charFreq[startChar]++
+      }
+    }
+  }
+  
+  return resultIndex
+}
+
+findStringAnagrams('ppqp', 'pq')//[1,2], The two anagrams of the pattern in the given string are "pq" and "qp".
+findStringAnagrams('abbcabc', 'abc')//[2,3,4], The three anagrams of the pattern in the given string are "bca", "cab", and "abc".
+````
+
+- The time complexity of the above algorithm will be `O(N + M)` where `‘N’` and `‘M’` are the number of characters in the input string and the pattern respectively.
+- The space complexity of the algorithm is `O(M)` since in the worst case, the whole pattern can have distinct characters which will go into the `HashMap`. In the worst case, we also need `O(N)` space for the result list, this will happen when the pattern has only one character and the string contains only that character.
 
 ## 🌟 Smallest Window containing Substring (hard)
 https://leetcode.com/problems/minimum-window-substring/
