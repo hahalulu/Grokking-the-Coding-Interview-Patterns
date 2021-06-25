@@ -657,6 +657,73 @@ findStringAnagrams('abbcabc', 'abc')//[2,3,4], The three anagrams of the pattern
 
 ## 🌟 Smallest Window containing Substring (hard)
 https://leetcode.com/problems/minimum-window-substring/
+
+> Given a string and a pattern, find the <b>smallest substring</b> in the given string which has <b>all the characters of the given pattern</b>.
+
+This problem follows the <b>Sliding Window</b> pattern and has a lot of similarities with <b>Permutation in a String</b> with one difference. In this problem, we need to find a substring having all characters of the pattern which means that the required substring can have some additional characters and doesn’t need to be a permutation of the pattern. Here is how we will manage these differences:
+1. We will keep a running count of every matching instance of a character.
+2. Whenever we have matched all the characters, we will try to shrink the window from the beginning, keeping track of the smallest substring that has all the matching characters.
+3. We will stop the shrinking process as soon as we remove a matched character from the sliding window. One thing to note here is that we could have redundant matching characters, e.g., we might have two ‘a’ in the sliding window when we only need one ‘a’. In that case, when we encounter the first ‘a’, we will simply shrink the window without decrementing the matched count. We will decrement the matched count when the second ‘a’ goes out of the window.
+
+````
+function findSubstring(str, pattern) {
+  let windowStart = 0
+  let matched = 0
+  let substrStart = 0
+  let minLength = str.length + 1
+  let charFreq = {}
+  
+  for(let i = 0; i < pattern.length; i++) {
+    const char = pattern[i]
+    if(!(char in charFreq)) {
+      charFreq[char] = 0
+    }
+    charFreq[char]++
+  }
+  
+  //try to extend the range [windowStart, windowEnd]
+  for(let windowEnd = 0; windowEnd < str.length; windowEnd++) {
+    const endChar = str[windowEnd]
+    if(endChar in charFreq) {
+      charFreq[endChar]--
+      if(charFreq[endChar] >= 0) {
+        //count every matching of a character
+        matched++
+      }
+    }
+    
+    //Shrink the window if we can, finish as soon as we remove a 
+    //matched character
+    while(matched === pattern.length) {
+      if(minLength > windowEnd - windowStart + 1) {
+        minLength = windowEnd - windowStart + 1
+        substrStart = windowStart
+      }
+      
+      const startChar = str[windowStart]
+      windowStart++
+      if(startChar in charFreq) {
+        if(charFreq[startChar] === 0) {
+        matched--
+      }
+      charFreq[startChar]++
+        
+      }
+    }
+  } 
+  if(minLength > str.length) {
+  return ''
+}
+return str.substring(substrStart, substrStart + minLength)
+}
+
+findSubstring("aabdec", "abc")//"abdec", The smallest substring having all characters of the pattern is "abdec"
+findSubstring("abdbca", "abc")//"bca", The smallest substring having all characters of the pattern is "bca".
+findSubstring("adcad", "abc")//"", No substring in the given string has all characters of the pattern.
+````
+
+- The time complexity of the above algorithm will be `O(N + M)` where `‘N’` and `‘M’` are the number of characters in the input string and the pattern respectively.
+- The space complexity of the algorithm is `O(M)` since in the worst case, the whole pattern can have distinct characters which will go into the `HashMap`. In the worst case, we also need `O(N)` space for the resulting substring, which will happen when the input string is a permutation of the pattern.
 ## 🌟 Words Concatenation (hard)
 https://leetcode.com/problems/concatenated-words/
 
