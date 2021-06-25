@@ -727,4 +727,69 @@ findSubstring("adcad", "abc")//"", No substring in the given string has all char
 ## 🌟 Words Concatenation (hard)
 https://leetcode.com/problems/concatenated-words/
 
+Given a string and a list of words, find all the starting indices of substrings in the given string that are a <b>concatenation of all the given words</b> exactly once without any <b>overlapping of words</b>. It is given that all words are of the same length.
+
+This problem follows the <b>Sliding Window</b> pattern and has a lot of similarities with <b>Maximum Sum Subarray of Size K</b>. We will keep track of all the words in a <b>HashMap</b> and try to match them in the given string. Here are the set of steps for our algorithm:
+1. Keep the frequency of every word in a <b>HashMap</b>.
+2. Starting from every index in the string, try to match all the words.
+3. In each iteration, keep track of all the words that we have already seen in another <b>HashMap</b>.
+4. If a word is not found or has a higher frequency than required, we can move on to the next character in the string.
+5. Store the index if we have found all the words.
+
+````
+function findWordConcatenation(str, words) {
+  if(words.length === 0 || words[0].length === 0) {
+    return []
+  }
+  
+  let wordFreq = {}
+  
+  words.forEach((word) => {
+    if(!(word in wordFreq)) {
+      wordFreq[word] = 0
+    }
+    wordFreq[word]++
+  })
+  
+  const resultIndex = []
+  let wordCount = words.length
+  let wordLength = words[0].length
+
+  for(let i = 0; i < (str.length - wordCount * wordLength) + 1; i++) {
+    const wordsSeen = {}
+    for(let j = 0; j < wordCount; j++) {
+      let nextWordIndex = i + j * wordLength
+      //get the next word from the string
+      const word = str.substring(nextWordIndex, nextWordIndex + wordLength)
+      if(!(word in wordFreq)){
+        //break if we don't need this word
+        break
+      }
+      
+      //add the word ot the wordsSeen ma
+      if(!(word in wordsSeen)){
+        wordsSeen[word] = 0
+      }
+      wordsSeen[word]++
+      
+      //no need to process furrther if the word
+      //has higher frequency than required
+      if(wordsSeen[word] > (wordFreq[word] || 0)){
+        break
+      }
+      
+      if(j + 1 === wordCount){
+        //store index if we have found all the words
+        resultIndex.push(i)
+      }
+    }
+  }
+  return resultIndex
+}
+
+findWordConcatenation("catfoxcat", ["cat", "fox"])//[0, 3], The two substring containing both the words are "catfox" & "foxcat".
+findWordConcatenation("catcatfoxfox", ["cat", "fox"])//[3], The only substring containing both the words is "catfox".
+````
+- The time complexity of the above algorithm will be `O(N * M * Len)` where `‘N’` is the number of characters in the given string, `‘M’` is the total number of words, and `‘Len’` is the length of a word.
+- The space complexity of the algorithm is `O(M)` since at most, we will be storing all the words in the two <b>HashMaps</b>. In the worst case, we also need `O(N)` space for the resulting list. So, the overall space complexity of the algorithm will be `O(M+N)`.
 
