@@ -87,6 +87,7 @@ A huge number of coding interview problems involve dealing with <b>Permutations<
 
 ## Pattern 11: Modified Binary Search
 
+As we know, whenever we are given a sorted <b>Array</b> or <b>LinkedList</b> or <b>Matrix</b>, and we are asked to find a certain element, the best algorithm we can use is the <b>Binary Search</b>.
 ## Pattern 12: Bitwise XOR
 
 <b>XOR</b> is a logical bitwise operator that returns `0` (false) if both bits are the same and returns `1` (true) otherwise. In other words, it only returns `1` if exactly one bit is set to `1` out of the two bits in comparison.
