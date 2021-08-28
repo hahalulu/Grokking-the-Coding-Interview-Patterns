@@ -523,6 +523,8 @@ console.log(dutchFlagSort([2, 2, 0, 1, 2, 0]))//[0 0 1 2 2 2 ]
 ## 🌟 Quadruple Sum to Target (medium)
 https://leetcode.com/problems/4sum/
 
+> Given an array of unsorted numbers and a target number, find all <b>unique quadruplets</b> in it, whose <b>sum is equal to the target number</b>.
+
 ## 🌟 Comparing Strings containing Backspaces (medium)
 https://leetcode.com/problems/backspace-string-compare/
 
