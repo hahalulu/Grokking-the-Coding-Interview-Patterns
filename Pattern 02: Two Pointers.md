@@ -525,6 +525,66 @@ https://leetcode.com/problems/4sum/
 
 > Given an array of unsorted numbers and a target number, find all <b>unique quadruplets</b> in it, whose <b>sum is equal to the target number</b>.
 
+This problem follows the <b>Two Pointers</b> pattern and shares similarities with <b>Triplet Sum to Zero</b>.
+
+We can follow a similar approach to iterate through the array, taking one number at a time. At every step during the iteration, we will search for the quadruplets similar to <b>Triplet Sum to Zero</b> whose sum is equal to the given target.
+````
+function searchQuads (arr, target) {
+  //sort the array
+  arr.sort((a,b) => a -b)
+  
+  let quads = []
+   
+  for(let i = 0; i < arr.length-3; i++) {
+    //skip the same element to avoid duplicate quadruplets
+    if(i > 0 && arr[i] === arr[i-1]) {
+      continue
+    }
+    for(let j = i +1; j < arr.length-2; j++) {
+      //skip the same element to avoid duplicate quadruplets
+      if(j > i + 1 && arr[j] === arr[j-1]){
+        continue
+      }
+      searchPairs(arr, target, i, j, quads)
+    }
+  }
+  return quads
+}
+
+function searchPairs(arr, targetSum, first, second, quads) {
+  let start = second + 1
+  let end = arr.length -1
+  
+  while(start < end) {
+    const sum = arr[first] + arr[second] + arr[start] + arr[end]
+    if(sum === targetSum) {
+      //found the quadruplet
+      quads.push([arr[first], arr[second], arr[start], arr[end]])
+      start++
+      end--
+      while(start < end && arr[start] === arr[start -1]){
+        //skip the same element to avoid duplicate quadruplets
+        start++
+      }
+      while(start < end && arr[end] === arr[end -1]){
+        //skip the same element to avoid duplicate quadruplets
+        end--
+      }
+    } else if(sum < targetSum) {
+      //we need a pair with a bigger sum
+      start++
+    } else {
+      //we need a pair with a smaller sum
+      end--
+    }
+  }
+}
+
+searchQuads([4,1,2,-1,1,-3], 1)//-3, -1, 1, 4], [-3, 1, 1, 2]
+searchQuads([2,0,-1,1,-2,2], 2)//[-2, 0, 2, 2], [-1, 0, 1, 2]
+````
+- Sorting the array will take `O(N*logN)`. Overall `searchQuads()` will take `O(N * logN + N³)`, which is asymptotically equivalent to `O(N³)`.
+- The space complexity of the above algorithm will be `O(N)` which is required for sorting.
 ## 🌟 Comparing Strings containing Backspaces (medium)
 https://leetcode.com/problems/backspace-string-compare/
 
