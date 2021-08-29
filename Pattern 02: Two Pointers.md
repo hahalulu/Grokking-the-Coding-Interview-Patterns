@@ -587,6 +587,64 @@ searchQuads([2,0,-1,1,-2,2], 2)//[-2, 0, 2, 2], [-1, 0, 1, 2]
 - The space complexity of the above algorithm will be `O(N)` which is required for sorting.
 ## 🌟 Comparing Strings containing Backspaces (medium)
 https://leetcode.com/problems/backspace-string-compare/
+>Given two strings containing backspaces (identified by the character `‘#’`), check if the two strings are equal.
+
+To compare the given strings, first, we need to apply the backspaces. An efficient way to do this would be from the end of both the strings. We can have separate pointers, pointing to the last element of the given strings. We can start comparing the characters pointed out by both the pointers to see if the strings are equal. If, at any stage, the character pointed out by any of the pointers is a backspace (`’#’`), we will skip and apply the backspace until we have a valid character available for comparison.
+
+````
+function backspaceCompare(str1, str2) {
+  //use two pointer approach to compare the strings
+  let pointerOne = str1.length -1
+  let pointerTwo = str2.length -1
+  
+  while(pointerOne >= 0 || pointerTwo >= 0){
+    let i = getNextChar(str1, pointerOne)
+    let j = getNextChar(str2, pointerTwo)
+    
+    if(i < 0 && j < 0){
+      //reached the end of both strings
+      return true
+    } 
+     if(i < 0 || j < 0){
+      //reached the end of both strings
+      return false
+    } 
+    if(str1[i] !== str2[j]){
+      //check if the characters are equal
+      return false
+    }
+    pointerOne = i - 1
+    pointerTwo = j -1
+  }
+  return true
+}
+
+
+function getNextChar(str, index) {
+  let backspaceCount = 0
+  while(index >= 0) {
+    if(str[index] === '#'){
+      //found a backspace character
+      backspaceCount++
+    } else if(backspaceCount > 0) {
+      //a non-backspace character
+      backspaceCount--
+    } else {
+      break
+    }
+    //skip a backspace or valid character
+    index--
+  }
+  return index
+}
+
+backspaceCompare("xy#z", "xzz#")//true, After applying backspaces the strings become "xz" and "xz" respectively.
+backspaceCompare("xy#z", "xyz#")//false, After applying backspaces the strings become "xz" and "xy" respectively.
+backspaceCompare("xp#", "xyz##")//true, After applying backspaces the strings become "x" and "x" respectively.  In "xyz##", the first '#' removes the character 'z' and the second '#' removes the character 'y'.
+backspaceCompare("xywrrmp", "xywrrmu#p")//true, After applying backspaces the strings become "xywrrmp" and "xywrrmp" respectively.
+````
+- The time complexity of the above algorithm will be `O(M+N)` where `‘M’` and `‘N’` are the lengths of the two input strings respectively.
+- The algorithm runs in constant space `O(1)`.
 
 ## 🌟 Minimum Window Sort (medium)
 https://leetcode.com/problems/shortest-subarray-to-be-removed-to-make-array-sorted/
