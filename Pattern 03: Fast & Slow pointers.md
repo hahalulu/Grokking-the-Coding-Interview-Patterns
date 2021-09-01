@@ -356,6 +356,10 @@ console.log(`Middle Node: ${findMiddleOfLinkedList(head).value}`)
 
 ## 🌟 Palindrome LinkedList (medium)
 https://leetcode.com/problems/palindrome-linked-list/
+
+> Given the head of a <b>Singly LinkedList</b>, write a method to check if the <b>LinkedList is a palindrome</b> or not.
+> 
+>Your algorithm should use <b>constant space</b> and the input LinkedList should be in the original form once the algorithm is finished. The algorithm should have `O(N)` time complexity where `‘N’` is the number of nodes in the LinkedList.
 ## 🌟 Rearrange a LinkedList (medium)
 ## 🌟 Cycle in a Circular Array (hard)
 
