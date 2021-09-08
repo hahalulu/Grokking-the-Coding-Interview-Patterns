@@ -360,6 +360,100 @@ https://leetcode.com/problems/palindrome-linked-list/
 > Given the head of a <b>Singly LinkedList</b>, write a method to check if the <b>LinkedList is a palindrome</b> or not.
 > 
 >Your algorithm should use <b>constant space</b> and the input LinkedList should be in the original form once the algorithm is finished. The algorithm should have `O(N)` time complexity where `‘N’` is the number of nodes in the LinkedList.
+### Example 1:
+````
+Input: 2 -> 4 -> 6 -> 4 -> 2 -> null
+Output: true
+````
+### Example 2:
+````
+Input: 2 -> 4 -> 6 -> 4 -> 2 -> 2 -> null
+Output: false
+````
+
+As we know, a palindrome LinkedList will have nodes values that read the same backward or forward. This means that if we divide the LinkedList into two halves, the node values of the first half in the forward direction should be similar to the node values of the second half in the backward direction. As we have been given a Singly LinkedList, we can’t move in the backward direction. To handle this, we will perform the following steps:
+
+1. We can use the <b>Fast & Slow pointers</b> method similar to <b>Middle of the LinkedList</b> to find the middle node of the LinkedList.
+2. Once we have the middle of the LinkedList, we will reverse the second half.
+3. Then, we will compare the first half with the reversed second half to see if the LinkedList represents a palindrome.
+4. Finally, we will reverse the second half of the LinkedList again to revert and bring the LinkedList back to its original form.
+
+````
+class Node {
+  constructor(value, next = null) {
+    this.value = value
+    this.next = next
+  }
+}
+
+function isPalindromicLinkedList(head) {
+  if(head === null || head.next === null) {
+    return true
+  }
+  
+  //find the middle of the LinkedList
+  let slow = head
+  let fast = head
+  
+  while((fast !== null && fast.next !== null)) {
+    slow = slow.next
+    fast = fast.next.next
+  }
+  
+  //reverse the second half
+  let headSecondHalf = reverse(slow)
+  
+  //store the head of reversed part to revert back later
+  let copyHeadSecondHalf = headSecondHalf
+  
+  //compare first and second half
+  while((head !== null && headSecondHalf !== null)){
+    if(head.value !== headSecondHalf.value) {
+      //not a palindrome
+      break
+    }
+    
+    head = head.next
+    headSecondHalf = headSecondHalf.next
+  }
+  
+  //revert the reverse of the second half
+  reverse(copyHeadSecondHalf)
+  
+  //if both halves match
+  if(head === null || headSecondHalf === null) {
+    return true
+  }
+  
+  return false
+}
+
+
+function reverse(head) {
+  let prev = null
+  
+  while (head !== null) {
+    let next = head.next
+    head.next = prev
+    prev = head
+    head = next
+  }
+  return prev
+}
+head = new Node(2)
+head.next = new Node(4)
+head.next.next = new Node(6)
+head.next.next.next = new Node(4)
+head.next.next.next.next = new Node(2)
+
+console.log(`Is palindrome: ${isPalindromicLinkedList(head)}`)
+
+head.next.next.next.next.next = new Node(2)
+console.log(`Is palindrome: ${isPalindromicLinkedList(head)}`)
+````
+
+- The above algorithm will have a time complexity of `O(N)` where `‘N’` is the number of nodes in the LinkedList.
+- The algorithm runs in constant space `O(1)`.
 ## 🌟 Rearrange a LinkedList (medium)
 ## 🌟 Cycle in a Circular Array (hard)
 
