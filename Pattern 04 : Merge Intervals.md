@@ -46,8 +46,7 @@ function merge (intervals) {
   }
   
   //sort the intervals on the start time
-  intervals.sort((a,b) => a.start - b.start
-                )
+  intervals.sort((a,b) => a.start - b.start)
   const mergedIntervals = []
   
   let start = intervals[0].start
