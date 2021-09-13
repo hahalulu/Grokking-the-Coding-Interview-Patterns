@@ -424,6 +424,58 @@ So our algorithm will look like this:
 4. Since the min-heap contains all the active meetings, so before scheduling `m1` we can remove all meetings from the heap that have ended before `m1`, i.e., remove all meetings from the heap that have an end time smaller than or equal to the start time of `m1`.
 5. Now add `m1` to the heap.
 6. The heap will always have all the overlapping meetings, so we will need rooms for all of them. Keep a counter to remember the maximum size of the heap at any time which will be the minimum number of rooms needed.
+
+````
+function minMeetingRooms(meetings) {
+  //JavaScript does not come with built in Heap, so I used an array to keep track of rooms and sorted by end time at each call
+  if(meetings == null) return 0
+  if(meetings.length <= 1) return meetings.length
+  
+  //helper that returns the meeting room with the earliest end time
+  function getEarliest(room) {
+    room.sort((a,b) => a[1]-b[1])
+    return rooms[0]
+  }
+  
+  //sort meetings on start time
+  meetings.sort((a,b) => a[0]-b[0])
+  
+  let rooms = [meetings[0]]
+  
+  for(let i = 1; i < meetings.length; i++) {
+    let earliestRoom = getEarliest(rooms)
+    let currentTime = meetings[i]
+    
+    //if the room time ends before the currentTime interval starts
+    //then use the room and update the room end time to currentTime
+    if(earliestRoom[1] <= currentTime[0]) {
+      earliestRoom[1] = currentTime[1]
+    } else {
+      //create room
+      rooms.push(currentTime)
+    }
+  }
+  return rooms.length
+}
+
+minMeetingRooms()
+minMeetingRooms([[1,4]])
+minMeetingRooms([[1,4], [2,5], [7,9]])//2, Since [1,4] and [2,5] overlap, we need two rooms to hold these two meetings. [7,9] can occur in any of the two rooms later.
+minMeetingRooms([[6,7], [2,4], [8,12]])//1, None of the meetings overlap, therefore we only need one room to hold all meetings.
+minMeetingRooms([[1,4], [2,3], [3,6]])//2, Since [1,4] overlaps with the other two meetings [2,3] and [3,6], we need two rooms to hold all the meetings.
+minMeetingRooms([[4,5], [2,3], [2,4], [3,5]])//2, We will need one room for [2,3] and [3,5], and another room for [2,4] and [4,5].
+````
+- The time complexity of the above algorithm is `O(N*logN)`, where `‘N’` is the total number of meetings. This is due to the sorting that we did in the beginning. Also, while iterating the meetings we might need to poll/offer meeting to the priority queue. Each of these operations can take `O(logN)`. Overall our algorithm will take `O(NlogN)`.
+- The space complexity of the above algorithm will be `O(N)` which is required for sorting. Also, in the worst case scenario, we’ll have to insert all the meetings into the Min Heap (when all meetings overlap) which will also take `O(N)` space. The overall space complexity of our algorithm is `O(N)`.
+
+### Similar Problems
+> Given a list of intervals, find the point where the maximum number of intervals overlap.
+
+> Given a list of intervals representing the arrival and departure times of trains to a train station, our goal is to find the minimum number of platforms required for the train station so that no train has to wait.
+
+Both of these problems can be solved using the approach discussed above.
+
+
 ## 🌟 Maximum CPU Load (hard)
 ## 🌟 Employee Free Time (hard)
 https://leetcode.com/problems/employee-free-time/
