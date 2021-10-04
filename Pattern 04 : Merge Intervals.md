@@ -15,7 +15,7 @@ Understanding the above six cases will help us in solving all intervals related 
 ## Merge Intervals (medium)
 https://leetcode.com/problems/merge-intervals/
 
-> Given a list of intervals, merge all the overlapping intervals to produce a list that has only mutually exclusive intervals.
+> Given a list of intervals, <b>merge all the overlapping intervals</b> to produce a list that has only mutually exclusive intervals.
 
 Our goal is to merge the intervals whenever they overlap. 
 The diagram above clearly shows a merging approach. Our algorithm will look like this:
@@ -101,28 +101,63 @@ console.log(`Merged intervals: ${result}`)
 OR 
 ````
 function merge(intervals) {
-    if(intervals.length < 2) return intervals
+  if(intervals.length < 2) return intervals
+  
   //sort
-  intervals.sort((a, b) => a[0] - b[0])
+  intervals.sort((a,b) => a[0]-b[0])
+  
   for(let i = 1; i < intervals.length; i++) {
     let current = intervals[i]
     let previous = intervals[i-1]
+    
     if(current[0] <= previous[1]) {
-      intervals[i] =[previous[0], Math.max(previous[1], current[1])]
+      intervals[i] = [previous[0], Math.max(previous[1], current[1])]
       intervals.splice(i-1, 1)
       i--
-       }
+    }
   }
+  
   return intervals
-};
+}
+
+merge([[1,4], [2,5], [7,9]])//[[1,5], [7,9]], Since the first two intervals [1,4] and [2,5] overlap, we merged them into one [1,5].
+merge([[6,7], [2,4], [5,9]])//[[2,4], [5,9]], Since the intervals [6,7] and [5,9] overlap, we merged them into one [5,9].
+merge([[1,4], [2,6], [3,5]])//[[1,6]], Since all the given intervals overlap, we merged them into one.
+merge([[2,5]])
 ````
 
 - The time complexity of the above algorithm is `O(N * logN)`, where `N` is the total number of intervals. We are iterating the intervals only once which will take `O(N)`, in the beginning though, since we need to sort the intervals, our algorithm will take `O(N * logN)`.
 - The space complexity of the above algorithm will be `O(N)` as we need to return a list containing all the merged intervals. We will also need `O(N)` space for sorting
 
 >  Given a set of intervals, find out if any two intervals overlap.
+````
+Intervals: [[1,4], [2,5], [7,9]]
+Output: true
+Explanation: Intervals [1,4] and [2,5] overlap
+````
 
  We can follow the same approach as discussed above to find if any two intervals overlap.
+ ````
+ function anyOverlap(intervals) {
+  //edge cases?
+  if(intervals.length < 2) return false
+  
+  //already sorted?
+  intervals.sort((a, b) => a[0] - b[0])
+  
+  for(let i = 1; i < intervals.length; i++) {
+    let current = intervals[i]
+    let previous = intervals[i-1]
+   if(current[0] <= previous[1]) return true
+  }
+  
+  return false
+}
+
+anyOverlap([[1,4], [2,5], [7,9]])//true, Intervals [1,4] and [2,5] overlap
+anyOverlap([[1,2], [3,4], [5,6]])
+anyOverlap([[1,2]])
+ ````
  
  ## Insert Interval (medium)
  https://leetcode.com/problems/insert-interval/
