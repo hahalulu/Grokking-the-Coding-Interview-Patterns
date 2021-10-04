@@ -98,7 +98,7 @@ console.log(`Merged intervals: ${result}`)
 //Output: [[1,6]]
 //Explanation: Since all the given intervals overlap, we merged them into one.
 ````
-OR 
+#### OR 
 ````
 function merge(intervals) {
   if(intervals.length < 2) return intervals
@@ -268,36 +268,41 @@ for (i = 0; i < result.length; i++) {
 }
 console.log();
 ````
-
-OR 
-
+#### OR 
 ````
-function insert (intervals, newInterval) {
-    let merged = []
-    let i = 0
-    
-    //skip and add to output all intervals that come before the newInterval
-    while(i < intervals.length && intervals[i][1] < newInterval[0]) {
-        merged.push(intervals[i])
-        i++
-    }
-    
-    //merge all intervals that overlap with newInterval
-    while(i < intervals.length && intervals[i][0] <= newInterval[1]) {
-        newInterval[0] = Math.min(intervals[i][0], newInterval[0])
-        newInterval[1] = Math.max(intervals[i][1], newInterval[1])
-        i++
-    }
-    //insert the newInterval
-    merged.push(newInterval)
-    
-    //add all the remaining intervals to the output
-    while(i < intervals.length) {
-        merged.push(intervals[i])
-        i++
-    }
-    return merged
-};
+function insert(intervals, newInterval) {
+  let merged = []
+  
+  let i = 0
+  
+  //skip and add to output all intervals that come before the newInterval
+  while(i < intervals.length && intervals[i][1] < newInterval[0]) {
+    merged.push(intervals[i])
+    i++
+  }
+  
+  //merge all intervals that overlap with newInterval
+  while(i < intervals.length && intervals[i][0] <= newInterval[1]) {
+    newInterval[0] = Math.min(intervals[i][0], newInterval[0])
+    newInterval[1] = Math.max(intervals[i][1], newInterval[1])
+    i++
+  }
+  
+  //insert the newInterval
+  merged.push(newInterval)
+  
+  //add the remaining intervals to the output
+  while(i < intervals.length) {
+    merged.push(intervals[i])
+    i++
+  }
+  
+  return merged
+}
+
+insert([[1,3], [5,7], [8,12]], [4,6])//[[1,3], [4,7], [8,12]], After insertion, since [4,6] overlaps with [5,7], we merged them into one [4,7].
+insert([[1,3], [5,7], [8,12]], [4,10])// [[1,3], [4,12]], After insertion, since [4,10] overlaps with [5,7] & [8,12], we merged them into [4,12].
+insert([[2,3],[5,7]], [1,4])//[[1,4], [5,7]], After insertion, since [1,4] overlaps with [2,3], we merged them into one [1,4].
 ````
 
 - As we are iterating through all the intervals only once, the time complexity of the above algorithm is `O(N)`, where `N` is the total number of intervals.
