@@ -403,6 +403,31 @@ Output:
 [4,5] and [3,6] conflict. 
 [3,6] and [5,7] conflict.
 ````
+### REVIEW
+````
+function whatAreTheConflicts(appointmentTimes)  {
+  
+  // appointmentTimes.sort((a,b) => a[0]-b[0])
+  
+  let conflicts = []
+  
+  for(let i = 0; i < appointmentTimes.length -1; i++) {
+    for(let j = 1; j < appointmentTimes.length; j++) {
+      if((j!==i) && (appointmentTimes[i][1] > appointmentTimes[j][0])) {
+        conflicts.push([appointmentTimes[j], appointmentTimes[i]])
+      } 
+    }
+ }
+ // console.log(appointmentTimes)
+ return conflicts
+}
+
+
+ whatAreTheConflicts([[4,5], [2,3], [3,6], [5,7], [7,8]])
+//[4,5] and [3,6] conflict. 
+//[3,6] and [5,7] conflict.
+````
+
 ## 🌟 Minimum Meeting Rooms (hard) 
 https://leetcode.com/problems/meeting-rooms-ii/
 
