@@ -327,35 +327,40 @@ That is, the highest start time and the lowest end time will be the overlapping 
 
 So our algorithm will be to iterate through both the lists together to see if any two intervals overlap. If two intervals overlap, we will insert the overlapped part into a result list and move on to the next interval which is finishing early.
 ````
-function merge(intervalA, intervalB) {
+function findIntersection(firstIntervals, secondIntervals) {
   let result = []
+  
   let i = 0
   let j = 0
   
-  while(i < intervalA.length && j < intervalB.length) {
-    //check if intervals overlap and intervalA[i]'s start time
-    //lies with the other intervalB[j]
-    let aOverlapsB = intervalA[i][0] >= intervalB[j][0] && intervalA[i][0] <= intervalB[j][1]
+  while(i < firstIntervals.length && j < secondIntervals.length) {
+    //check if intervals overlap and firstIntervals[i] start time
+    //lies within the other secondIntervals[j]
+    let firstOverlapsSecond = firstIntervals[i][0] >= secondIntervals[j][0] && firstIntervals[i][0] <= secondIntervals[j][1]
     
-    //check if intervals overlap and intervalA[j]'s start time lies with the other intervalB[i]
-    let bOverlapsA = intervalB[j][0] >= intervalA[i][0] && intervalB[j][0] <= intervalA[i][1]
+    //check if intervals overlap and firstIntervals[j]'s start time 
+    //lies within the other secondInterval[i]
+    let secondOverlapsFirst = secondIntervals[j][0] >= firstIntervals[i][0] && secondIntervals[j][0] <= firstIntervals[i][1]
     
     //store the intersection part
-    if(aOverlapsB || bOverlapsA) {
-      result.push([Math.max(intervalA[i][0], intervalB[j][0]), Math.min(intervalA[i][1],intervalB[j][1])])
+    if(firstOverlapsSecond || secondOverlapsFirst) {
+      result.push([Math.max(firstIntervals[i][0], secondIntervals[j][0]), Math.min(firstIntervals[i][1], secondIntervals[j][1])])
     }
-    //move next from the intercal which is finishing first
-    if(intervalA[i][1] < intervalB[j][1]) {
+    
+    //move next from the interval which is finishing first
+    if(firstIntervals[i][1] < secondIntervals[j][1]) {
       i++
     } else {
       j++
     }
   }
+  
   return result
 }
 
-merge([[1, 3], [5, 6], [7, 9]], [[2, 3], [5, 7]])//[2, 3], [5, 6], [7, 7], The output list contains the common intervals between the two lists.
-merge([[1, 3], [5, 7], [9, 12]], [[5, 10]])//[5, 7], [9, 10], The output list contains the common intervals between the two lists.
+
+findIntersection([[1, 3], [5, 6], [7, 9]], [[2, 3], [5, 7]])//[2, 3], [5, 6], [7, 7], The output list contains the common intervals between the two lists.
+findIntersection([[1, 3], [5, 7], [9, 12]], [[5, 10]])// [5, 7], [9, 10], The output list contains the common intervals between the two lists.
 ````
 - As we are iterating through both the lists once, the time complexity of the above algorithm is `O(N + M)`, where `‘N’` and `‘M’` are the total number of intervals in the input arrays respectively.
 - Ignoring the space needed for the result list, the algorithm runs in constant space `O(1)`.
