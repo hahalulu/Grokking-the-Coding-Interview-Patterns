@@ -637,7 +637,7 @@ findEmployeeFreeTime ([[[1,3]], [[2,4]], [[3,5], [7,9]]])//[5,7], ll employees a
 - This algorithm will take `O(N * logN)` time, where `‘N’` is the total number of intervals. This time is needed because we need to sort all the intervals. 
 - The space complexity will be `O(N)`, which is needed for sorting. 
 
-Can we find a better solution?
+#### Can we find a better solution?
 
 One fact that we are not utilizing is that each employee list is individually sorted!
 
