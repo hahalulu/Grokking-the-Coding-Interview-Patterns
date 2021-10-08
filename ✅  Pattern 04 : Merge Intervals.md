@@ -585,4 +585,63 @@ function findMaxCPULoad(jobs) {
 - The time complexity of the above algorithm is `O(N*logN)`, where `N` is the total number of jobs. This is due to the sorting that we did in the beginning. Also, while iterating the jobs, we might need to poll/offer jobs to the priority queue. Each of these operations can take `O(logN)`. Overall our algorithm will take `O(NlogN)`.
 - The space complexity of the above algorithm will be `O(N)`, which is required for sorting. Also, in the worst case, we have to insert all the jobs into the priority queue (when all jobs overlap) which will also take `O(N)` space. The overall space complexity of our algorithm is `O(N)`.
 ## 🌟 Employee Free Time (hard)
-https://leetcode.com/problems/employee-free-time/
+https://leetcode.com/problems/employee-free-time/ 
+> For ‘K’ employees, we are given a list of intervals representing the working hours of each employee. Our goal is to find out if there is a <b>free interval that is common to all employees</b>. You can assume that each list of employee working hours is sorted on the start time.
+
+This problem follows the Merge Intervals pattern. Let’s take the an example:
+````
+Input: Employee Working Hours=[[[1,3], [9,12]], [[2,4]], [[6,8]]]
+Output: [4,6], [8,9]
+````
+One simple solution can be to put all employees’ working hours in a list and sort them on the start time. Then we can iterate through the list to find the gaps. Let’s dig deeper. Sorting the intervals of the above example will give us:
+````
+[1,3], [2,4], [6,8], [9,12]
+````
+We can now iterate through these intervals, and whenever we find non-overlapping intervals (e.g., `[2,4]` and `[6,8]`), we can calculate a free interval (e.g., `[4,6]`). This algorithm will take `O(N * logN)` time, where `‘N’` is the total number of intervals. This time is needed because we need to sort all the intervals. The space complexity will be `O(N)`, which is needed for sorting. 
+````
+function findEmployeeFreeTime (schedules) {
+  let freeTime = [];
+  
+  //combine all schedules
+  let allTime = []
+  
+  for(let i = 0; i < schedules.length; i++) {
+    for(let j = 0; j <  schedules[i].length; j++) {
+      allTime.push(schedules[i][j])
+    }
+  }
+  allTime.sort((a,b) => a[0]-b[0])
+
+  //merge overlap
+  for(let i = 1; i < allTime.length; i++) {
+    let current = allTime[i]
+    let previous = allTime[i-1]
+   
+    if(current[0] <= previous[1]) {
+      allTime[i] = [previous[0], current[1]]
+      allTime.splice(i-1, 1)
+      i-- 
+    }
+  }
+  //whatever is not accounted for is free time
+  for(let i = 1; i < allTime.length; i++) {
+    freeTime.push([allTime[i-1][1], allTime[i][0]])
+  }
+    return freeTime;
+};
+
+findEmployeeFreeTime ([[[1,3], [5,6]], [[2,3], [6,8]]])//[3,5], Both the employees are free between [3,5].
+findEmployeeFreeTime ([[[1,3], [9,12]], [[2,4]], [[6,8]]])//[4,6], [8,9], All employees are free between [4,6] and [8,9].
+findEmployeeFreeTime ([[[1,3]], [[2,4]], [[3,5], [7,9]]])//[5,7], ll employees are free between [5,7].
+````
+
+Can we find a better solution?
+
+One fact that we are not utilizing is that each employee list is individually sorted!
+
+How about we take the first interval of each employee and insert it in a `Min Heap`. This `Min Heap` can always give us the interval with the smallest start time. Once we have the smallest start-time interval, we can then compare it with the next smallest start-time interval (again from the `Heap`) to find the gap. This interval comparison is similar to what we suggested in the previous approach.
+
+Whenever we take an interval out of the `Min Heap`, we can insert the same employee’s next interval. This also means that we need to know which interval belongs to which employee.
+- The above algorithm’s time complexity is `O(N*logK)`, where `‘N’` is the total number of intervals, and `‘K’` is the total number of employees. This is because we are iterating through the intervals only once (which will take `O(N)`), and every time we process an interval, we remove (and can insert) one interval in the` Min Heap`, (which will take `O(logK)`. At any time, the heap will not have more than `‘K’` elements.
+- The space complexity of the above algorithm will be `O(K)` as at any time, the heap will not have more than `‘K’` elements.
+
