@@ -548,5 +548,41 @@ Explanation: Maximum CPU load will be 8 as all jobs overlap during the time inte
 ````
 
 The problem follows the <b>Merge Intervals</b> pattern and can easily be converted to <b>Minimum Meeting Rooms</b>. Similar to ‘Minimum Meeting Rooms’ where we were trying to find the maximum number of meetings happening at any time, for ‘Maximum CPU Load’ we need to find the maximum number of jobs running at any time. We will need to keep a running count of the maximum CPU load at any time to find the overall maximum load.
+
+
+````
+function findMaxCPULoad(jobs) {
+  //sort the jobs by start time
+  jobs.sort((a, b) => a[0]-b[0])
+  
+  let maxCPULoad = 0
+  
+ //consolidate jobs that overlap
+  for(let i = 1; i < jobs.length; i++) {
+    let current = jobs[i]
+    let previous = jobs[i-1]
+   
+    if(current[0] < previous[1]){
+      jobs[i] = [previous[0], current[1], previous[2] + current[2]]
+      jobs.splice(i-1, 1)
+      i--
+    }
+  }
+  
+  //set maximum load
+  for(let i = 0; i < jobs.length; i++) {
+    maxCPULoad = Math.max(maxCPULoad, jobs[i][2]) 
+  }
+
+  return maxCPULoad;
+};
+
+ findMaxCPULoad([[1,4,3], [2,5,4], [7,9,6]])//7, Since [1,4,3] and [2,5,4] overlap, their maximum CPU load (3+4=7) will be when both the jobs are running at the same time i.e., during the time interval (2,4). 
+ findMaxCPULoad([[6,7,10], [2,4,11], [8,12,15]])//15, None of the jobs overlap, therefore we will take the maximum load of any job which is 15. 
+ findMaxCPULoad([[1,4,2], [2,4,1], [3,6,5]])//8, Maximum CPU load will be 8 as all jobs overlap during the time interval [3,4]. 
+ ````
+ 
+- The time complexity of the above algorithm is `O(N*logN)`, where `N` is the total number of jobs. This is due to the sorting that we did in the beginning. Also, while iterating the jobs, we might need to poll/offer jobs to the priority queue. Each of these operations can take `O(logN)`. Overall our algorithm will take `O(NlogN)`.
+- The space complexity of the above algorithm will be `O(N)`, which is required for sorting. Also, in the worst case, we have to insert all the jobs into the priority queue (when all jobs overlap) which will also take `O(N)` space. The overall space complexity of our algorithm is `O(N)`.
 ## 🌟 Employee Free Time (hard)
 https://leetcode.com/problems/employee-free-time/
