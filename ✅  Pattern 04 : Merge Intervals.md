@@ -597,7 +597,7 @@ One simple solution can be to put all employees’ working hours in a list and s
 ````
 [1,3], [2,4], [6,8], [9,12]
 ````
-We can now iterate through these intervals, and whenever we find non-overlapping intervals (e.g., `[2,4]` and `[6,8]`), we can calculate a free interval (e.g., `[4,6]`). This algorithm will take `O(N * logN)` time, where `‘N’` is the total number of intervals. This time is needed because we need to sort all the intervals. The space complexity will be `O(N)`, which is needed for sorting. 
+We can now iterate through these intervals, and whenever we find non-overlapping intervals (e.g., `[2,4]` and `[6,8]`), we can calculate a free interval (e.g., `[4,6]`). 
 ````
 function findEmployeeFreeTime (schedules) {
   let freeTime = [];
@@ -634,6 +634,8 @@ findEmployeeFreeTime ([[[1,3], [5,6]], [[2,3], [6,8]]])//[3,5], Both the employe
 findEmployeeFreeTime ([[[1,3], [9,12]], [[2,4]], [[6,8]]])//[4,6], [8,9], All employees are free between [4,6] and [8,9].
 findEmployeeFreeTime ([[[1,3]], [[2,4]], [[3,5], [7,9]]])//[5,7], ll employees are free between [5,7].
 ````
+- This algorithm will take `O(N * logN)` time, where `‘N’` is the total number of intervals. This time is needed because we need to sort all the intervals. 
+- The space complexity will be `O(N)`, which is needed for sorting. 
 
 Can we find a better solution?
 
