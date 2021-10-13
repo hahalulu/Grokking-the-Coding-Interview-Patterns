@@ -293,4 +293,43 @@ findCorruptNumbers([3, 1, 2, 3, 6, 4])// [3, 5], '3' is duplicated and '5' is mi
 - The algorithm runs in constant space `O(1)`.
 ## 🌟 Find the Smallest Missing Positive Number (medium)
 https://leetcode.com/problems/first-missing-positive/
+
+> Given an unsorted array containing numbers, find the <b>smallest missing positive number</b> in it.
+
+This problem follows the <b>Cyclic Sort</b> pattern and shares similarities with <b>Find the Missing Number</b> with one big difference. In this problem, the numbers are not bound by any range so we can have any number in the input array.
+
+However, we will follow a similar approach though as discussed in <b>Find the Missing Number</b> to place the numbers on their correct indices and ignore all numbers that are out of the range of the array (i.e., all negative numbers and all numbers greater than or equal to the length of the array). Once we are done with the cyclic sort we will iterate the array and the first index that does not have the correct number will be the smallest missing positive number!
+
+````
+function findFirstSmallestMissingPositive(nums) {
+  //try to sort the array
+  let i = 0
+  let n = nums.length
+  
+  while(i < n) {
+    const j = nums[i] - 1
+    if(nums[i] !== nums[j] && nums[i] > 0 && nums[i] <= n){
+      [nums[i], nums[j]] = [nums[j], nums[i]]
+    } else {
+      i++
+    }
+  }
+  
+  
+  for(let i = 0; i < n; i++) {
+    if(nums[i] !== i + 1) {
+      return i + 1
+    }
+  }
+  
+  return nums.length + 1;
+};
+
+findFirstSmallestMissingPositive([-3, 1, 5, 4, 2])//3, The smallest missing positive number is '3'
+findFirstSmallestMissingPositive([3, -2, 0, 1, 2])//4
+findFirstSmallestMissingPositive([3, 2, 5, 1])//4
+````
+
+- The time complexity of the above algorithm is `O(n)`.
+- The algorithm runs in constant space `O(1)`.
 ## 🌟 Find the First K Missing Positive Numbers (hard)
