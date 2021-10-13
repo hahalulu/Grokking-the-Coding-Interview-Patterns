@@ -333,3 +333,70 @@ findFirstSmallestMissingPositive([3, 2, 5, 1])//4
 - The time complexity of the above algorithm is `O(n)`.
 - The algorithm runs in constant space `O(1)`.
 ## 🌟 Find the First K Missing Positive Numbers (hard)
+https://leetcode.com/problems/kth-missing-positive-number/
+> Given an unsorted array containing numbers and a number `‘k’`, find the first `‘k’` missing positive numbers in the array.
+
+This problem follows the <b>Cyclic Sort</b> pattern and shares similarities with <b>Find the Smallest Missing Positive Number</b>. The only difference is that, in this problem, we need to find the first `‘k’` missing numbers compared to only the first missing number.
+
+We will follow a similar approach as discussed in <b>Find the Smallest Missing Positive Number</b> to place the numbers on their correct indices and ignore all numbers that are out of the range of the array. Once we are done with the cyclic sort we will iterate through the array to find indices that do not have the correct numbers.
+
+If we are not able to find `‘k’` missing numbers from the array, we need to add additional numbers to the output array. To find these additional numbers we will use the length of the array. For example, if the length of the array is `4`, the next missing numbers will be `4, 5, 6` and so on. One tricky aspect is that any of these additional numbers could be part of the array. Remember, while sorting, we ignored all numbers that are greater than or equal to the length of the array. So all indices that have the missing numbers could possibly have these additional numbers. To handle this, we must keep track of all numbers from those indices that have missing numbers. Let’s understand this with an example:
+````
+nums: [2, 1, 3, 6, 5], k =2
+````
+After the cyclic sort our array will look like:
+````
+nums: [1, 2, 3, 6, 5]
+````
+From the sorted array we can see that the first missing number is `‘4’` (as we have `‘6’` on the fourth index) but to find the second missing number we need to remember that the array does contain `‘6’`. Hence, the next missing number is `‘7’`.
+
+````
+function findFirstKMissingPositive(nums, k) {
+  //sort? the input array
+  let i = 0
+  const n = nums.length
+  
+  while(i < n) {
+    const j = nums[i] - 1
+    if(nums[i] !== nums[j] && nums[i] <= n && nums[i] > 0) {
+      //swap
+      [nums[i], nums[j]] = [nums[j], nums[i]]
+    } else {
+      i++
+    }
+  }
+  
+  const missingNumbers = []
+  const extraNumbers = new Set()
+  
+    for(let i = 0; i < n; i++) {
+      if(missingNumbers.length < k) {
+        if(nums[i] !== i + 1) {
+          missingNumbers.push(i+1)
+          extraNumbers.add(nums[i])
+        }
+      }
+    }
+  
+  //add the remaining missing numbers
+  let j = 1
+  
+  while(missingNumbers.length < k) {
+    const currentNumber = j + n
+    //ignore if the array contains the current number
+    if(!extraNumbers.has(currentNumber)) {
+      missingNumbers.push(currentNumber)
+      }
+    j++
+  }
+   
+  return missingNumbers;
+};
+
+findFirstKMissingPositive([3, -1, 4, 5, 5], 3)//[1, 2, 6], The smallest missing positive numbers are 1, 2 and 6.) 
+findFirstKMissingPositive([2, 3, 4], 3)//[1, 5, 6], The smallest missing positive numbers are 1, 5 and 6.
+findFirstKMissingPositive([-2, -3, 4], 2)//[1, 2], The smallest missing positive numbers are 1 and 2.
+findFirstKMissingPositive([2, 1, 3, 6, 5],2)//[4, 7]
+````
+- The time complexity of the above algorithm is `O(n + k)`, as the last two for loops will run for `O(n)` and `O(k)` times respectively.
+- The algorithm needs `O(k)` space to store the `extraNumbers`.
