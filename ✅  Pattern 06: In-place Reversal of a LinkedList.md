@@ -433,3 +433,5 @@ head.next.next.next.next.next = new Node(6)
 console.log(`Nodes of original LinkedList are: ${head.getList()}`)
 console.log(`Nodes of rotated LinkedList are: ${rotate(head, 3).getList()}`)
 ````
+- The time complexity of our algorithm will be `O(N)` where `‘N’` is the total number of nodes in the LinkedList.
+- We only used constant space, therefore, the space complexity of our algorithm is `O(1)`.
