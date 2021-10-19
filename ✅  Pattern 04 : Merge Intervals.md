@@ -523,7 +523,7 @@ Both of these problems can be solved using the approach discussed above.
 
 
 ## 🌟 Maximum CPU Load (hard)
-https://leetcode.com/problems/maximum-profit-in-job-scheduling/
+https://leetcode.com/problems/car-pooling/
 
 We are given a list of Jobs. Each job has a Start time, an End time, and a CPU load when it is running. Our goal is to find the <b>maximum CPU load</b> at any time if all the jobs are <b>running on the same machine</b>.
 
