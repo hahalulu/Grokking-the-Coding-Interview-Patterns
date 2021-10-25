@@ -702,4 +702,69 @@ printLevelOrder(root)
 - The space complexity of the above algorithm will be `O(N)`, which is required for the queue. Since we can have a maximum of `N/2`nodes at any level (this could happen only at the lowest level), therefore we will need `O(N)` space to store them in the queue.
 
 ## 🌟 Connect All Level Order Siblings (medium) 
+> Given a binary tree, connect each node with its level order successor. The last node of each level should point to the first node of the next level.
+
+This problem follows the <b>Binary Tree Level Order Traversal</b> pattern. We can follow the same <b>BFS</b> approach. The only difference will be that while traversing we will remember (irrespective of the level) the previous node to connect it with the current node.
+
+````
+class TreeNode {
+  constructor(value) {
+    this.value = value;
+    this.left = null;
+    this.right = null; 
+  }
+  
+  // tree traversal using 'next' pointer
+  printTree() {
+    let result = "Traversal using 'next' pointer: ";
+    let current = this;
+    while (current != null) {
+      result += current.value + " ";
+      current = current.next;
+    }
+    console.log(result);
+  }
+};
+
+function connectAllSiblings(root) {
+  if(root === null) {
+    return
+  }
+  
+  const queue = [root]
+  let currentNode = null
+  let previousNode = null
+  
+  while(queue.length > 0) {
+    currentNode = queue.shift()
+    
+    if(previousNode !== null) {
+      previousNode.next = currentNode
+    }
+    
+    previousNode = currentNode
+    
+    //insert the children of the currentNode into the queue
+    if(currentNode.left !== null) {
+      queue.push(currentNode.left)
+    }
+    if(currentNode.right !== null) {
+      queue.push(currentNode.right)
+    }
+  }
+};
+
+
+const root = new TreeNode(12)
+root.left = new TreeNode(7)
+root.right = new TreeNode(1)
+root.left.left = new TreeNode(9)
+root.right.left = new TreeNode(10)
+root.right.right = new TreeNode(5)
+connectAllSiblings(root)
+root.printTree()
+````
+
+- The time complexity of the above algorithm is `O(N)`, where `‘N’` is the total number of nodes in the tree. This is due to the fact that we traverse each node once.
+- The space complexity of the above algorithm will be `O(N)` which is required for the queue. Since we can have a maximum of `N/2` nodes at any level (this could happen only at the lowest level), therefore we will need `O(N)` space to store them in the queue.
 ## 🌟 Right View of a Binary Tree (easy) 
