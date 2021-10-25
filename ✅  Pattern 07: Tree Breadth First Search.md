@@ -823,5 +823,62 @@ root.right.right = new TreeNode(5);
 root.left.left.left = new TreeNode(3);
 console.log("Tree right view: " + treeRightView(root))
 ````
--The time complexity of the above algorithm is `O(N)`, where `‘N’` is the total number of nodes in the tree. This is due to the fact that we traverse each node once
+- The time complexity of the above algorithm is `O(N)`, where `‘N’` is the total number of nodes in the tree. This is due to the fact that we traverse each node once
 - The space complexity of the above algorithm will be `O(N)` as we need to return a list containing the level order traversal. We will also need `O(N)` space for the queue. Since we can have a maximum of `N/2` nodes at any level (this could happen only at the lowest level), therefore we will need `O(N)` space to store them in the queue.
+
+### Similar Questions
+> Given a binary tree, return an array containing nodes in its left view. The left view of a binary tree is the set of nodes visible when the tree is seen from the left side.
+
+We will be following a similar approach, but instead of appending the last element of each level, we will be appending the first element of each level to the output array.
+
+````
+class TreeNode {
+  constructor(value) {
+    this.value = value
+    this.left = null
+    this.right = null
+  }
+}
+
+function treeRightView(root) {
+  let result = [];
+  
+  if(root === null) {
+    return result
+  }
+  
+  const queue = [root]
+  
+  while(queue.length > 0) {
+    let levelSize = queue.length
+    
+    for(let i = 0; i < levelSize; i++) {
+      let currentNode = queue.shift()
+      
+      //if it is the first node of this level,
+      //add it to the result
+      if(i === 0){
+        result.push(currentNode.value)
+      }
+      //insert the children of current node in the queue
+      if(currentNode.left !== null) {
+        queue.push(currentNode.left)
+      }
+      if(currentNode.right !== null) {
+        queue.push(currentNode.right)
+      }
+    }
+  }
+
+  return result;
+};
+
+const root = new TreeNode(12);
+root.left = new TreeNode(7);
+root.right = new TreeNode(1);
+root.left.left = new TreeNode(9);
+root.right.left = new TreeNode(10);
+root.right.right = new TreeNode(5);
+root.left.left.left = new TreeNode(3);
+console.log("Tree right view: " + treeRightView(root))
+````
