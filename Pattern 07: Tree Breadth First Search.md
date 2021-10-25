@@ -338,6 +338,64 @@ We will follow a similar approach, but instead of having a running sum we will t
 
 `maxValue = Math.max(maxValue, currentNode.val)`
 
+
+````
+class TreeNode {
+  constructor(value) {
+    this.value = value
+    this.left = null
+    this.right = null
+  }
+}
+
+function largestValue(root) {
+  let result = []
+  
+  //edge case => no root
+  if(!root) { 
+    return result
+  }
+  
+  const queue = [root]
+  
+  while(queue.length > 0) {
+    let levelSize = queue.length
+    let maxValue = 0
+    
+    for(let i = 0; i < levelSize; i++){
+      
+      let currentNode = queue.shift()
+      
+      maxValue = Math.max(maxValue, currentNode.value)
+      
+      //insert the children of the current node to the queue
+      if(currentNode.left !== null) {
+        queue.push(currentNode.left)
+      }
+      
+      if(currentNode.right !== null) {
+        queue.push(currentNode.right)
+      }
+    }
+   
+    //append the current level's max value to the result array
+    result.push(maxValue)
+    maxValue = 0
+  }
+  return result
+}
+
+const root = new TreeNode(12)
+root.left = new TreeNode(7)
+root.right = new TreeNode(1)
+root.left.left = new TreeNode(9)
+root.left.right = new TreeNode(2)
+root.right.left = new TreeNode(10)
+root.right.right = new TreeNode(5)
+
+console.log(`Max value's for each level are: ${largestValue(root)}`)
+````
+
 ## Minimum Depth of a Binary Tree (easy)
 https://leetcode.com/problems/minimum-depth-of-binary-tree/
 
