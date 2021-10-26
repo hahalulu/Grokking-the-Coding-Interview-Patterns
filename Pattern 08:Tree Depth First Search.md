@@ -122,12 +122,104 @@ findPaths(root, 23);
 - If we ignore the space required for the `allPaths` list, the space complexity of the above algorithm will be `O(N)` in the worst case. This space will be used to store the recursion stack. The worst-case will happen when the given tree is a linked list (i.e., every node has only one child).
 
 > 🌟 Given a binary tree, return all root-to-leaf paths.
+https://leetcode.com/problems/binary-tree-paths/
+We can follow a similar approach. We just need to remove the “check for the path sum.”
+````
+class TreeNode {
+  constructor(value, left = null, right = null) {
+    this.value = value;
+    this.left = left;
+    this.right = right; 
+  }
+};
 
-Solution: We can follow a similar approach. We just need to remove the “check for the path sum.”
+
+function findPaths(root) {
+  let allPaths = []
+  
+  findAPath(root, [], allPaths)
+
+  return allPaths
+};
+
+function findAPath(currentNode, currentPath, allPaths) {
+  if(currentNode === null) {
+    return
+  }
+  
+  //add the current node to the path
+  currentPath.push(currentNode.value)
+  
+  //if the current node is not a leaf, save the current path
+  if(currentNode.left === null && currentNode.right === null) {
+    allPaths.push([...currentPath])
+  } else {
+    //traverse the left sub-tree
+    findAPath(currentNode.left, currentPath, allPaths)
+    //traverse the right sub-tree
+    findAPath(currentNode.right, currentPath, allPaths)
+  }
+  
+  //remove the current node from the path to backtrack,
+  //we need to remove the currentNode while we are going 
+  //up the recursive call stack
+  currentPath.pop()
+}
+
+const root = new TreeNode(12)
+root.left = new TreeNode(7)
+root.right = new TreeNode(1)
+root.left.left = new TreeNode(4)
+root.right.left = new TreeNode(10)
+root.right.right = new TreeNode(5)
+findPaths(root, 23);
+````
 
 > 🌟 Given a binary tree, find the root-to-leaf path with the maximum sum.
+https://leetcode.com/problems/binary-tree-maximum-path-sum/
+We need to find the path with the maximum sum. As we traverse all paths, we can keep track of the path with the maximum sum.
+````class TreeNode {
+  constructor(value, left = null, right = null) {
+    this.value = value;
+    this.left = left;
+    this.right = right; 
+  }
+};
 
-Solution: We need to find the path with the maximum sum. As we traverse all paths, we can keep track of the path with the maximum sum.
+
+function maxPathSum(root) {
+  let maxSum = -Infinity
+  
+  function findAPath(currentNode) {
+    if(!currentNode) {
+      return 0
+    }
+
+    let leftSum = Math.max(0, findAPath(currentNode.left))
+    
+    let rightSum =  Math.max(0, findAPath(currentNode.right))
+    let currentSum = currentNode.value + leftSum + rightSum
+    
+    maxSum = Math.max(maxSum, currentSum)
+    
+    return currentNode.value + Math.max(leftSum, rightSum)
+  }
+  
+  findAPath(root)
+  
+  return maxSum 
+};
+
+
+
+const root = new TreeNode(12)
+root.left = new TreeNode(7)
+root.right = new TreeNode(1)
+root.left.left = new TreeNode(4)
+root.right.left = new TreeNode(10)
+root.right.right = new TreeNode(5)
+maxPathSum(root);
+````
 
 ## Sum of Path Numbers (medium)
 https://leetcode.com/problems/sum-root-to-leaf-numbers/
