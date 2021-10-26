@@ -67,90 +67,55 @@ This problem follows the <b>Binary Tree Path Sum</b> pattern. We can follow the 
 2. We will traverse all paths and will not stop processing after finding the first path.
 
 ````
-class Deque {
-    constructor() {
-        this.front = this.back = undefined;
-    }
-    addFront(value) {
-        if (!this.front) this.front = this.back = { value };
-        else this.front = this.front.next = { value, prev: this.front };
-    }
-    removeFront() {
-        let value = this.peekFront();
-        if (this.front === this.back) this.front = this.back = undefined;
-        else (this.front = this.front.prev).next = undefined;
-        return value;
-    }
-    peekFront() { 
-        return this.front && this.front.value;
-    }
-    addBack(value) {
-        if (!this.front) this.front = this.back = { value };
-        else this.back = this.back.prev = { value, next: this.back };
-    }
-    removeBack() {
-        let value = this.peekBack();
-        if (this.front === this.back) this.front = this.back = undefined;
-        else (this.back = this.back.next).back = undefined;
-        return value;
-    }
-    peekBack() { 
-        return this.back && this.back.value;
-    }
-}
-
 class TreeNode {
-  constructor(value) {
+  constructor(value, left = null, right = null) {
     this.value = value;
-    this.left = null;
-    this.right = null; 
+    this.left = left;
+    this.right = right; 
   }
 };
 
 
-function find_paths(root, sum) {
-  //Every time we find a root-to-leaf path, we will store it in a list.
-  allPaths = [];
-//We will traverse all paths and will not stop processing after finding the first path.
- findPathsRecursive(root, sum, new Deque(), allPaths)
-  return allPaths;
+function findPaths(root, sum) {
+  let allPaths = []
+  
+  findAPath(root, sum, [], allPaths)
+
+  return allPaths
 };
 
-function findPathsRecursive(currentNode, sum, currentPath, allPaths){
-  if(currentNode === null) return
+function findAPath(currentNode, sum, currentPath, allPaths) {
+  if(currentNode === null) {
+    return
+  }
   
   //add the current node to the path
   currentPath.push(currentNode.value)
   
-  //if the current node is a leaf and it's value is equal to sum, save the current path
-  if(currentNode.val === sum && currentNode.left === null & currentNode.right === null) {
-    allPaths.push(currentPath.toArray())
+  //if the current node is a leaf and it's value is 
+  //equal to sum, save the current path
+  if(currentNode.value === sum && currentNode.left === null && currentNode.right === null) {
+    allPaths.push([...currentPath])
   } else {
     //traverse the left sub-tree
-    findPathsRecursive(currentNode.left, sum - currentNode.value, currentPath, allPaths)
+    findAPath(currentNode.left, sum - currentNode.value, currentPath, allPaths)
     //traverse the right sub-tree
-    findPathsRecursive(currentNode.right, sum - currentNode.value, currentPath, allPaths)
+    findAPath(currentNode.right, sum - currentNode.value, currentPath, allPaths)
   }
-  //remove the current node from the path to backtrack,
-  //we need to remove the current node while we are going up the recursive call stack
+  
+  //remove the current node for the path to backtrack,
+  //we need to remove the currentNode while we are going 
+  //up the recursive call stack
   currentPath.pop()
 }
 
-
-
-var root = new TreeNode(12)
+const root = new TreeNode(12)
 root.left = new TreeNode(7)
 root.right = new TreeNode(1)
 root.left.left = new TreeNode(4)
 root.right.left = new TreeNode(10)
 root.right.right = new TreeNode(5)
-let sum = 23,
-  result = find_paths(root, sum);
-
-process.stdout.write(`Tree paths with sum ${sum}: `);
-for (i = 0; i < result.length; i++) {
-  process.stdout.write(`[${result[i]}] `);
-}
+findPaths(root, 23);
 ````
 - The time complexity of the above algorithm is `O(N^2)`, where `‘N’` is the total number of nodes in the tree. This is due to the fact that we traverse each node once (which will take `O(N)`), and for every leaf node, we might have to store its path (by making a copy of the current path) which will take `O(N)`.
   - We can calculate a tighter time complexity of `O(NlogN)` from the space complexity discussion below.
