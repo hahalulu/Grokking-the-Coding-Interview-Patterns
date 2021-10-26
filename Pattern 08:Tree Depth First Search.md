@@ -122,7 +122,9 @@ findPaths(root, 23);
 - If we ignore the space required for the `allPaths` list, the space complexity of the above algorithm will be `O(N)` in the worst case. This space will be used to store the recursion stack. The worst-case will happen when the given tree is a linked list (i.e., every node has only one child).
 
 > 🌟 Given a binary tree, return all root-to-leaf paths.
+
 https://leetcode.com/problems/binary-tree-paths/
+
 We can follow a similar approach. We just need to remove the “check for the path sum.”
 ````
 class TreeNode {
@@ -172,13 +174,16 @@ root.right = new TreeNode(1)
 root.left.left = new TreeNode(4)
 root.right.left = new TreeNode(10)
 root.right.right = new TreeNode(5)
-findPaths(root, 23);
+findPaths(root);
 ````
 
 > 🌟 Given a binary tree, find the root-to-leaf path with the maximum sum.
+
 https://leetcode.com/problems/binary-tree-maximum-path-sum/
+
 We need to find the path with the maximum sum. As we traverse all paths, we can keep track of the path with the maximum sum.
-````class TreeNode {
+````
+class TreeNode {
   constructor(value, left = null, right = null) {
     this.value = value;
     this.left = left;
