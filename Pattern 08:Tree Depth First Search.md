@@ -391,5 +391,80 @@ console.log(`Tree has ${countPaths(root, 11)} paths`)
 - The space complexity of the above algorithm will be `O(N)`. This space will be used to store the recursion stack. The worst case will happen when the given tree is a linked list (i.e., every node has only one child). We also need `O(N)` space for storing the currentPath in the worst case.  Overall space complexity of our algorithm is `O(N)`.
 ## 🌟 Tree Diameter (medium)
 https://leetcode.com/problems/diameter-of-binary-tree/
+
+> Given a binary tree, find the length of its diameter. The diameter of a tree is the number of nodes on the <b>longest path between any two leaf nodes</b>. The diameter of a tree may or may not pass through the root.
+>
+> Note: You can always assume that there are at least two leaf nodes in the given tree.
+
+This problem follows the <b>Binary Tree Path Sum</b> pattern. We can follow the same <b>DFS</b> approach. There will be a few differences:
+1. At every step, we need to find the height of both children of the current node. For this, we will make two recursive calls similar to <b>DFS</b>.
+2. The height of the current node will be equal to the maximum of the heights of its left or right children, plus `1` for the `currentNode`.
+3. The tree diameter at the `currentNode` will be equal to the height of the left child plus the height of the right child plus `1` for the current node: `diameter = leftTreeHeight + rightTreeHeight + 1`. To find the overall tree diameter, we will use a class level variable. This variable will store the maximum `diameter` of all the nodes visited so far, hence, eventually, it will have the final tree diameter.
+
+````
+class TreeNode {
+  constructor(value, left = null, right = null) {
+    this.value = value;
+    this.left = left;
+    this.right = right; 
+  }
+};
+
+class TreeDiameter {
+  constructor() {
+    this.treeDiameter = 0;
+  }
+
+  findDiameter(root) {
+    this.calculateHeight(root)
+    return this.treeDiameter
+  }
+  
+   calculateHeight(currentNode) {
+    if(currentNode === null) return 0
+     
+     const leftTreeHeight = this.calculateHeight(currentNode.left)
+     const rightTreeHeight = this.calculateHeight(currentNode.right)
+     
+     //if the current node doesn't have a left or right sub-tree,
+     //we can't have a path passing through it,
+     //since we need a leaf node on each side
+     if(leftTreeHeight !== 0 && rightTreeHeight !== 0) {
+       //diameter at the currentNode will be equal to the height of the left 
+       //sub-tree the height of sub-trees + 1 for the currentNode
+       const diameter = leftTreeHeight + rightTreeHeight + 1
+       
+       //update the global tree diameter
+       this.treeDiameter = Math.max(this.treeDiameter, diameter)
+     }
+     
+     //height of the currentNode will be equal to the maximum of the heights of
+     //left or right sub-trees plus 1
+     return Math.max(leftTreeHeight, rightTreeHeight) + 1
+  } 
+};
+
+
+const treeDiameter = new TreeDiameter()
+const root = new TreeNode(1)
+root.left = new TreeNode(2)
+root.right = new TreeNode(3)
+root.left.left = new TreeNode(4)
+root.right.left = new TreeNode(5)
+root.right.right = new TreeNode(6)
+console.log(`Tree Diameter: ${treeDiameter.findDiameter(root)}`)
+root.left.left = null
+root.right.left.left = new TreeNode(7)
+root.right.left.right = new TreeNode(8)
+root.right.right.left = new TreeNode(9)
+root.right.left.right.left = new TreeNode(10)
+root.right.right.left.left = new TreeNode(11)
+console.log(`Tree Diameter: ${treeDiameter.findDiameter(root)}`)
+````
+
+- The time complexity of the above algorithm is `O(N)`, where `N` is the total number of nodes in the tree. This is due to the fact that we traverse each node once.
+- The space complexity of the above algorithm will be `O(N)` in the worst case. This space will be used to store the recursion stack. The worst case will happen when the given tree is a linked list (i.e., every node has only one child).
+
+
 ## 🌟 Path with Maximum Sum (hard)
 https://leetcode.com/problems/binary-tree-maximum-path-sum/
