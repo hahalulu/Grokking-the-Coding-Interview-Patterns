@@ -179,8 +179,6 @@ findPaths(root);
 
 > 🌟 Given a binary tree, find the root-to-leaf path with the maximum sum.
 
-https://leetcode.com/problems/binary-tree-maximum-path-sum/
-
 We need to find the path with the maximum sum. As we traverse all paths, we can keep track of the path with the maximum sum.
 ````
 class TreeNode {
@@ -195,26 +193,37 @@ class TreeNode {
 function maxPathSum(root) {
   let maxSum = -Infinity
   
-  function findAPath(currentNode) {
-    if(!currentNode) {
-      return 0
+  function findAPath(currentNode, currentPath) {
+    if(currentNode === null) {
+      return
+    }
+    //add the current node to the path
+    currentPath.push(currentNode.value)
+
+    let pathMax = 0
+    //if the current node is not a leaf, save the current path
+    if(currentNode.left === null && currentNode.right === null) {
+      for(let i = 0; i < currentPath.length; i++) {
+        pathMax += currentPath[i] 
+      }
+      maxSum = Math.max(maxSum, pathMax)
+    } else {
+      //traverse the left sub-tree
+      findAPath(currentNode.left, currentPath)
+      //traverse the right sub-tree
+      findAPath(currentNode.right, currentPath)
     }
 
-    let leftSum = Math.max(0, findAPath(currentNode.left))
-    
-    let rightSum =  Math.max(0, findAPath(currentNode.right))
-    let currentSum = currentNode.value + leftSum + rightSum
-    
-    maxSum = Math.max(maxSum, currentSum)
-    
-    return currentNode.value + Math.max(leftSum, rightSum)
+    //remove the current node from the path to backtrack,
+    //we need to remove the currentNode while we are going 
+    //up the recursive call stack
+    currentPath.pop()  
   }
   
-  findAPath(root)
-  
-  return maxSum 
-};
+  findAPath(root, [], maxSum)
 
+  return maxSum
+};
 
 
 const root = new TreeNode(12)
@@ -537,3 +546,6 @@ console.log(`Maximum Path Sum: ${findMaximumPathSum(root)}`)
 
 - The time complexity of the above algorithm is `O(N)`, where `N` is the total number of nodes in the tree. This is due to the fact that we traverse each node once.
 - The space complexity of the above algorithm will be `O(N)` in the worst case. This space will be used to store the recursion stack. The worst case will happen when the given tree is a linked list (i.e., every node has only one child).
+
+
+###### #DFS #DepthFirstSearch #JavaScript #GrokkingTheCodingInterviewPatterns #LeetCode #DataStructures #Algorithms
