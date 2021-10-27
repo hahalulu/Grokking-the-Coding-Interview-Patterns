@@ -468,3 +468,72 @@ console.log(`Tree Diameter: ${treeDiameter.findDiameter(root)}`)
 
 ## 🌟 Path with Maximum Sum (hard)
 https://leetcode.com/problems/binary-tree-maximum-path-sum/
+
+> Find the path with the maximum sum in a given binary tree. Write a function that returns the maximum sum.
+> 
+> A path can be defined as a <b>sequence of nodes between any two nodes</b> and doesn’t necessarily pass through the root. The path must contain at least one node.
+
+This problem follows the <b>Binary Tree Path Sum</b> pattern and shares the algorithmic logic with <b>Tree Diameter</b>. We can follow the same <b>DFS</b> approach. The only difference will be to ignore the paths with negative sums. Since we need to find the overall maximum sum, we should ignore any path which has an overall negative sum.
+
+````
+class TreeNode {
+  constructor(value, left = null, right = null) {
+    this.value = value;
+    this.left = left;
+    this.right = right; 
+  }
+};
+
+
+
+function findMaximumPathSum(root) {
+  let globalMaximumSum = -Infinity
+  findMaximumPathSumRecursive(root)
+  
+  
+  function findMaximumPathSumRecursive(currentNode) {
+    if(currentNode === null) return 0
+    
+    let maxPathSumLeft = findMaximumPathSumRecursive(currentNode.left)
+    let maxPathSumRight = findMaximumPathSumRecursive(currentNode.right)
+    
+    //ignore paths with negative sums, since we need to find the maximum sum 
+    //we should ignore any path which has an overall negative sum
+    maxPathSumLeft = Math.max(maxPathSumLeft, 0)
+    maxPathSumRight = Math.max(maxPathSumRight, 0)
+    
+    //maximum path sum at the currentNode will be equal to the sum from the
+    //left subtree + the sum from the right subtree + value of the currentNode
+    const localMaximumSum = maxPathSumLeft + maxPathSumRight + currentNode.value
+    
+    //update the globalMaximumSum 
+    globalMaximumSum = Math.max(globalMaximumSum, localMaximumSum)
+    
+    //maximum sum of any path from the currentNode will be equal to the maximum
+    //of the sums from left to right sub-tree plus the value of the currentNode
+    return Math.max(maxPathSumLeft, maxPathSumRight) + currentNode.value
+  }
+  return globalMaximumSum
+};
+
+let root = new TreeNode(1)
+root.left = new TreeNode(2)
+root.right = new TreeNode(3)
+console.log(`Maximum Path Sum: ${findMaximumPathSum(root)}`)//6
+
+root.left.left = new TreeNode(1)
+root.left.right = new TreeNode(3)
+root.right.left = new TreeNode(5)
+root.right.right = new TreeNode(6)
+root.right.left.left = new TreeNode(7)
+root.right.left.right = new TreeNode(8)
+root.right.right.left = new TreeNode(9)
+console.log(`Maximum Path Sum: ${findMaximumPathSum(root)}`)//31
+
+root = new TreeNode(-1)
+root.left = new TreeNode(-3)
+console.log(`Maximum Path Sum: ${findMaximumPathSum(root)}`)
+````
+
+- The time complexity of the above algorithm is `O(N)`, where `N` is the total number of nodes in the tree. This is due to the fact that we traverse each node once.
+- The space complexity of the above algorithm will be `O(N)` in the worst case. This space will be used to store the recursion stack. The worst case will happen when the given tree is a linked list (i.e., every node has only one child).
