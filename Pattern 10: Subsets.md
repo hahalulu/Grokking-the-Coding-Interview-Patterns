@@ -188,6 +188,31 @@ findPermutations([1, 3, 5])
 - All the additional space used by our algorithm is for the `result` list and the `queue` to store the intermediate permutations. If you see closely, at any time, we don’t have more than `N!` permutations between the result list and the queue. Therefore the overall space complexity to store `N!` permutations each containing `N` elements will be `O(N*N!)`.
 
 ### Recursive Solution
+````
+function permute(nums) {
+  //recursion
+  let subsets = []
+ 
+  generatePermuationsRecursive(nums, 0, [], subsets)
+  
+  return subsets   
+};
+
+function generatePermuationsRecursive(nums, index, currentPermuation, subsets) {
+    if(index === nums.length) {
+      subsets.push(currentPermuation)
+    } else {
+      //create a new permuation by adding the current number at every position
+      for(let i = 0; i < currentPermuation.length +1; i++) {
+        let newPermutation = currentPermuation.slice(0)
+        
+        //insert nums[index] at index i
+        newPermutation.splice(i, 0, nums[index])
+        generatePermuationsRecursive(nums, index+1, newPermutation, subsets)
+      }
+    }  
+  }
+  ````
 ## String Permutations by changing case (medium)
 ## Balanced Parentheses (hard)
 https://leetcode.com/problems/generate-parentheses/
