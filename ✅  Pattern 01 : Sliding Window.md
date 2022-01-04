@@ -725,7 +725,7 @@ findSubstring("adcad", "abc")//"", No substring in the given string has all char
 - The time complexity of the above algorithm will be `O(N + M)` where `‘N’` and `‘M’` are the number of characters in the input string and the pattern respectively.
 - The space complexity of the algorithm is `O(M)` since in the worst case, the whole pattern can have distinct characters which will go into the `HashMap`. In the worst case, we also need `O(N)` space for the resulting substring, which will happen when the input string is a permutation of the pattern.
 ## 🌟 Words Concatenation (hard)
-https://leetcode.com/problems/concatenated-words/
+https://leetcode.com/problems/substring-with-concatenation-of-all-words/
 
 Given a string and a list of words, find all the starting indices of substrings in the given string that are a <b>concatenation of all the given words</b> exactly once without any <b>overlapping of words</b>. It is given that all words are of the same length.
 
