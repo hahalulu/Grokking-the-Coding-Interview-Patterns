@@ -157,42 +157,40 @@ If we look closely, we will realize that when we add a new number `5`, we take e
 
 ````
 function findPermutations(nums) {
-  let result = []
+  const result = [];
   let permutations = [[]]
   let numsLength = nums.length
   
-  for(let i = 0; i < nums.length; i++) {
-    const currentNumber = nums[i]
-    
-    //we will take all existing permutations and add the
-    //current number to create a new permutation
-    const n = permutations.length
-    
-    for(let p = 0; p < n; p++) {
-      const oldPermutation = permutations.shift()
-      
-      
-      //create a new permustion by adding the current number at every position
-      for(let j = 0; j < oldPermutation.length + 1; j++) {
-      
-        //clone the permutation
-        const newPermutation = oldPermutation.slice(0)
-        
-        //insert the current number at index j
-        newPermutation.splice(j, 0, currentNumber)
-        
-        if(newPermutation.length === numsLength) {
-          result.push(newPermutation)
-        } else {
-          permutations.push(newPermutation)
-        }
-      } 
-    }  
-  }
-  
-  return result
-}
-
+   for(let i = 0; i < nums.length; i++) {
+     const currentNumber = nums[i]
+     
+     //we will take all existing permutations an add the
+     //current number to create a new permutation
+     const n = permutations.length
+     
+     for(let p = 0; p < n; p++){
+       const oldPermutation = permutations.shift()
+       console.log(oldPermutation)
+       
+       //create a new permutation by adding the current number at every position
+       for(let j  = 0; j < oldPermutation.length + 1; j++) {
+         
+         //clone the permutation
+         const newPermutation = oldPermutation.slice(0)
+         
+         //insert the current number at index j
+         newPermutation.splice(j, 0, currentNumber)
+         
+         if(newPermutation.length === numsLength) {
+           result.push(newPermutation)
+         } else {
+           permutations.push(newPermutation)
+         }
+       }
+     }
+   }
+  return result;
+};
 
 findPermutations([1, 3, 5])
 ````
@@ -227,6 +225,59 @@ function generatePermuationsRecursive(nums, index, currentPermuation, subsets) {
   }
   ````
 ## String Permutations by changing case (medium)
+https://leetcode.com/problems/letter-case-permutation/
+
+> Given a string, find all of its permutations preserving the character sequence but changing case.
+
+This problem follows the <b>Subsets</b> pattern and can be mapped to <b>Permutations</b>.
+
+Let’s take Example-2 mentioned above to generate all the permutations. Following a <b>BFS</b> approach, we will consider one character at a time. Since we need to preserve the character sequence, we can start with the actual string and process each character (i.e., make it upper-case or lower-case) one by one:
+1. Starting with the actual string: `"ab7c"`
+2. Processing the first character `a`, we will get two permutations: `"ab7c", "Ab7c"`
+3. Processing the second character `b`, we will get four permutations: `"ab7c", "Ab7c", "aB7c", "AB7c"`
+4. Since the third character is a digit, we can skip it.
+5. Processing the fourth character `c`, we will get a total of eight permutations: `"ab7c", "Ab7c", "aB7c", "AB7c", "ab7C", "Ab7C", "aB7C", "AB7C"`
+
+Let’s analyze the permutations in the 3rd and the 5th step. How can we generate the permutations in the 5th step from the permutations in the 3rd step?
+
+If we look closely, we will realize that in the 5th step, when we processed the new character `c`, we took all the permutations of the previous step (3rd) and changed the case of the letter `c` in them to create four new permutations.
+````
+function findLetterCaseStringPermutations(str) {
+  const permutations = [];
+  permutations.push(str)
+  
+  //process every character of the string one by one
+  for(let i = 0; i < str.length; i++) {
+    //only characters we will skip digits
+    if(isNaN(parseInt(str[i]), 10)){
+      //we will take all exixting permutations and change the letter case appropriately
+      const n = permutations.length
+      
+      for(let j = 0; j < n; j++) {
+        //string to array
+        const chs = permutations[j].split('')
+        
+        //if the current character is in upper case
+        //change it to lower case or vice verse
+        if(chs[i] === chs[i].toLowerCase()) {
+          chs[i] = chs[i].toUpperCase()
+        } else {
+          chs[i] = chs[i].toLowerCase()
+        }
+        permutations.push(chs.join(''))
+      }
+    }
+  }
+  return permutations;
+};
+
+
+findLetterCaseStringPermutations("ad52")
+findLetterCaseStringPermutations("ab7c")
+````
+
+- Since we can have`2ᴺ` permutations at the most and while processing each permutation we convert it into a character array, the overall time complexity of the algorithm will be `O(N*2ᴺ)`.
+- All the additional space used by our algorithm is for the output list. Since we can have a total of `O(2ᴺ)` permutations, the space complexity of our algorithm is `O(N*2ᴺ)`.
 ## Balanced Parentheses (hard)
 https://leetcode.com/problems/generate-parentheses/
 ## Unique Generalized Abbreviations (hard)
