@@ -20,27 +20,36 @@ Given set: `[1, 5, 3]`
 Since the input set has distinct elements, the above steps will ensure that we will not have any duplicate subsets.
 ````
 function findSubsets(nums) {
-  let subsets = []
+  const subsets = [];
   
   //start by adding the empty subset
   subsets.push([])
   
   for(let i = 0; i < nums.length; i++) {
-    let currentNumber = nums[i]
-    //we will take all existing subsets and insert the current number in them to create new subsets
-    const n = subsets.length
+    const currentNumber = nums[i]
     
+    //we will take all existing subsets and insert the current
+    //number in them to create new subsets
+    const n = subsets.length
+
+    //create a new subset from the existing subset and insert
+    //the current element to it
     for(let j = 0; j < n; j++) {
-      //create a new subset from the existing subset and insert the current element to it?
-      //clone the permutation?
+      
+      //clone the permutation
+      // const set1 = subsets[j].slice(0)
+      
+      // set1.push(currentNumber)
       subsets.push([...subsets[j], nums[i]])
     }
   }
-  return subsets
-}
 
-findSubsets([1, 5, 3])
+  return subsets;
+};
+
+
 findSubsets([1, 3])
+findSubsets([1, 5, 3])
 ````
 - Since, in each step, the number of subsets doubles as we add each element to all the existing subsets, therefore, we will have a total of `O(2ᴺ)` subsets, where `‘N’` is the total number of elements in the input set. And since we construct a new subset from an existing set, therefore, the time complexity of the above algorithm will be `O(N*2ᴺ)`.
 - All the additional space used by our algorithm is for the output list. Since we will have a total of `O(2ᴺ)` subsets, and each subset can take up to `O(N)` space, therefore, the space complexity of our algorithm will be `O(N*2ᴺ)`.
