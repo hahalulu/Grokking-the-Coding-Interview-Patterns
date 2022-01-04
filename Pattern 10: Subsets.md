@@ -87,37 +87,41 @@ To handle this instead of adding `3` to all the existing subsets, we only add it
 
 ````
 function subsetsWithDupe(nums) {
-  let subsets = []
-  nums.sort((a, b) => a-b)
+  //sort the numbers to handle duplicates
+  nums.sort((a,b) => a-b)
   
-  //start by adding the empty subset
+  const subsets = [];
+  
   subsets.push([])
   
   let start = 0
   let end = 0
   
   for(let i = 0; i < nums.length; i++) {
-    //if the current and previous elements are the same, 
-    //create new subsets only from the subsets added in the previous step
-   
-    end = subsets.length
+    start = 0
     
-    for(let j = start; j < end; j++) {
-      //create a new subset from the existing subset and add the current element to it
+    //if current and the previous elements are the same,
+    //create new subsets only from the subsets
+    //added in the previous step
+    if(i > 0 && nums[i] === nums[i-1]) {
+      start = end + 1
+    }
+    
+    end = subsets.length - 1
+    
+    for(let j = start; j < end + 1; j++) {
+      //create a new suset from the existing subset and add the
+      //current element to it
       subsets.push([...subsets[j], nums[i]])
-      
-      if(nums[i + 1] === nums[i]) {
-        start = end
-      } else {
-        start = 0
-      }
     }
   }
-  return subsets
-}
+  
+  return subsets;
+};
 
-subsetsWithDupe([1, 5, 3, 3])
+
 subsetsWithDupe([1, 3, 3])
+subsetsWithDupe([1, 5, 3, 3])
 ````
 - Since, in each step, the number of subsets doubles (if not duplicate) as we add each element to all the existing subsets, therefore, we will have a total of `O(2ᴺ)` subsets, where `‘N’` is the total number of elements in the input set. And since we construct a new subset from an existing set, therefore, the time complexity of the above algorithm will be `O(N*2ᴺ)`.
 - All the additional space used by our algorithm is for the output list. Since, at most, we will have a total of `O(2ᴺ)` subsets, and each subset can take up to `O(N)` space, therefore, the space complexity of our algorithm will be `O(N*2ᴺ)`.
