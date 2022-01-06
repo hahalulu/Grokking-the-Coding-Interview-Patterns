@@ -176,32 +176,199 @@ https://leetcode.com/problems/sliding-window-median/
 > Given an array of numbers and a number ‘k’, find the median of all the ‘k’ sized sub-arrays (or windows) of the array.
 
 ### Example 1:
-
-#### Input: `nums=[1, 2, -1, 3, 5], k = 2`
-#### Output: `[1.5, 0.5, 1.0, 4.0]`
+#### Input: 
+`nums=[1, 2, -1, 3, 5], k = 2`
+#### Output: 
+`[1.5, 0.5, 1.0, 4.0]`
 #### Explanation: 
 Lets consider all windows of size ‘2’:
-````
-[1, 2, -1, 3, 5] -> median is 1.5
-[1, 2, -1, 3, 5] -> median is 0.5
-[1, 2, -1, 3, 5] -> median is 1.0
-[1, 2, -1, 3, 5] -> median is 4.0
-````
+<pre>
+[<b>1, 2</b>, -1, 3, 5] -> median is 1.5
+[1, <b>2, -1</b>, 3, 5] -> median is 0.5
+[1, 2, <b>-1, 3</b>, 5] -> median is 1.0
+[1, 2, -1, <b>3, 5</b>] -> median is 4.0
+</pre>
 ### Example 2:
-
 #### Input: `nums=[1, 2, -1, 3, 5], k = 3`
 #### Output: `[1.0, 2.0, 3.0]`
 #### Explanation: 
 Lets consider all windows of size ‘3’:
-````
-[1, 2, -1, 3, 5] -> median is 1.0
-[1, 2, -1, 3, 5] -> median is 2.0
-[1, 2, -1, 3, 5] -> median is 3.0
-````
+<pre>
+[<b>1, 2, -1</b>, 3, 5] -> median is 1.0
+[1, <b>2, -1, 3</b>, 5] -> median is 2.0
+[1, 2, <b>-1, 3, 5</b>] -> median is 3.0
+</pre>
 
 This problem follows the <b>Two Heaps</b> pattern and share similarities with <b>Find the Median of a Number Stream</b>. We can follow a similar approach of maintaining a <b>max-heap</b> and a <b>min-heap</b> for the list of numbers to find their median.
 
 The only difference is that we need to keep track of a sliding window of ‘k’ numbers. This means, in each iteration, when we insert a new number in the heaps, we need to remove one number from the heaps which is going out of the sliding window. After the removal, we need to rebalance the heaps in the same way that we did while inserting.
+### JavaScript Custom Heap Class
+````
+/** 
+ *  custom Heap class
+ */
+
+class Heap {
+	constructor(comparator) {
+		this.size = 0;
+		this.values = [];
+		this.comparator = comparator || Heap.minComparator;
+	}
+
+	add(val) {
+		this.values.push(val);
+		this.size ++;
+		this.bubbleUp();
+	}
+
+	peek() {
+		return this.values[0] || null;
+	}
+
+	poll() {
+		const max = this.values[0];
+		const end = this.values.pop();
+		this.size --;
+		if (this.values.length) {
+			this.values[0] = end;
+			this.bubbleDown();
+		}
+		return max;
+	}
+
+	bubbleUp() {
+		let index = this.values.length - 1;
+		let parent = Math.floor((index - 1) / 2);
+
+		while (this.comparator(this.values[index], this.values[parent]) < 0) {
+			[this.values[parent], this.values[index]] = [this.values[index], this.values[parent]];
+			index = parent;
+			parent = Math.floor((index - 1) / 2);
+		}
+	}
+
+	bubbleDown() {
+		let index = 0, length = this.values.length;
+
+		while (true) {
+			let left = null,
+				right = null,
+				swap = null,
+				leftIndex = index * 2 + 1,
+				rightIndex = index * 2 + 2;
+
+			if (leftIndex < length) {
+				left = this.values[leftIndex];
+				if (this.comparator(left, this.values[index]) < 0) swap = leftIndex;
+			}
+
+			if (rightIndex < length) {
+				right = this.values[rightIndex];
+				if ((swap !== null && this.comparator(right, left) < 0) || (swap === null && this.comparator(right, this.values[index]))) {
+					swap = rightIndex;
+				}
+			}
+			if (swap === null) break;
+
+			[this.values[index], this.values[swap]] = [this.values[swap], this.values[index]];
+			index = swap;
+		}
+	}
+  // balance() {
+  //   const diff = this.maxHeap.size() - this.minHeap.size()
+  //   if (diff > 0) this.minHeap.add(this.maxHeap.values.pop());
+  //   else if (diff < -1) this.maxHeap.add(this.minHeap.values.pop());
+  // }
+}
+
+/** 
+ *  Min Comparator
+ */
+Heap.minComparator = (a, b) => { return a - b; }
+
+/** 
+ *  Max Comparator
+ */
+Heap.maxComparator = (a, b) => { return b - a; }
+````
+### Solution 😕(review)
+````
+
+class SlidingWindowMedian {
+  constructor(){
+    this.maxHeap = new Heap(Heap.maxComparator)
+    this.minHeap = new Heap(Heap.minComparator)
+  }
+  
+    balance() {
+    // either both the heaps will have equal number of elements or max-heap will have
+    // one more element than the min-heap
+    if (this.maxHeap.size > this.minHeap.size + 1) {
+      this.minHeap.add(this.maxHeap.values.pop());
+    } else if (this.maxHeap.size < this.minHeap.size) {
+      this.maxHeap.add(this.minHeap.values.pop());
+    }
+  }
+
+  findSlidingWindowMedian(nums, k) {
+    const result = new Array(nums.length - k + 1).fill(0.0);
+    console.log(result)
+    
+    let n = nums.length
+    console.log(n)
+    
+    for(let i = 0; i < n; i++){
+      console.log(nums[i])
+      if(this.maxHeap.size === 0 || nums[i] <= this.maxHeap.peek()){
+        this.maxHeap.add(nums[i])
+        console.log(this.maxHeap.peek())
+      } else {
+        this.minHeap.add(nums[i])
+        console.log(this.minHeap.peek())
+      }
+      
+      this.balance()
+      
+      if(i - k + 1 >= 0){
+         //if we have at least k elements in the sliding window
+        //then add the median to the result array
+        if(this.maxHeap.size() === this.minHeap.size()){
+          //we have an enven number of elements
+          //take the average of middle two elements
+          result[i - k + 1] = (this.maxHeap.peek() + this.min.Heap.peek())/2
+        } else {
+          //because maxHeap will have one more element than the minHeap
+          result[i - k + 1] = this.maxHeap.peek()
+        }
+        
+        //remove the element going out of the sliding window
+        const elementToBeRemoved = nums[i - k + 1]
+        if(elementToBeRemoved <= this.maxHeap.peek()){
+          //delete from heap
+          this.maxHeap.remove(elementToBeRemoved)
+        } else {
+          //delete from heap
+          this.minHeap.remove(elementToBeRemoved)
+        }
+        this.balance()
+     }
+    }
+   return result
+  }
+};
+
+
+
+const slidingWindowMedian = new SlidingWindowMedian()
+let result = slidingWindowMedian.findSlidingWindowMedian(
+  [1, 2, -1, 3, 5], 2)
+console.log(`Sliding window medians are: ${result}`)//[1.5, 0.5, 1.0, 4.0]
+
+slidingWindowMedian = new SlidingWindowMedian()
+result = slidingWindowMedian.findSlidingWindowMedian(
+  [1, 2, -1, 3, 5], 3)
+console.log(`Sliding window medians are: ${result}`)//[1.0, 2.0, 3.0]
+````
 
 ## Maximize Capital (hard)
 https://leetcode.com/problems/ipo/
