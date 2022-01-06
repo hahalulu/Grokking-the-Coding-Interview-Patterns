@@ -91,6 +91,27 @@ One straight forward solution can be to use a <b>HashMap</b> kind of data struct
 - If number is already present in <b>HashMap</b>, remove it.
 - If number is not present in <b>HashMap</b>, add it.
 - In the end, only number left in the <b>HashMap</b> is our required single number.
+### using Map class
+````
+function findSingleNumber(arr) {
+  const numberMap = new Map()
+  
+  for(let i = 0; i < arr.length; i++) {
+    if(numberMap.has(arr[i])){
+      numberMap.delete(arr[i])
+    } else {
+      numberMap.set(arr[i], 0)
+    }
+  }
+  for(const k of numberMap.keys()){
+    return k
+  }
+}
+  
+findSingleNumber([1, 4, 2, 1, 3, 2, 3])//4
+findSingleNumber([7, 9, 7])//9
+````
+### using Map object
 ````
 function singleNumber(arr) {
   //HashMap
@@ -118,11 +139,11 @@ So we can XOR all the numbers in the input; duplicate numbers will zero out each
 
 ````
 function singleNumber(arr) {
-  //So we can XOR all the numbers in the input; duplicate numbers will zero out each other and we will be left with the single number.
+  //So we can XOR all the numbers in the input 
+  //duplicate numbers will zero out each other and we will be left with the single number.
   let num = 0
   
   for(let i = 0; i < arr.length; i++) {
-    //console.log(num, arr[i], num^arr[i], "CL")
     num ^= arr[i]
   }
   return num
