@@ -83,7 +83,7 @@ Following are some important properties of XOR to remember:
 - XOR is Associative & Commutative, which means:
   - (a ^ b) ^ c = a ^ (b ^ c)
   - a ^ b = b ^ a
-## 😕 Single Number (easy)
+## Single Number (easy)
 https://leetcode.com/problems/single-number/
 > In a non-empty array of integers, every number appears twice except for one, find that single number.
 
@@ -177,36 +177,41 @@ We can take any bit which is ‘1’ in `n1xn2` and partition all numbers in the
 ````
 function findSingleNumbers(nums) {
   //get the XOR of all the numbers
+  
   let n1xn2 = 0
-  nums.forEach((num) => {
-    n1xn2 ^= num
+  
+  nums.forEach((n)=> {
+    n1xn2 ^= n
   })
   
   //get the rightmost bit that is 1
-  let rightmostSetBit = 1
-  while((rightmostSetBit & n1xn2) === 0){
-    rightmostSetBit = rightmostSetBit << 1
+  let right = 1
+  while((right & n1xn2) === 0) {
+    //& is bitwise AND
+    //This operator expects two numbers and retuns a number. 
+    //In case they are not numbers, they are cast to numbers.
+    right = right << 1
     //The left shift operator ( << ) shifts the first operand the specified number of bits to the left.
     //Excess bits shifted off to the left are discarded. 
     //Zero bits are shifted in from the right.
   }
-  let num1 = 0
-  let num2 = 0
   
-  nums.forEach((num)=> {
-    //if the bit is set
-    if((num & rightmostSetBit) !== 0) {
-      num1 ^= num
+  let num1 = 0; num2 = 0
+  
+  nums.forEach((n) => {
+    if((n & right) !== 0) {
+      //the bit is set
+      num1 ^= n
     } else {
       //the bit is not set
-      num2 ^= num
+      num2 ^= n
     }
   })
-  return [num1, num2]
+  return [num1, num2];
 }
 
 findSingleNumbers([1, 4, 2, 1, 3, 5, 6, 2, 3, 5])//[4, 6]
-findSingleNumbers([2, 1, 3, 2])//[1, 3]
+findSingleNumbers([2, 1, 3, 2])//[1,3]
 ````
 - The time complexity of this solution is `O(n)` where `n` is the number of elements in the input array.
 - The algorithm runs in constant space `O(1)`.
@@ -247,35 +252,60 @@ We can use the above fact to find the complement of any number.
 <b>How do we calculate `all_bits_set`?</b> One way to calculate `all_bits_set` will be to first count the bits required to store the given number. We can then use the fact that for a number which is a complete power of ‘2’ i.e., it can be written as pow(2, n), if we subtract ‘1’ from such a number, we get a number which has ‘n’ least significant bits set to ‘1’. For example, ‘4’ which is a complete power of ‘2’, and ‘3’ (which is one less than 4) has a binary representation of ‘11’ i.e., it has ‘2’ least significant bits set to ‘1’.
 
 ````
-function calculateBitwiseComplement(num) {
-  //count number of total bits in num
+function calculateBitwiseComplement(n) {
+  // count number of total bits in 'num'
   let bitCount = 0
-  let n = num
-  while(n > 0) {
-    bitCount ++
-    n = n >> 1
-    //The right shift operator ( >> ) shifts the first operand the specified number of bits to the right. 
-    //Excess bits shifted off to the right are discarded.
+  let num = n
+  
+  while(num > 0){
+    bitCount++
+    num = num >> 1
   }
   
-  //for a number which is a complete power of two, 
-  //i.e., it can be wrtiten as pow(1, n),
-  //if we subtract 1 from such a number, we get a number
-  //which has n least significant bits set to 1
-  //For example, 4 which is a complete power of 2, 
-  //and 3 (which is one less than 4) ahs a binary
-  //representation of 11 i.e., it has 2 least significant bits set to 1
+   // for a number which is a complete power of '2' i.e., it can be written as pow(2, n), if we
+  // subtract '1' from such a number, we get a number which has 'n' least significant bits set to '1'.
+  // For example, '4' which is a complete power of '2', and '3' (which is one less than 4) has a binary 
+  // representation of '11' i.e., it has '2' least significant bits set to '1' 
   let allBitsSet = Math.pow(2, bitCount) -1
   
-  //from the solution description: complement = number ^ allBitsSet
-  return num ^ allBitsSet
+  // from the solution description: complement = number ^ allBitsSet
+  return n ^ allBitsSet
 }
 
-calculateBitwiseComplement(8)//7, 8 is 1000 in binary, its complement is 0111 in binary, which is 7 in base-10.
+calculateBitwiseComplement(8)//7,  is 1000 in binary, its complement is 0111 in binary, which is 7 in base-10.
 calculateBitwiseComplement(10)//5, 10 is 1010 in binary, its complement is 0101 in binary, which is 5 in base-10.
 ````
 
 - Time complexity of this solution is `O(b)`where `b` is the number of bits required to store the given number.
 - Space complexity of this solution is `O(1)`.
 ## 🌟 Flip Binary Matrix(hard)
+https://leetcode.com/problems/flipping-an-image/
+> Given a binary matrix representing an image, we want to flip the image horizontally, then invert it.
+> 
+> To flip an image horizontally means that each row of the image is reversed. For example, flipping `[0, 1, 1]` horizontally results in `[1, 1, 0]`.
+> 
+> To invert an image means that each 0 is replaced by 1, and each 1 is replaced by 0. For example, inverting `[1, 1, 0]` results in `[0, 0, 1]`.
 
+- <b>Flip:</b> We can flip the image in place by replacing <i>ith</i> element from left with the <i>ith</i> element from the right.
+- <b>Invert:</b> We can take XOR of each element with `1`. If it is `1` then it will become `0` and if it is `0` then it will become `1`.
+
+````
+function flipAndInvertImage(matrix) {
+  let c = matrix.length
+  
+  for(let row = 0; row < c; ++row){
+    for(let col = 0; col < Math.floor((c+1)/2); ++col){
+      let temp = matrix[row][col] ^ 1
+      matrix[row][col] = matrix[row][c - 1 -col] ^ 1
+      matrix[row][c - 1 - col] = temp
+    }
+  }
+  return matrix
+}
+
+flipAndInvertImage([[1,0,1], [1,1,1], [0,1,1]])//First reverse each row: [[1,0,1],[1,1,1],[1,1,0]]. Then, invert the image: [[0,1,0],[0,0,0],[0,0,1]]
+flipAndInvertImage([[1,1,0,0],[1,0,0,1],[0,1,1,1],[1,0,1,0]])//First reverse each row: [[0,0,1,1],[1,0,0,1],[1,1,1,0],[0,1,0,1]]. Then invert the image: [[1,1,0,0],[0,1,1,0],[0,0,0,1],[1,0,1,0]]
+````
+
+- The time complexity of this solution is `O(n)` as we iterate through all elements of the input.
+- The space complexity of this solution is `O(1)`.
