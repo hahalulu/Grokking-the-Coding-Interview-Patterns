@@ -370,6 +370,11 @@ result = slidingWindowMedian.findSlidingWindowMedian(
 console.log(`Sliding window medians are: ${result}`)//[1.0, 2.0, 3.0]
 ````
 
+- The time complexity of our algorithm is `O(N*K)`where `N` is the total number of elements in the input array and `K` is the size of the sliding window. This is due to the fact that we are going through all the `N` numbers and, while doing so, we are doing two things:
+	1. Inserting/removing numbers from heaps of size `K`. This will take `O(logK)`.
+	2. Removing the element going out of the sliding window. This will take `O(K)` as we will be searching this element in an array of size `K` (i.e., a heap).
+- Ignoring the space needed for the output array, the space complexity will be `O(K)` because, at any time, we will be storing all the numbers within the sliding window.
+
 ## Maximize Capital (hard)
 https://leetcode.com/problems/ipo/
 
