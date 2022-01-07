@@ -170,7 +170,7 @@ console.log(`The median is: ${medianOfAStream.findMedian()}`)//3.5
 - The time complexity of the `insertNum()` will be `O(logN)` due to the insertion in the heap. The time complexity of the `findMedian()` will be `O(1)` as we can find the median from the top elements of the heaps.
 - The space complexity will be `O(N)` because, as at any time, we will be storing all the numbers.
 
-## Sliding Window Median (hard)
+## 😕 Sliding Window Median (hard)
 https://leetcode.com/problems/sliding-window-median/
 
 > Given an array of numbers and a number ‘k’, find the median of all the ‘k’ sized sub-arrays (or windows) of the array.
@@ -274,11 +274,19 @@ class Heap {
 			index = swap;
 		}
 	}
-  // balance() {
-  //   const diff = this.maxHeap.size() - this.minHeap.size()
-  //   if (diff > 0) this.minHeap.add(this.maxHeap.values.pop());
-  //   else if (diff < -1) this.maxHeap.add(this.minHeap.values.pop());
-  // }
+  remove(value) {
+    let idx;
+    for (let i of this.index[value]) {
+      idx = i;
+      break;
+    }
+    this.index[value].delete(idx);
+    if (idx === this.values.length - 1) return this.value.pop();
+    this.values[idx] = this.value.pop()
+    this.idxs[this.values[idx]].delete(this.value.length);
+    this.idxs[this.store[idx]].add(idx);
+    this.heapifyDown(this.heapifyUp(idx));
+  }
 }
 
 /** 
@@ -375,8 +383,199 @@ console.log(`Sliding window medians are: ${result}`)//[1.0, 2.0, 3.0]
 	2. Removing the element going out of the sliding window. This will take `O(K)` as we will be searching this element in an array of size `K` (i.e., a heap).
 - Ignoring the space needed for the output array, the space complexity will be `O(K)` because, at any time, we will be storing all the numbers within the sliding window.
 
-## Maximize Capital (hard)
+## 😕 Maximize Capital (hard)
 https://leetcode.com/problems/ipo/
 
+> Given a set of investment projects with their respective profits, we need to find the most profitable projects. We are given an initial `capital` and are allowed to invest only in a fixed number of projects. Our goal is to choose projects that give us the maximum profit. Write a function that returns the maximum total capital after selecting the most profitable projects.
+> 
+> We can start an investment project only when we have the required capital. Once a project is selected, we can assume that its profit has become our capital.
+> 
+> <b>Example 1</b>
+> 
+> Input: 
+> 
+> `Project Capitals=[0,1,2], Project Profits=[1,2,3], Initial Capital=1, Number of Projects=2`
+> 
+> Output: 
+> `6`
+> 
+> Explanation
+> 
+> With initial capital of ‘1’, we will start the second project which will give us profit of ‘2’. 
+> 
+> Once we selected our first project, our total capital will become 3 (profit + initial capital).
+> 
+> With ‘3’ capital, we will select the third project, which will give us ‘3’ profit.
+> 
+> After the completion of the two projects, our total capital will be 6 (1+2+3).
+> 
+> <b>Example 2</b>
+> 
+> Input
+> 
+> `Project Capitals=[0,1,2,3], Project Profits=[1,2,3,5], Initial Capital=0, Number of Projects=3`
+> 
+> Output
+> 
+>  `8`
+>  
+>  Explanation
+>  
+>  With ‘0’ capital, we can only select the first project, bringing out capital to 1.
+>  
+>  Next, we will select the second project, which will bring our capital to 3.
+>  
+>  Next, we will select the fourth project, giving us a profit of 5.
+>  
+>  After selecting the three projects, our total capital will be 8 (1+2+5).
+
+While selecting projects we have two constraints:
+
+1. We can select a project only when we have the required capital.
+2. There is a maximum limit on how many projects we can select.
+Since we don’t have any constraint on time, we should choose a project, among the projects for which we have enough capital, which gives us a maximum profit. Following this greedy approach will give us the best solution.
+
+While selecting a project, we will do two things:
+1. Find all the projects that we can choose with the available capital.
+2. From the list of projects in the 1st step, choose the project that gives us a maximum profit.
+We can follow the Two Heaps approach similar to Find the Median of a Number Stream. Here are the steps of our algorithm:
+1. Add all project capitals to a min-heap, so that we can select a project with the smallest capital requirement.
+2. Go through the top projects of the min-heap and filter the projects that can be completed within our available capital. Insert the profits of all these projects into a max-heap, so that we can choose a project with the maximum profit.
+3. Finally, select the top project of the max-heap for investment.
+4. Repeat the 2nd and 3rd steps for the required number of projects.
+````
+/** 
+ *  custom Heap class
+ */
+
+class Heap {
+	constructor(comparator) {
+		this.size = 0;
+		this.values = [];
+		this.comparator = comparator || Heap.minComparator;
+	}
+
+	add(val) {
+		this.values.push(val);
+		this.size ++;
+		this.bubbleUp();
+	}
+
+	peek() {
+		return this.values[0] || null;
+	}
+
+	poll() {
+		const max = this.values[0];
+		const end = this.values.pop();
+		this.size --;
+		if (this.values.length) {
+			this.values[0] = end;
+			this.bubbleDown();
+		}
+		return max;
+	}
+
+	bubbleUp() {
+		let index = this.values.length - 1;
+		let parent = Math.floor((index - 1) / 2);
+
+		while (this.comparator(this.values[index], this.values[parent]) < 0) {
+			[this.values[parent], this.values[index]] = [this.values[index], this.values[parent]];
+			index = parent;
+			parent = Math.floor((index - 1) / 2);
+		}
+	}
+
+	bubbleDown() {
+		let index = 0, length = this.values.length;
+
+		while (true) {
+			let left = null,
+				right = null,
+				swap = null,
+				leftIndex = index * 2 + 1,
+				rightIndex = index * 2 + 2;
+
+			if (leftIndex < length) {
+				left = this.values[leftIndex];
+				if (this.comparator(left, this.values[index]) < 0) swap = leftIndex;
+			}
+
+			if (rightIndex < length) {
+				right = this.values[rightIndex];
+				if ((swap !== null && this.comparator(right, left) < 0) || (swap === null && this.comparator(right, this.values[index]))) {
+					swap = rightIndex;
+				}
+			}
+			if (swap === null) break;
+
+			[this.values[index], this.values[swap]] = [this.values[swap], this.values[index]];
+			index = swap;
+		}
+	}
+   remove(value) {
+    let idx;
+    for (let i of this.index[value]) {
+      idx = i;
+      break;
+    }
+    this.index[value].delete(idx);
+    if (idx === this.values.length - 1) return this.value.pop();
+    this.values[idx] = this.value.pop()
+    this.idxs[this.values[idx]].delete(this.value.length);
+    this.idxs[this.store[idx]].add(idx);
+    this.heapifyDown(this.heapifyUp(idx));
+  }
+}
+
+/** 
+ *  Min Comparator
+ */
+Heap.minComparator = (a, b) => { return a - b; }
+
+/** 
+ *  Max Comparator
+ */
+Heap.maxComparator = (a, b) => { return b - a; }
+````
+````
+function findMaximumCapital(capital, profits, numberOfProjects, initialCapital) {
+  const minCapitalHeap = new Heap(Heap.minComparator);
+  const maxProfitHeap = new Heap(Heap.maxComparator);
+
+  // insert all project capitals to a min-heap
+  for (i = 0; i < profits.length; i++) {
+    minCapitalHeap.add([capital[i], i]);
+  }
+
+  // let's try to find a total of 'numberOfProjects' best projects
+  let availableCapital = initialCapital;
+  for (i = 0; i < numberOfProjects; i++) {
+    // find all projects that can be selected within the available capital and insert them in a max-heap
+    while (minCapitalHeap.size > 0 && minCapitalHeap.peek()[0] <= availableCapital) {
+      const [capital, index] = minCapitalHeap.values.pop();
+      maxProfitHeap.add([profits[index], index]);
+    }
+
+    // terminate if we are not able to find any project that can be completed within the available capital
+    if (maxProfitHeap.size === 0) {
+      break;
+    }
+
+    // select the project with the maximum profit
+    availableCapital += maxProfitHeap.pop()[0];
+  }
+
+  return availableCapital;
+}
+
+
+console.log(`Maximum capital: ${findMaximumCapital([0, 1, 2], [1, 2, 3], 2, 1)}`);
+console.log(`Maximum capital: ${findMaximumCapital([0, 1, 2, 3], [1, 2, 3, 5], 3, 0)}`);
+````
+
+- Since, at the most, all the projects will be pushed to both the heaps once, the time complexity of our algorithm is `O(NlogN + KlogN)`, where `N` is the total number of projects and `K` is the number of projects we are selecting.
+- The space complexity will be `O(N)` because we will be storing all the projects in the heaps.
 ## 🌟 Next Interval (hard)
 https://leetcode.com/problems/find-right-interval/
