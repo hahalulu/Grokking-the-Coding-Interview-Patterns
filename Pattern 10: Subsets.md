@@ -593,5 +593,143 @@ console.log(`Expression evaluations: ${diffWaysToEvaluateExpression("2*3-4-5")}`
 https://leetcode.com/problems/unique-binary-search-trees-ii/
 
 > Given a number `n`, write a function to return all structurally unique <b>Binary Search Trees (BST)</b> that can store values `1` to `n`?
+
+This problem follows the <b>Subsets</b> pattern and is quite similar to <b>Evaluate Expression</b>. Following a similar approach, we can iterate from `1` to `n` and consider each number as the root of a tree. All smaller numbers will make up the left sub-tree and bigger numbers will make up the right sub-tree. We will make recursive calls for the left and right sub-trees
+
+````
+class TreeNode {
+  constructor(val, left = null, right = null) {
+    this.val = val;
+    this.left = left;
+    this.right = right;
+  }
+}
+
+
+function findUniqueTrees(n) {
+   if (n <= 0) {
+    return [];
+  }
+  return findUniqueTreesRecursive(1, n);
+}
+
+function findUniqueTreesRecursive(start, end) {
+  const result = [];
+  // let treeCount = 0
+  // base condition, return 'null' for an empty sub-tree
+  // consider n = 1, in this case we will have start = end = 1, this means we should have only one tree
+  // we will have two recursive calls, findUniqueTreesRecursive(1, 0) & (2, 1)
+  // both of these should return 'null' for the left and the right child
+  if (start > end) {
+    result.push(null);
+    return result;
+  }
+
+  for (let i = start; i < end + 1; i++) {
+    // making 'i' the root of the tree
+    const leftSubtrees = findUniqueTreesRecursive(start, i - 1);
+    const rightSubtrees = findUniqueTreesRecursive(i + 1, end);
+    for (let p = 0; p < leftSubtrees.length; p++) {
+      for (let q = 0; q < rightSubtrees.length; q++) {
+        const root = new TreeNode(i, leftSubtrees[p], rightSubtrees[q]);
+        result.push(root);
+        // treeCount++
+      }
+    }
+  }
+
+  //return length of this instead, traverse tree?
+  return result;
+};
+
+
+findUniqueTrees(2)//List containing root nodes of all structurally unique BSTs, Here are the 2 structurally unique BSTs storing all numbers from 1 to 2:
+findUniqueTrees(3)//List containing root nodes of all structurally unique BSTs, Here are the 5 structurally unique BSTs storing all numbers from 1 to 3:
+````
+- The time complexity of this algorithm will be exponential and will be similar to Balanced Parentheses. Estimated time complexity will be `O(n*2^n)` but the actual time complexity `( O(4^n/\sqrt{n})` is bounded by the Catalan number and is beyond the scope of a coding interview. 
+- The space complexity of this algorithm will be exponential too, estimated at `O(2^n)`, but the actual will be `( O(4^n/\sqrt{n})`.
+
+#### Memoized Solution
+Since our algorithm has overlapping subproblems, can we use memoization to improve it? We could, but every time we return the result of a subproblem from the cache, we have to clone the result list because these trees will be used as the left or right child of a tree. This cloning is equivalent to reconstructing the trees, therefore, the overall time complexity of the memoized algorithm will also be the same.
+
 ## 🌟 Count of Structurally Unique Binary Search Trees (hard)
 https://leetcode.com/problems/unique-binary-search-trees/
+
+> Given a number `n`, write a function to return the count of structurally unique <b>Binary Search Trees (BST)</b> that can store values `1` to `n`.
+
+````
+class TreeNode {
+  constructor(value) {
+    this.value = value;
+    this.left = null;
+    this.right = null; 
+  }
+};
+
+
+function countTrees(n) {
+if (n <= 1) {
+    return 1;
+  }
+  let count = 0;
+  for (let i = 1; i < n + 1; i++) {
+    // making 'i' the root of the tree
+    const countOfLeftSubtrees = countTrees(i - 1);
+    const countOfRightSubtrees = countTrees(n - i);
+    count += (countOfLeftSubtrees * countOfRightSubtrees);
+  }
+  return count;
+};
+
+
+countTrees(2)//2, As we saw in the previous problem, there are 2 unique BSTs storing numbers from 1-2.
+countTrees(3)//5, There will be 5 unique BSTs that can store numbers from 1 to 3.
+````
+- The time complexity of this algorithm will be exponential and will be similar to Balanced Parentheses. Estimated time complexity will be `O(n*2^n)` but the actual time complexity `( O(4^n/\sqrt{n})` is bounded by the Catalan number and is beyond the scope of a coding interview. 
+- The space complexity of this algorithm will be exponential too, estimated `O(2^n)` but the actual will be `( O(4^n/\sqrt{n})`.
+
+### Memoized version
+Our algorithm has overlapping subproblems as our recursive call will be evaluating the same sub-expression multiple times. To resolve this, we can use memoization and store the intermediate results in a <b>HashMap</b>. In each function call, we can check our map to see if we have already evaluated this sub-expression before.
+````
+class TreeNode {
+  constructor(value) {
+    this.value = value;
+    this.left = null;
+    this.right = null; 
+  }
+};
+
+function countTrees(n) {
+  return countTreesRec({}, n);
+}
+
+function countTrees(map, n) {
+  
+  //fix this hashmap
+   if (n in map) {
+    return map[n];
+  }
+  
+  
+if (n <= 1) {
+    return 1;
+  }
+  let count = 0;
+  for (let i = 1; i < n + 1; i++) {
+    // making 'i' the root of the tree
+    const countOfLeftSubtrees = countTrees(i - 1);
+    const countOfRightSubtrees = countTrees(n - i);
+    count += (countOfLeftSubtrees * countOfRightSubtrees);
+  }
+  
+  map[n] = count;
+  
+  return count;
+};
+
+
+countTrees(2)//2, As we saw in the previous problem, there are 2 unique BSTs storing numbers from 1-2.
+countTrees(3)//5, There will be 5 unique BSTs that can store numbers from 1 to 3.
+````
+- The time complexity of the memoized algorithm will be `O(n^2)`, since we are iterating from `1` to `n` and ensuring that each sub-problem is evaluated only once. 
+- The space complexity will be `O(n)` for the memoization map.
