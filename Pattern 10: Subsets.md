@@ -477,7 +477,121 @@ console.log(`Generalized abbreviation are: ${generate_generalized_abbreviation('
 ````
 ## 🌟 Evaluate Expression (hard)
 https://leetcode.com/problems/different-ways-to-add-parentheses/
+
+> Given an expression containing digits and operations `(+, -, *)`, find all possible ways in which the expression can be evaluated by grouping the numbers and operators using parentheses.
+
+This problem follows the Subsets pattern and can be mapped to Balanced Parentheses. We can follow a similar BFS approach.
+
+Let’s take the first example to generate different ways to evaluate the expression.
+1. We can iterate through the expression character-by-character.
+2. we can break the expression into two halves whenever we get an operator `(+, -, *)`.
+3. The two parts can be calculated by recursively calling the function.
+4. Once we have the evaluation results from the left and right halves, we can combine them to produce all results.
+
+````
+function diffWaysToEvaluateExpression(input) {
+  const result = [];
+  
+  // base case: if the input string is a number, parse and add it to output.
+  if(!(input.includes('+')) && !(input.includes('-')) && !(input.includes('*'))) {
+     result.push(parseInt(input))
+     } else {
+       for(let i = 0; i < input.length; i++){
+         const char = input[i];
+         if(isNaN(parseInt(char, 10))){
+        // if not a digit
+        // break the equation here into two parts and make recursively calls
+           const leftParts = diffWaysToEvaluateExpression(input.substring(0, i))
+           const rightParts = diffWaysToEvaluateExpression(input.substring(i + 1))
+         
+           for (let l = 0; l < leftParts.length; l++) {
+          for (let r = 0; r < rightParts.length; r++) {
+            let part1 = leftParts[l],
+              part2 = rightParts[r];
+            if (char === '+') {
+              result.push(part1 + part2);
+            } else if (char === '-') {
+              result.push(part1 - part2);
+            } else if (char === '*') {
+              result.push(part1 * part2);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  return result;
+};
+
+
+console.log(`Expression evaluations: ${diffWaysToEvaluateExpression("1+2*3")}`)//[7, 9],1+(2*3) => 7 and (1+2)*3 => 9
+console.log(`Expression evaluations: ${diffWaysToEvaluateExpression("2*3-4-5")}`)//[8, -12, 7, -7, -3 ], 2*(3-(4-5)) => 8, 2*(3-4-5) => -12, 2*3-(4-5) => 7, 2*(3-4)-5 => -7, (2*3)-4-5 => -3
+````
+
+- The time complexity of this algorithm will be exponential and will be similar to Balanced Parentheses. Estimated time complexity will be `O(N*2^N)` but the actual time complexity `( O(4^n/\sqrt{n})` is bounded by the Catalan number and is beyond the scope of a coding interview. 
+- The space complexity of this algorithm will also be exponential, estimated at `O(2^N)` though the actual will be `( O(4^n/\sqrt{n})`.
+
+### Memoized Solution
+The problem has overlapping subproblems, as our recursive calls can be evaluating the same sub-expression multiple times. To resolve this, we can use <b>memoization</b> and store the intermediate results in a <b>HashMap</b>. In each function call, we can check our map to see if we have already evaluated this sub-expression before
+````
+function diffWaysToEvaluateExpression(input) {
+  diffWaysToEvaluateExpressionRecursive({}, input)
+}
+
+function diffWaysToEvaluateExpressionRecursive(map, input) {
+  
+  if(input in map) {
+    //issue with the hashmap here
+    return map[input]
+    // console.log(map[input])
+  }
+  const result = [];
+  
+  // base case: if the input string is a number
+  //parse and add it to output.
+  if(!(input.includes('+')) && !(input.includes('-')) && !(input.includes('*'))) {
+     result.push(parseInt(input))
+     } 
+  else {
+       for(let i = 0; i < input.length; i++){
+         const char = input[i];
+         if(isNaN(parseInt(char, 10))){
+        // if not a digit
+        // break the equation here into two parts and make recursively calls
+           const leftParts = diffWaysToEvaluateExpression(input.substring(0, i))
+           const rightParts = diffWaysToEvaluateExpression(input.substring(i + 1))
+         // console.log(leftParts.length)
+           for (let l = 0; l < leftParts.length; l++) {
+          for (let r = 0; r < rightParts.length; r++) {
+            let part1 = leftParts[l],
+              part2 = rightParts[r];
+            if (char === '+') {
+              result.push(part1 + part2);
+            } else if (char === '-') {
+              result.push(part1 - part2);
+            } else if (char === '*') {
+              result.push(part1 * part2);
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  map[input] = result
+  
+  return result;
+};
+
+
+console.log(`Expression evaluations: ${diffWaysToEvaluateExpression("1+2*3")}`)//[7, 9],1+(2*3) => 7 and (1+2)*3 => 9
+console.log(`Expression evaluations: ${diffWaysToEvaluateExpression("2*3-4-5")}`)//[8, -12, 7, -7, -3 ], 2*(3-(4-5)) => 8, 2*(3-4-5) => -12, 2*3-(4-5) => 7, 2*(3-4)-5 => -7, (2*3)-4-5 => -3
+````
+
 ## 🌟 Structurally Unique Binary Search Trees (hard)
 https://leetcode.com/problems/unique-binary-search-trees-ii/
+
+> Given a number `n`, write a function to return all structurally unique <b>Binary Search Trees (BST)</b> that can store values `1` to `n`?
 ## 🌟 Count of Structurally Unique Binary Search Trees (hard)
 https://leetcode.com/problems/unique-binary-search-trees/
