@@ -265,7 +265,7 @@ longestSubstringWithKdistinct("cbbebi", 3)//5, The longest substrings with no mo
 - The above algorithm’s time complexity will be `O(N)`, where `N` is the number of characters in the input string. The outer for loop runs for all characters, and the inner while loop processes each character only once; therefore, the time complexity of the algorithm will be `O(N+N)`, which is asymptotically equivalent to `O(N)`
 - The algorithm’s space complexity is `O(K)`, as we will be storing a maximum of `K+1` characters in the HashMap.
 
-## Fruits into Baskets (medium)
+## 🔎 Fruits into Baskets (medium)
 https://leetcode.com/problems/fruit-into-baskets/
 
 > Given an array of characters where each character represents a fruit tree, you are given <b>two baskets</b>, and your goal is to put the <b>maximum number of fruits in each basket</b>. The only restriction is that <b>each basket can have only one type of fruit</b>.
@@ -279,7 +279,46 @@ This problem follows the Sliding Window pattern and is quite similar to <b>Longe
 In this problem, we need to find the length of the longest subarray with no more than two distinct characters (or fruit types!). 
 
 This transforms the current problem into Longest Substring with <b>K Distinct Characters</b> where `K=2`.
+### Map Class Solution
+````
+function totalFruit (fruits) {
+  let windowStart = 0
+  let windowMax = 0
+  let fruitMap = new Map()
 
+  
+  //1. try to extend the window range
+  for(let windowEnd = 0; windowEnd < fruits.length; windowEnd++) {
+    let endFruit = fruits[windowEnd]
+    
+    fruitMap.set(endFruit, fruitMap.get(endFruit)+1 || 1)
+    
+    
+    //2. Shrink the sliding window, until we are left with 2 fruits in the fruitMap
+    while(fruitMap.size > 2) {
+      let startFruit = fruits[windowStart]
+      
+      fruitMap.set(startFruit, fruitMap.get(startFruit)-1)
+      
+      
+      if(fruitMap.get(startFruit) === 0){
+        fruitMap.delete(startFruit)
+      }
+      windowStart++
+    }
+    
+    windowMax = Math.max(windowMax, windowEnd - windowStart + 1)
+  }
+  
+  return windowMax   
+};
+
+totalFruit ([3,3,3,1,2,1,1,2,3,3,4])//5
+totalFruit ([1,2,1])//3,We can pick from all 3 trees.
+totalFruit ([0,1,2,2])//3,We can pick from trees [1,2,2].If we had started at the first tree, we would only pick from trees [0,1].
+totalFruit ([1,2,3,2,2])//4,We can pick from trees [2,3,2,2]. If we had started at the first tree, we would only pick from trees [1,2].
+````
+### Map Object Solution
 ````
 function fruitsInBaskets(fruits) {
   let windowStart = 0; 
