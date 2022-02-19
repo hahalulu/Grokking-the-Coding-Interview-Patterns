@@ -175,3 +175,51 @@ searchFloorOfNumber([4, 6, 10], -1); //-1, There is no number smaller than or eq
 ````
 - Since, we are reducing the search range by half at every step, this means that the time complexity of our algorithm will be `O(log N)` where `N` is the total elements in the given array.
 - The algorithm runs in constant space `O(1)`.
+
+## Next Letter (medium)
+https://leetcode.com/problems/find-smallest-letter-greater-than-target/
+
+> Given an array of lowercase letters sorted in ascending order, find the <b>smallest letter</b> in the given array <b>greater than a given `key`</b>.
+> 
+> Assume the given array is a <b>circular list</b>, which means that the last letter is assumed to be connected with the first letter. This also means that the smallest letter in the given array is greater than the last letter of the array and is also the first letter of the array.
+>
+> Write a function to return the next letter of the given `key`.
+
+The problem follows the <b>Binary Search</b> pattern. Since <b>Binary Search</b> helps us find an element in a sorted array efficiently, we can use a modified version of it to find the next letter.
+
+We can use a similar approach as discussed in <b>Ceiling of a Number</b>. There are a couple of differences though:
+
+1. The array is considered circular, which means if the `key` is bigger than the last letter of the array or if it is smaller than the first letter of the array, the `key`’s next letter will be the first letter of the array.
+2. The other difference is that we have to find the next biggest letter which can’t be equal to the `key`. This means that we will ignore the case where `key == arr[middle]`. To handle this case, we can update our start range to `start = middle +1`.
+
+In the end, instead of returning the element pointed out by start, we have to return the letter pointed out by `start % array.length`. This is needed because of point 2 discussed above. Imagine that the last letter of the array is equal to the `key`. In that case, we have to return the first letter of the input array.
+
+````
+function searchNextLetter(letters, key) {
+  let n = letters.length;
+  let start = 0;
+  let end = n - 1;
+
+  while (start <= end) {
+    let mid = Math.floor(start + (end - start) / 2);
+
+    //in first half
+    if (key < letters[mid]) {
+      end = mid - 1;
+    } else {
+      //key > letters[mid]
+      //in second half
+      start = mid + 1;
+    }
+  }
+  // since the loop is running until 'start <= end', so at the end of the while loop, 'start === end+1'
+  return letters[start % n];
+}
+
+searchNextLetter(['a', 'c', 'f', 'h'], 'f'); //'h', The smallest letter greater than 'f' is 'h' in the given array.
+searchNextLetter(['a', 'c', 'f', 'h'], 'b'); //'c', The smallest letter greater than 'b' is 'c'.
+searchNextLetter(['a', 'c', 'f', 'h'], 'm'); //'a', As the array is assumed to be circular, the smallest letter greater than 'm' is 'a'.
+searchNextLetter(['a', 'c', 'f', 'h'], 'h'); //'a', As the array is assumed to be circular, the smallest letter greater than 'h' is 'a'.
+````
+- Since, we are reducing the search range by half at every step, this means that the time complexity of our algorithm will be `O(log N)` where `N` is the total elements in the given array.
+- The algorithm runs in constant space `O(1)`.
