@@ -223,3 +223,62 @@ searchNextLetter(['a', 'c', 'f', 'h'], 'h'); //'a', As the array is assumed to b
 ````
 - Since, we are reducing the search range by half at every step, this means that the time complexity of our algorithm will be `O(log N)` where `N` is the total elements in the given array.
 - The algorithm runs in constant space `O(1)`.
+## Number Range (medium)
+https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/
+
+> Given an array of numbers sorted in ascending order, find the range of a given number `key`. The range of the `key` will be the first and last position of the `key` in the array.
+> 
+> Write a function to return the range of the `key`. If the `key` is not present return `[-1, -1]`.
+The problem follows the <b>Binary Search</b> pattern. Since <b>Binary Search</b> helps us find a number in a sorted array efficiently, we can use a modified version of the <b>Binary Search</b> to find the first and the last position of a number.
+
+We can use a similar approach as discussed in <b>Order-agnostic Binary Search</b>. We will try to search for the `key` in the given array; if the `key` is found (i.e. `key == arr[middle`) we have two options:
+
+1. When trying to find the first position of the `key`, we can update `end = middle - 1` to see if the `key` is present before `middle`.
+2. When trying to find the last position of the `key`, we can update `start = middle + 1` to see if the `key` is present after `middle`.
+In both cases, we will keep track of the last position where we found the `key`. These positions will be the required range.
+````
+function findRange(arr, key) {
+  let result = [-1, -1]
+  result[0] = binarySearch(arr, key, false)
+  
+  if(result[0] !== -1){
+    //no need to search, if key is not present in the input array
+    result[1] = binarySearch(arr, key, true)
+  }
+  return result;
+}
+
+function binarySearch(arr, key, findMaxIndex) {
+  let keyIndex = -1;
+  let start = 0;
+  let end = arr.length - 1;
+
+  while (start <= end) {
+    let mid = Math.floor(start + (end - start) / 2);
+
+    if (key < arr[mid]) {
+      end = mid - 1;
+    } else if (key > arr[mid]) {
+      start = mid + 1;
+    } else {
+      //key === arr[mid];
+      keyIndex = mid;
+      if (findMaxIndex) {
+        //search ahead to find the last index of key
+        start = mid + 1;
+      } else {
+        //search behind to find the last index of key
+        end = mid - 1;
+      }
+    }
+  }
+
+  return keyIndex;
+}
+
+findRange([4, 6, 6, 6, 9], 6); //[1, 3]
+findRange([1, 3, 8, 10, 15], 10); //[3, 3]
+findRange([1, 3, 8, 10, 15], 12); //[-1,-1]
+````
+- Since, we are reducing the search range by half at every step, this means that the time complexity of our algorithm will be `O(log N)` where `N` is the total elements in the given array.
+- The algorithm runs in constant space `O(1)`.
