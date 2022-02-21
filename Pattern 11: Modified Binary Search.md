@@ -349,3 +349,27 @@ searchInInfiniteArray(reader, 200); //-1, The key is not present in the array.
 - There are two parts of the algorithm. In the first part, we keep increasing the bound’s size exponentially (double it every time) while searching for the proper bounds. Therefore, this step will take `O(log N)` assuming that the array will have maximum `N` numbers. In the second step, we perform the binary search which will take `O(log N)`, so the overall time complexity of our algorithm will be` O(log N + log N)` which is asymptotically equivalent to `O(log N)`.
 
 - The algorithm runs in constant space `O(1)`.
+
+## Minimum Difference Element (medium)
+
+> Given an array of numbers sorted in ascending order, find the element in the array that has the minimum difference with the given `key`.
+
+## Bitonic Array Maximum (easy)
+> Find the maximum value in a given Bitonic array. An array is considered bitonic if it is monotonically increasing and then monotonically decreasing. Monotonically increasing or decreasing means that for any index `i` in the `array arr[i] != arr[i+1]`.
+
+## 🌟 Search Bitonic Array (medium)
+> Given a Bitonic array, find if a given `key` is present in it. An array is considered bitonic if it is monotonically increasing and then monotonically decreasing. Monotonically increasing or decreasing means that for any index `i` in the array `arr[i] != arr[i+1]`.
+> 
+> Write a function to return the index of the `key`. If the `key` is not present, return `-1`.
+
+## 🌟 Search in Rotated Array (medium)
+https://leetcode.com/problems/search-in-rotated-sorted-array/
+> Given an array of numbers which is sorted in ascending order and also rotated by some arbitrary number, find if a given ‘key’ is present in it.
+>
+> Write a function to return the index of the ‘key’ in the rotated array. If the ‘key’ is not present, return -1. You can assume that the given array does not have any duplicates.
+## 🌟 Rotation Count (medium)
+https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/
+
+> Given an array of numbers which is sorted in ascending order and is rotated ‘k’ times around a pivot, find ‘k’.
+>
+> You can assume that the array does not have any duplicates.
