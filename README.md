@@ -38,7 +38,7 @@ One of the famous problems solved using this technique was <b>Finding a cycle in
 
 This pattern describes an efficient technique to deal with overlapping intervals. In a lot of problems involving intervals, we either need to find overlapping intervals or merge intervals if they overlap.
 
-Given two intervals (`a` and `b`), there will be six different ways the two intervals can relate to each other:
+Given two intervals (`a` and `b`), there will be six distinct ways the two intervals can relate to each other:
 1. `a` and `b`do not overlap
 2. `a` and `b` overlap, `b` ends after `a`
 3. `a` completely overlaps `b`
@@ -101,5 +101,11 @@ The best data structure that comes to mind to keep track of ‘K’ elements is 
 ## Pattern 14: K-way merge
 
 ## Pattern 15: 0/1 Knapsack (Dynamic Programming)
+<b>0/1 Knapsack pattern</b> is based on the famous problem with the same name which is efficiently solved using <b>Dynamic Programming (DP)</b>.
+
+In this pattern, we will go through a set of problems to develop an understanding of <b>DP</b>. We will always start with a brute-force recursive solution to see the overlapping subproblems, i.e., realizing that we are solving the same problems repeatedly.
+
+After the recursive solution, we will modify our algorithm to apply advanced techniques of <b>Memoization</b> and <b>Bottom-Up Dynamic Programming</b> to develop a complete understanding of this pattern.
+
 
 ## Pattern 16: Topological Sort (Graph)
