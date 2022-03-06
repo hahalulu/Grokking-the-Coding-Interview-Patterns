@@ -405,11 +405,19 @@ function solveKnapsack(profits, weights, capacity) {
 console.log(`Total knapsack profit: ---> $${solveKnapsack([1, 6, 10, 16],[1, 2, 3, 5],7)}`);
 console.log(`Total knapsack profit: ---> $${solveKnapsack([1, 6, 10, 16],[1, 2, 3, 5],6)}`);
 ````
-## 
-## 
-## 
-## 
+## Equal Subset Sum Partition (medium)
+https://leetcode.com/problems/partition-equal-subset-sum/
+## 🔍 Subset Sum (medium)
+https://www.techiedelight.com/subset-sum-problem/
+> Given a set of positive numbers, determine if a subset exists whose sum is equal to a given number `S`.
+## Minimum Subset Sum Difference (hard)
+https://leetcode.com/problems/partition-array-into-two-arrays-to-minimize-sum-difference/
+> Given a set of positive numbers, partition the set into two subsets with minimum difference between their subset sums.
+## 🌟Count of Subset Sum (hard)
+https://leetcode.com/problems/combination-sum/
+Given a set of positive numbers, find the total number of subsets whose sum is equal to a given number ‘S’.
 
-## 🌟
-## 🌟
-## 🌟
+## 🌟 Target Sum (hard)
+https://leetcode.com/problems/target-sum/
+You are given a set of positive numbers and a target sum ‘S’. Each number should be assigned either a ‘+’ or ‘-’ sign. We need to find the total ways to assign symbols to make the sum of the numbers equal to the target ‘S’.
+
