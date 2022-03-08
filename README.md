@@ -2,6 +2,8 @@
 
 These are my notes from [Educative.io](https://www.educative.io/)'s [Grokking the Coding Interview in 16 Patterns](https://www.educative.io/courses/grokking-the-coding-interview) course in <b>JavaScript</b>
 
+This course categorizes coding interview problems into a set of 16 patterns. Each pattern will be a complete tool - consisting of data structures, algorithms, and analysis techniques - to solve a specific category of problems. The goal is to develop an understanding of the underlying pattern, so that, we can apply that pattern to solve other problems.
+
 ## [Pattern 1: Sliding Window](./✅%20%20Pattern%2001%20:%20Sliding%20Window.md)
 
 In many problems dealing with an array (or a LinkedList), we are asked to find or calculate something among all the contiguous subarrays (or sublists) of a given size. For example, take a look at this problem:
