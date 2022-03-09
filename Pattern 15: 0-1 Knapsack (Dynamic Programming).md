@@ -36,7 +36,7 @@ All <b>green boxes</b> have a total weight that is less than or equal to the cap
 
 
 ### Brute-Force Solution
-````
+````js
 function solveKnapsack(profits, weights, capacity) {
   
   function knapsackRecursive(profits, wights, capacity, currentIndex){
@@ -80,7 +80,7 @@ We can clearly see that `c:4, i=3` has been called twice. Hence we have an <b>ov
 Since we have two changing values (`capacity` and `currentIndex`) in our recursive `function knapsackRecursive()`, we can use a two-dimensional array to store the results of all the solved sub-problems. As mentioned above, we need to store results for every sub-array (i.e., for every possible index `i`) and every possible capacity `c`.
 
 Here is the code with <b>memoization</b>
-````
+````js
 function solveKnapsack(profits, weights, capacity) {
   const memo = []
   
@@ -131,7 +131,7 @@ Finally, our optimal solution will be maximum of the above two values:
 
 `dp[i][c] = max (dp[i-1][c], profit[i] + dp[i-1][c-weight[i]])`
 
-````
+````js
 function solveKnapsack(profits, weights, capacity) {
   //bottom-up dynamic programming approach
   const n = profits.length;
@@ -198,7 +198,7 @@ Let’s understand this from the above example:
 7. Thus, the items going into the knapsack are `{B, D}`.
 
 Let’s write a function to print the set of items included in the knapsack.
-````
+````js
 function solveKnapsack(profits, weights, capacity) {
   //bottom-up dynamic programming approach
   const n = profits.length;
@@ -266,7 +266,7 @@ console.log(`Total knapsack profit: ---> $${solveKnapsack([1, 6, 10, 16],[1, 2, 
 
 ### Challenge
 Can we improve our <b>bottom-up DP</b> solution even further? Can you find an algorithm that has `O(C)` space complexity?
-````
+````js
 function solveKnapsack(profits, weights, capacity) {
   //optimal O(C) bottom-up dynamic programming approach
   const n = profits.length;
@@ -345,7 +345,7 @@ Since our inner loop is iterating over `c:0-->capacity`, let’s see how this mi
 
 To solve the second case, we can change our inner loop to process in the reverse direction: `c:capacity-->0`. This will ensure that whenever we change a value in `dp[]`, we will not need it again in the current iteration.
 
-````
+````js
 function solveKnapsack(profits, weights, capacity) {
   //space optimization solution, O(C) bottom-up dynamic programming approach
   const n = profits.length;
@@ -416,7 +416,7 @@ Assume that `S` represents the total sum of all the given numbers. Then the two 
 
 So our <b>brute-force</b> algorithm will look like:
 
-````
+````js
 function canPartition (num) {
   //brute force
   let sum = 0
@@ -463,7 +463,7 @@ We can use memoization to overcome the overlapping sub-problems. As stated in pr
 Since we need to store the results for every subset and for every possible sum, therefore we will be using a two-dimensional array to store the results of the solved sub-problems. The first dimension of the array will represent different subsets and the second dimension will represent different `sums` that we can calculate from each subset. These two dimensions of the array can also be inferred from the two changing values (`sum` and `currentIndex`) in our recursive function `canPartitionRecursive()`.
 
 Here is the code for <b>Top-down Dynamic Programming with Memoization</b>:
-````
+````js
 function canPartition (num) {
   //Top-down DP with memoization
   let sum = 0
@@ -524,7 +524,7 @@ Let’s start with our <i>base case of zero capacity</i>:
 
 From the above visualization, we can clearly see that it is possible to partition the given set into two subsets with equal sums, as shown by bottom-right cell: `dp[3][5] => T`
 
-````
+````js
 function canPartition (num) {
   //Bottom-up Dynamic Programming
   const n = num.length
@@ -577,13 +577,510 @@ console.log(`Can partition: ${canPartition ([2, 3, 4, 6])}`)//False
 ## 🔍 Subset Sum (medium)
 https://www.techiedelight.com/subset-sum-problem/
 > Given a set of positive numbers, determine if a subset exists whose sum is equal to a given number `S`.
+
+This problem follows the <b>0/1 Knapsack pattern</b> and is quite similar to <b>Equal Subset Sum Partition</b>. A basic <b>brute-force</b> solution could be to try all subsets of the given numbers to see if any set has a sum equal to `S`.
+
+So our <b>brute-force</b> algorithm will look like:
+ ````js
+ for each number 'i' 
+  create a new set which INCLUDES number 'i' if it does not exceed 'S', and recursively 
+     process the remaining numbers
+  create a new set WITHOUT number 'i', and recursively process the remaining numbers 
+return true if any of the above two sets has a sum equal to 'S', otherwise return false
+````
+Since this problem is quite similar to <b>Equal Subset Sum Partition</b>, let’s jump directly to the <b>bottom-up dynamic programming</b> solution.
+
+We’ll try to find if we can make all possible sums with every subset to populate the array `dp[TotalNumbers][S+1]`.
+
+For every possible sum `s` (where `0 <= s <= S`), we have two options:
+
+1. Exclude the number. In this case, we will see if we can get the sum `s` from the subset excluding this number => `dp[index-1][s]`
+2. Include the number if its value is not more than `s`. In this case, we will see if we can find a subset to get the remaining sum => `dp[index-1][s-num[index]]`
+ 
+If either of the above two scenarios returns `true`, we can find a subset with a sum equal to `s`.
+ 
+ Here is the code for our <b>bottom-up dynamic programming</b> approach:
+ ````js
+ function canPartition(nums, sum) {
+  //bottom-up dynamic programming approach
+  let n = nums.length;
+  
+  const dp = Array(n)
+    .fill(false)
+    .map(() => Array(sum + 1).fill(false));
+
+  //populate the sum=0 columns, as we can always for 0 sum with an empty set
+  for (let i = 0; i < n; i++) dp[i][0] = true;
+
+  //with only one number, we can form a subset only when the required sum is equal to its value
+  for (let s = 1; s <= sum; s++) dp[0][s] = nums[0] === s;
+
+  //process all subsets for all lsum
+  for (let i = 1; i < nums.length; i++) {
+    for (let s = 1; s <= sum; s++) {
+      //if we can get the sum s without the number at index i
+      if (dp[i - 1][s]) {
+        dp[i][s] = dp[i - 1][s];
+      } else if (s >= nums[i]) {
+        //else include the number and see if we can find a subset to get the remaining sum
+        dp[i][s] = dp[i - 1][s - nums[i]];
+      }
+    }
+  }
+  //the bottom right corner will have our answer
+  return dp[nums.length - 1][sum];
+}
+
+console.log(`Can partitioning be done: ---> ${canPartition([1, 2, 3, 4], 6)}`);
+//True
+//The given set has a subset whose sum is '6': {1, 2, 3}
+
+console.log(
+  `Can partitioning be done: ---> ${canPartition([1, 2, 7, 1, 5], 10)}`
+);
+
+//True
+//The given set has a subset whose sum is '10': {1, 2, 7}
+
+console.log(`Can partitioning be done: ---> ${canPartition([1, 3, 4, 8], 6)}`);
+//False
+//The given set does not have any subset whose sum is equal to '6'.
+ ````
+ 
+ - The above solution has the time and space complexity of `O(N*S)`, where `N` represents total numbers and `S` is the required sum.
+
+### Challenge
+- [ ] Can we improve our <b>bottom-up DP</b> solution even further? Can you find an algorithm that has `O(S)` space complexity?
+````js
+function canPartition(nums, sum) {
+  //O(S) space bottom-up dynamic programming approach
+  let n = nums.length;
+
+  const dp = Array(sum + 1).fill(false);
+
+  //sum=0, as we can always have 0 sum with an empty set
+  dp[0] = true;
+
+  //with only one number, we can form a subset only when the required sum is equal to its value
+  for (let s = 1; s <= sum; s++) dp[s] = nums[0] == s;
+
+  //process all subsets for all lsum
+  for (let i = 1; i < nums.length; i++) {
+    for (let s = sum; s >= 0; s--) {
+      // if dp[s]==true, this means we can get the sum s without
+      //num[i], then move on to the next number else we can include num[i]
+      //and see if e can find a subset to get the remaining sum
+
+      if (!dp[s] && s >= nums[i]) {
+        //else include the number and see if we can find a subset to get the remaining sum
+        dp[s] = dp[s - nums[i]];
+      }
+    }
+  }
+
+  return dp[sum];
+}
+
+console.log(`Can partitioning be done: ---> ${canPartition([1, 2, 3, 4], 6)}`);
+//True
+//The given set has a subset whose sum is '6': {1, 2, 3}
+
+console.log(
+  `Can partitioning be done: ---> ${canPartition([1, 2, 7, 1, 5], 10)}`
+);
+
+//True
+//The given set has a subset whose sum is '10': {1, 2, 7}
+
+console.log(`Can partitioning be done: ---> ${canPartition([1, 3, 4, 8], 6)}`);
+//False
+//The given set does not have any subset whose sum is equal to '6'.
+
+````
+
 ## Minimum Subset Sum Difference (hard)
 https://leetcode.com/problems/partition-array-into-two-arrays-to-minimize-sum-difference/
 > Given a set of positive numbers, partition the set into two subsets with minimum difference between their subset sums.
+
+This problem follows the <b>0/1 Knapsack pattern</b> and can be converted into a <b>Subset Sum</b> problem.
+
+Let’s assume `S1` and `S2` are the two desired subsets. A basic <b>brute-force</b> solution could be to try adding each element either in `S1` or `S2` in order to find the combination that gives the minimum sum difference between the two sets.
+
+So our <b>brute-force</b> algorithm will look like:
+````js
+for each number 'i' 
+  add number 'i' to S1 and recursively process the remaining numbers
+  add number 'i' to S2 and recursively process the remaining numbers
+return the minimum absolute difference of the above two sets 
+````
+Here is the code for the <b>brute-force</b> solution:
+
+````js
+function canPartition(nums) {
+  //brute force
+
+  function canPartitionRecursive(nums, currentIndex, sum1, sum2) {
+    //recursive base check
+    if (currentIndex === nums.length) return Math.abs(sum1 - sum2);
+
+    //recursive call after including the number at the
+    //currentIndex in the first set
+    const difference1 = canPartitionRecursive(
+      nums,
+      currentIndex + 1,
+      sum1 + nums[currentIndex],
+      sum2
+    );
+
+    //recursive call after including the number at the
+    //currentIndex in the second set
+    const difference2 = canPartitionRecursive(
+      nums,
+      currentIndex + 1,
+      sum1,
+      sum2 + nums[currentIndex]
+    );
+
+    return Math.min(difference1, difference2);
+  }
+  return canPartitionRecursive(nums, 0, 0, 0);
+}
+
+console.log(`Can partitioning be done: ---> ${canPartition([1, 2, 3, 9])}`);
+//3
+//We can partition the given set into two subsets where minimum absolute difference between the sum of numbers is '3'. Following are the two subsets: {1, 2, 3} & {9}.
+
+console.log(`Can partitioning be done: ---> ${canPartition([1, 2, 7, 1, 5])}`);
+//0
+//We can partition the given set into two subsets where minimum absolute difference between the sum of number is '0'. Following are the two subsets: {1, 2, 5} & {7, 1}.
+
+console.log(`Can partitioning be done: ---> ${canPartition([1, 3, 100, 4])}`);
+//92
+//We can partition the given set into two subsets where minimum absolute difference between the sum of numbers is '92'. Here are the two subsets: {1, 3, 4} & {100}.
+````
+- Because of the two recursive calls, the time complexity of the above algorithm is exponential `O(2ⁿ)`, where `n` represents the total number. 
+- The space complexity is `O(n)` which is used to store the recursion stack.
+
+### Top-down Dynamic Programming with Memoization
+We can use <b>memoization</b> to overcome the overlapping sub-problems.
+
+We will be using a two-dimensional array to store the results of the solved sub-problems. We can uniquely identify a sub-problem from `currentIndex` and `sum1` as `sum2` will always be the sum of the remaining numbers.
+````js
+function canPartition(nums) {
+  //Top-down Dynamic Programming with Memoization
+  let sum = 0;
+  for (let i = 0; i < nums.length; i++) sum += nums[i];
+  const dp = [];
+
+  function canPartitionRecursive(nums, currentIndex, sum1, sum2) {
+    //recursive base check
+    if (currentIndex === nums.length) return Math.abs(sum1 - sum2);
+
+    dp[currentIndex] = dp[currentIndex] || [];
+
+    //check if we have not already process similar problem
+    if (typeof dp[currentIndex][sum1] === 'undefined') {
+      //recursive call after including the number at the
+      //currentIndex in the first set
+      const difference1 = canPartitionRecursive(
+        nums,
+        currentIndex + 1,
+        sum1 + nums[currentIndex],
+        sum2
+      );
+
+      //recursive call after including the number at the
+      //currentIndex in the second set
+      const difference2 = canPartitionRecursive(
+        nums,
+        currentIndex + 1,
+        sum1,
+        sum2 + nums[currentIndex]
+      );
+      dp[currentIndex][sum1] = Math.min(difference1, difference2);
+    }
+    return dp[currentIndex][sum1];
+  }
+
+  return canPartitionRecursive(nums, 0, 0, 0);
+}
+
+console.log(`Can partitioning be done: ---> ${canPartition([1, 2, 3, 9])}`);
+//3
+//We can partition the given set into two subsets where minimum absolute difference between the sum of numbers is '3'. Following are the two subsets: {1, 2, 3} & {9}.
+
+console.log(`Can partitioning be done: ---> ${canPartition([1, 2, 7, 1, 5])}`);
+//0
+//We can partition the given set into two subsets where minimum absolute difference between the sum of number is '0'. Following are the two subsets: {1, 2, 5} & {7, 1}.
+
+console.log(`Can partitioning be done: ---> ${canPartition([1, 3, 100, 4])}`);
+//92
+//We can partition the given set into two subsets where minimum absolute difference between the sum of numbers is '92'. Here are the two subsets: {1, 3, 4} & {100}.
+````
+### Bottom-up Dynamic Programming
+Let’s assume `S` represents the total sum of all the numbers. So, in this problem, we are trying to find a subset whose sum is as close to `S/2` as possible, because if we can partition the given set into two subsets of an equal sum, we get the minimum difference, i.e. zero. This transforms our problem to <b>Subset Sum</b>, where we try to find a subset whose sum is equal to a given number-- `S/2` in our case. If we can’t find such a subset, then we will take the subset which has the sum closest to `S/2`. This is easily possible, as we will be calculating all possible sums with every subset.
+
+Essentially, we need to calculate all the possible sums up to `S/2` for all numbers. So how can we populate the array `db[TotalNumbers][S/2+1]` in the bottom-up fashion?
+
+For every possible sum `s` (where `0 <= s <= S/2`), we have two options:
+
+1. Exclude the number. In this case, we will see if we can get the sum `s` from the subset excluding this `number => dp[index-1][s]`
+2. Include the number if its value is not more than `s`. In this case, we will see if we can find a subset to get the remaining `sum => dp[index-1][s-num[index]]`
+
+If either of the two above scenarios is `true`, we can find a subset with a sum equal to `s`. We should dig into this before we can learn how to find the closest subset.
+
+Let’s draw this visually, with the example input `{1, 2, 3, 9}`. Since the total sum is `15`, we will try to find a subset whose sum is equal to the half of it, i.e. `7`.
+`[](./subsetsum.jpg)
+
+The above visualization tells us that it is not possible to find a subset whose sum is equal to `7`. So what is the closest subset we can find? We can find the subset if we start moving backwards in the last row from the bottom right corner to find the first `T`. The first `T` in the diagram above is the sum `6`, which means that we can find a subset whose sum is equal to `6`. This means the other set will have a sum of `9` and the minimum difference will be `3`.
+
+Here is the code for our <b>bottom-up dynamic programming</b> approach:
+````js
+function canPartition(nums) {
+  //bottom-up dynamic programming
+  let n = nums.length;
+  let sum = 0;
+  for (let i = 0; i < n; i++) sum += nums[i];
+
+  const requiredSum = Math.floor(sum / 2);
+  const dp = Array(n)
+    .fill(false)
+    .map(() => Array(requiredSum + 1).fill(false));
+
+  //populage the sum=0 columns, as we can always form 0 sum with empty set
+  for (let i = 0; i < n; i++) dp[i][0] = true;
+
+  //with only only number, we can form a subset only when the reuired sum is eual to that number
+  for (let s = 1; s <= requiredSum; s++) {
+    dp[0][s] = nums[0] == s;
+  }
+
+  //process all subsets for all sums
+  for (let i = 1; i < n; i++) {
+    for (let s = 1; s <= requiredSum; s++) {
+      // if we can get the sum 's' without the number at index 'i'
+      if (dp[i - 1][s]) {
+        dp[i][s] = dp[i - 1][s];
+      } else if (s >= nums[i]) {
+        // else include the number and see if we can find a subset to get the remaining sum
+        dp[i][s] = dp[i - 1][s - nums[i]];
+      }
+    }
+  }
+
+  let sum1 = 0;
+  // Find the largest index in the last row which is true
+  for (let i = requiredSum; i >= 0; i--) {
+    if (dp[n - 1][i] === true) {
+      sum1 = i;
+      break;
+    }
+  }
+
+  const sum2 = sum - sum1;
+  return Math.abs(sum2 - sum1);
+}
+
+console.log(`Can partitioning be done: ---> ${canPartition([1, 2, 3, 9])}`);
+//3
+//We can partition the given set into two subsets where minimum absolute difference between the sum of numbers is '3'. Following are the two subsets: {1, 2, 3} & {9}.
+
+console.log(`Can partitioning be done: ---> ${canPartition([1, 2, 7, 1, 5])}`);
+//0
+//We can partition the given set into two subsets where minimum absolute difference between the sum of number is '0'. Following are the two subsets: {1, 2, 5} & {7, 1}.
+
+console.log(`Can partitioning be done: ---> ${canPartition([1, 3, 100, 4])}`);
+//92
+//We can partition the given set into two subsets where minimum absolute difference between the sum of numbers is '92'. Here are the two subsets: {1, 3, 4} & {100}.
+````
+- The above solution has the time and space complexity of `O(N*S)`, where `N` represents total numbers and `S` is the total sum of all the numbers.
+
 ## 🌟Count of Subset Sum (hard)
 https://leetcode.com/problems/combination-sum/
-> Given a set of positive numbers, find the total number of subsets whose sum is equal to a given number ‘S’.
+> Given a set of positive numbers, find the total number of subsets whose sum is equal to a given number `S`.
 
+This problem follows the <b>0/1 Knapsack pattern</b> and is quite similar to <b>Subset Sum</b>. The only difference in this problem is that we need to count the number of subsets, whereas in <b>Subset Sum</b> we only wanted to know if a subset with the given sum existed.
+
+A basic <b>brute-force</b> solution could be to try all subsets of the given numbers to count the subsets that have a sum equal to `S`. So our <b>brute-force</b> algorithm will look like:
+````js
+for each number 'i' 
+  create a new set which includes number 'i' if it does not exceed 'S', and recursively   
+      process the remaining numbers and sum
+  create a new set without number 'i', and recursively process the remaining numbers 
+return the count of subsets who has a sum equal to 'S'
+````
+Here is the code for the <b>brute-force</b> solution:
+````js
+function countSubsets (num, sum) {
+  
+  function countSubsetsRecursive (num, sum, currentIndex){
+    //recursive base case check
+    if(sum === 0) return 1
+    
+    if(num.length === 0 || currentIndex >= num.length) return 0
+    
+    //recursive call after selecting the number at the currentIndex
+    //if the number at currentIndex exceeds the sum, we shouldn't process this
+    let sum1 = 0
+    if(num[currentIndex] <= sum) {
+      sum1 = countSubsetsRecursive (num, sum-num[currentIndex], currentIndex+1)
+    }
+    
+    //recursive call after excluding the number at currentIndex
+    const sum2 = countSubsetsRecursive (num, sum, currentIndex+1)
+    return sum1 + sum2
+    
+  }
+
+  return countSubsetsRecursive (num, sum, 0);
+};
+
+console.log(`Count of subset sum is: ---> ${countSubsets([1, 1, 2, 3], 4)}`);
+// 3
+//The given set has '3' subsets whose sum is '4': {1, 1, 2}, {1, 3}, {1, 3}
+//Note that we have two similar sets {1, 3}, because we have two '1' in our input.
+console.log(`Count of subset sum is: ---> ${countSubsets([1, 2, 7, 1, 5], 9)}`);
+//3
+//The given set has '3' subsets whose sum is '9': {2, 7}, {1, 7, 1}, {1, 2, 1, 5}
+````
+- The time complexity of the above algorithm is exponential `O(2ⁿ)`, where `n` represents the total number. 
+- The space complexity is `O(n)` which is used to store the recursion stack.
+### Top-down Dynamic Programming with Memoization 
+We can use <b>memoization</b> to overcome the overlapping sub-problems. We will be using a two-dimensional array to store the results of solved sub-problems. As mentioned above, we need to store results for every subset and for every possible sum.
+````js
+function countSubsets(num, sum) {
+  const dp = [];
+
+  function countSubsetsRecursive(num, sum, currentIndex) {
+    //recursive base case check
+    if (sum === 0) return 1;
+
+    if (num.length === 0 || currentIndex >= num.length) return 0;
+
+    dp[currentIndex] = dp[currentIndex] || [];
+
+    //check if we have not already processed a similar problem
+    if (typeof dp[currentIndex][sum] === 'undefined') {
+      //recursive call after selecting the number at the currentIndex
+      //if the number at currentIndex exceeds the sum, we shouldn't process this
+      let sum1 = 0;
+      if (num[currentIndex] <= sum) {
+        sum1 = countSubsetsRecursive(
+          num,
+          sum - num[currentIndex],
+          currentIndex + 1
+        );
+      }
+      //recursive call after excluding the number at currentIndex
+      const sum2 = countSubsetsRecursive(num, sum, currentIndex + 1);
+      dp[currentIndex][sum] = sum1 + sum2;
+    }
+
+    return dp[currentIndex][sum];
+  }
+
+  return countSubsetsRecursive(num, sum, 0);
+}
+
+console.log(`Count of subset sum is: ---> ${countSubsets([1, 1, 2, 3], 4)}`);
+// 3
+//The given set has '3' subsets whose sum is '4': {1, 1, 2}, {1, 3}, {1, 3}
+//Note that we have two similar sets {1, 3}, because we have two '1' in our input.
+console.log(`Count of subset sum is: ---> ${countSubsets([1, 2, 7, 1, 5], 9)}`);
+//3
+//The given set has '3' subsets whose sum is '9': {2, 7}, {1, 7, 1}, {1, 2, 1, 5}
+````
+### Bottom-up Dynamic Programming
+We will try to find if we can make all possible sums with every subset to populate the array `db[TotalNumbers][S+1]`.
+
+So, at every step we have two options:
+1. Exclude the number. Count all the subsets without the given number up to the given `sum => dp[index-1][sum]`
+2. Include the number if its value is not more than the `sum`. In this case, we will count all the subsets to get the remaining `sum => dp[index-1][sum-num[index]]`
+
+To find the total sets, we will add both of the above two values:
+````
+    dp[index][sum] = dp[index-1][sum] + dp[index-1][sum-num[index]])
+````
+    
+Here is the code for our <b>bottom-up dynamic programming</b> approach:
+````js
+function countSubsets(num, sum) {
+  //bottom-up dynamic programming approach
+  const n = num.length;
+  const dp = Array(n)
+    .fill(0)
+    .map(() => Array(sum + 1).fill(0));
+
+  //populate the sum=0 columns, as we will always have an empty set for zero sum
+  for (let i = 0; i < n; i++) {
+    dp[i][0] = 1;
+  }
+
+  //with only one number, we can form a subset only when the required sum is equal to its value
+  for (let s = 1; s <= sum; s++) {
+    dp[0][s] = num[0] == s ? 1 : 0;
+  }
+
+  //process all subsets for all sums
+  for (let i = 1; i < num.length; i++) {
+    for (let s = 1; s <= sum; s++) {
+      //exclude the number
+      dp[i][s] = dp[i - 1][s];
+      //include the number, if it does not exceed the sum
+      if (s >= num[i]) {
+        dp[i][s] += dp[i - 1][s - num[i]];
+      }
+    }
+  }
+
+  //the bottom-right corner will have our answer
+  return dp[num.length - 1][sum];
+}
+
+console.log(`Count of subset sum is: ---> ${countSubsets([1, 1, 2, 3], 4)}`);
+// 3
+//The given set has '3' subsets whose sum is '4': {1, 1, 2}, {1, 3}, {1, 3}
+//Note that we have two similar sets {1, 3}, because we have two '1' in our input.
+console.log(`Count of subset sum is: ---> ${countSubsets([1, 2, 7, 1, 5], 9)}`);
+//3
+//The given set has '3' subsets whose sum is '9': {2, 7}, {1, 7, 1}, {1, 2, 1, 5}
+````
+- The above solution has the time and space complexity of `O(N*S)`, where `N` represents total numbers and `S` is the desired sum.
+
+### Challenge
+- [ ] Can we improve our <b>bottom-up DP</b> solution even further? Can you find an algorithm that has `O(S)` space complexity?
+````js
+function countSubsets(num, sum) {
+  //O(S) bottom-up dynamic programming approach
+  const n = num.length;
+  const dp = Array(sum + 1).fill(0);
+  dp[0] = 1;
+
+  // with only one number, we can form a subset only when the required sum is equal to its value
+  for (let s = 1; s <= sum; s++) {
+    dp[s] = num[0] == s ? 1 : 0;
+  }
+
+  // process all subsets for all sums
+  for (let i = 1; i < num.length; i++) {
+    for (let s = sum; s >= 0; s--) {
+      if (s >= num[i]) {
+        dp[s] += dp[s - num[i]];
+      }
+    }
+  }
+
+  return dp[sum];
+}
+
+console.log(`Count of subset sum is: ---> ${countSubsets([1, 1, 2, 3], 4)}`);
+// 3
+//The given set has '3' subsets whose sum is '4': {1, 1, 2}, {1, 3}, {1, 3}
+//Note that we have two similar sets {1, 3}, because we have two '1' in our input.
+console.log(`Count of subset sum is: ---> ${countSubsets([1, 2, 7, 1, 5], 9)}`);
+//3
+//The given set has '3' subsets whose sum is '9': {2, 7}, {1, 7, 1}, {1, 2, 1, 5}
+````
 ## 🌟 Target Sum (hard)
 https://leetcode.com/problems/target-sum/
 > You are given a set of positive numbers and a target sum ‘S’. Each number should be assigned either a ‘+’ or ‘-’ sign. We need to find the total ways to assign symbols to make the sum of the numbers equal to the target ‘S’.
